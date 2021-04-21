@@ -1,0 +1,123 @@
+﻿@model IEnumerable<School>
+@{
+    ViewData["Title"] = "Schools";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int i = 1;
+}
+
+<div class="row">
+    <div class="col-12 text-right">
+        <input type="button" class="btn btn-info" value="qo'shish" style="width:140px" onclick="window.location.href='/Admin/CreateSchool'" />
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-info">
+                <h4 class="card-title ">MAKTABLAR</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table" id="myTable">
+                        <thead class="text-info">
+                            <tr>
+                                <th width="5%">
+                                    #
+                                </th>
+                                <th width="15%">
+                                    Hudud
+                                </th>
+                                <th width="15%">
+                                    Tuman
+                                </th>
+                                <th width="20%">
+                                    Nomi
+                                </th>
+                                <th width="15%">
+                                    Direktor
+                                </th>
+                                <th width="15%">
+                                    Telefon
+                                </th>
+                                <th>
+                                </th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @item.Department?.Departments?.NameUz
+                                    </td>
+                                    <td>
+                                        @item.Department?.NameUz
+                                    </td>
+                                    <td>
+                                        @item.NameUz
+                                    </td>
+                                    <td>
+                                        @item.Director
+                                    </td>
+                                    <td>
+                                        @item.Phone
+                                    </td>
+                                    <td style="text-align:right">
+                                        <input type="button" class="btn btn-warning" value="o'zgartirish" style="width:140px" onclick="window.location.href = '/Admin/EditSchool/@item.Id'" />
+                                        <button class="btn btn-danger open-exampleModal" onclick="deleteSchool(@item.Id)" style="width:140px">O'CHIRISH</button>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#myTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'excel',
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+            },
+            'print'
+        ],
+        pageLength: 10,
+    });
+
+    function deleteSchool(id) {
+        $('#schoolID').val(id);
+        $('#exampleModal').modal('show');
+    }
+</script>
+
+<form method="post" action="/Admin/DeleteSchool/">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">MAKTAB O'CHIRISH</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
+                    <input type="hidden" id="schoolID" name="id" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>
+                    <button type="submit" class="btn btn-danger">O'CHIRISH</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

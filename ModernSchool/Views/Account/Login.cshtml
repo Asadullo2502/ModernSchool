@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ZAMONAVIY MAKTAB</title>
+    <link href="~/login-page/css.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/login-page/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/login-page/bootstrap.min.css">
+    <link rel="stylesheet" href="~/login-page/login.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+</head>
+<body>
+    <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+        <div class="container">
+            <div class="card login-card">
+                <div class="row no-gutters">
+                    <div class="col-md-5">
+                        <img src="~/material-dashboard-master/assets/img/sidebar-3.jpg" alt="login" class="login-card-img">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <div class="brand-wrapper">
+                                <img src="~/img/zmlogo.svg" alt="logo" class="logo">
+                            </div>
+                            <p class="login-card-description">Tizimga kirish</p>
+                            <form method="post">
+                                <div class="form-group">
+                                    <label for="login" class="sr-only">Login</label>
+                                    <input type="text" name="login" id="login" class="form-control" placeholder="Login">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="password" class="sr-only">Parol</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" placeholder="Parol" name="password" id="password" aria-label="Parol" aria-describedby="basic-addon2">
+                                        <div class="input-group-append" onclick="showPass()">
+                                            <span class="input-group-text" id="basic-addon2" style="cursor:pointer"><i class="fa fa-eye fa-lg"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p style="color:darkred">@ViewBag.error</p>
+                                <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="KIRISH">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="~/login-page/jquery-3.4.1.min.js"></script>
+    <script src="~/login-page/popper.min.js"></script>
+    <script src="~/login-page/bootstrap.min.js"></script>
+</body>
+</html>
+
+<script>
+    function showPass() {
+        if ($('#password').attr('type') == "password") {
+            $('#password').prop('type', 'text');
+        }
+        else {
+            $('#password').prop('type', 'password');
+        }
+    }
+</script>

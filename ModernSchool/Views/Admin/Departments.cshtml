@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Department>
+@{
+    ViewData["Title"] = "Departments";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int i = 1;
+}
+
+
+<div class="row">
+    <div class="col-12 text-right">
+        <input type="button" class="btn btn-info" value="qo'shish" style="width:140px" onclick="window.location.href='/Admin/CreateDepartment'" />
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-info">
+                <h4 class="card-title ">HUDUDLAR</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table" id="myTable">
+                        <thead class="text-info">
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    Yuqori tashkilot
+                                </th>
+                                <th>
+                                    Nomi (o'zbekcha)
+                                </th>
+                                <th>
+                                    Nomi (ruscha)
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Where(x => x.Type > 1).OrderBy(x => x.ParentId).ThenBy(x => x.NameUz))
+                            {
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @item.Departments?.NameUz
+                                    </td>
+                                    <td>
+                                        @item.NameUz
+                                    </td>
+                                    <td>
+                                        @item.NameRu
+                                    </td>
+                                    <td style="text-align:right">
+                                        <input type="button" class="btn btn-warning" value="o'zgartirish" style="width:140px" onclick="window.location.href = '/Admin/EditDepartment/@item.Id'" />
+                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" style="width:140px" onclick="deleteDepartment(@item.Id)">O'CHIRISH</button>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#myTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'excel',
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+            },
+            'print'
+        ],
+        pageLength: 14,
+    });
+
+    function deleteDepartment(id) {
+        $('#departmentID').val(id);
+        $('#exampleModal').modal('show');
+    }
+</script>
+
+<form method="post" action="/Admin/DeleteDepartment/">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">HUDUD O'CHIRISH</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
+                    <input type="hidden" id="departmentID" name="id" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>
+                    <button type="submit" class="btn btn-danger">O'CHIRISH</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

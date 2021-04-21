@@ -1,0 +1,96 @@
+﻿@model Criteria
+@{
+    ViewData["Title"] = "EditCriteria";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-info">
+                <h4 class="card-title">KRITERIYA O'ZGARTIRISH</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">INDEKS</label>
+                                <select class="custom-select" name="IndexId" id="Indexes" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
+                                <textarea class="form-control" name="NameUz" rows="7" required>@Model.NameUz</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA KIRIL)</label>
+                                <textarea class="form-control" name="NameUzk" rows="7" required>@Model.NameUzk</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">NOMI (RUSCHA)</label>
+                                <textarea class="form-control" name="NameRu" rows="7" required>@Model.NameRu</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">NOMI (INGLIZCHA)</label>
+                                <textarea class="form-control" name="NameEn" rows="7" required>@Model.NameEn</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">TURI</label>
+                                <select class="custom-select" name="Type" id="Types" required>
+                                    <option value="@null">Tanlang...</option>
+                                    <option value="radio">radio</option>
+                                    <option value="checkbox">checkbox</option>
+                                    <option value="number">number</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">MAKSIMAL BALL</label>
+                                <input type="number" min="0" class="form-control" name="MaxBall" value="@Model.MaxBall" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-info pull-right">Saqlash</button>
+                    <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/Admin/Criterias/'">Ortga</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.getJSON("/GetApi/GetIndexes/999", function (result) {
+        var $dropdown = $("#Indexes");
+        $dropdown.append($("<option />").val(null).text("Tanlang..."));
+        $.each(result, function () {
+            if (this.id == @Model.IndexId) {
+                $dropdown.append($("<option selected />").val(this.id).text(this.shortName));
+            }
+            else {
+                $dropdown.append($("<option />").val(this.id).text(this.shortName));
+            }
+        });
+
+        const select = document.querySelector('#Types').getElementsByTagName('option');
+
+        for (let i = 0; i < select.length; i++) {
+            if (select[i].value === '@Model.Type') select[i].selected = true;
+        }
+    });
+</script>
+

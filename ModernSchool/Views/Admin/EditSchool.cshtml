@@ -1,0 +1,238 @@
+﻿@model School
+@{
+    ViewData["Title"] = "EditSchool";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-info">
+                <h4 class="card-title">MAKTAB O'ZGARTIRISH</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">HUDUD</label>
+                                <select class="custom-select" name="RegionId" id="Regions" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">TUMAN</label>
+                                <select class="custom-select" name="DepartmentId" id="Districts" value="@Model.DepartmentId" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">MAKTAB TURI</label>
+                                <select class="custom-select" name="TypeId" id="SchoolTypes" value="@Model.TypeId" required>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
+                                <input type="text" class="form-control" name="NameUz" value="@Model.NameUz" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA KIRIL)</label>
+                                <input type="text" class="form-control" name="NameUzk" value="@Model.NameUzk" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">NOMI (RUSCHA)</label>
+                                <input type="text" class="form-control" name="NameRu" value="@Model.NameRu" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">NOMI (INGLIZCHA)</label>
+                                <input type="text" class="form-control" name="NameEn" value="@Model.NameEn" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">MAKTAB RAQAMI</label>
+                                <input type="number" class="form-control" name="Number" value="@Model.Number">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">DIREKTOR</label>
+                                <input type="text" class="form-control" name="Director" value="@Model.Director">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="tel" class="form-control" name="Phone" id="phone" placeholder="TELEFON RAQAMI" value="@Model.Phone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div id="mapholder" style="width: 100%; height: 400px">
+
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Manzil</label>
+                                <input type="text" class="form-control" name="Address" id="address" value="@Model.Address" />
+                            </div>
+                        </div>
+
+                        <input type="hidden" class="form-control" name="Latitude" id="Latitude" value="@Model.Latitude" />
+                        <input type="hidden" class="form-control" name="Longtitude" id="Longtitude" value="@Model.Longtitude" />
+
+                    </div>
+                    <button type="submit" class="btn btn-info pull-right">Saqlash</button>
+                    <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/Admin/Schools/'">Ortga</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $("#phone").inputmask({ "mask": "+\\9\\98(99) 999-9999" });
+    })
+
+    $(document).ready(function () {
+        $.getJSON("/GetApi/GetRegions/", function (result) {
+            var $dropdown = $("#Regions");
+            $dropdown.append($("<option />").val(null).text("Tanlang..."));
+            var $dropdown2 = $("#Districts");
+            $dropdown2.append($("<option />").val(null).text("Tanlang..."));
+            $.each(result, function () {
+                if (this.id == @Model.Department.ParentId) {
+                    $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
+                }
+                else {
+                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                }
+            });
+        });
+
+        $.getJSON("/GetApi/GetDistricts/" + @Model.Department.ParentId, function (result) {
+            var $dropdown = $("#Districts");
+            $.each(result, function () {
+                if (this.id == @Model.DepartmentId) {
+                    $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
+                }
+                else {
+                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                }
+            });
+        });
+
+        $("#Regions").change(function () {
+            var region = this.value;
+            $('#Districts').empty();
+            $.getJSON("/GetApi/GetDistricts/" + region, function (result) {
+                var $dropdown = $("#Districts");
+                $dropdown.append($("<option />").val(null).text("Tanlang..."));
+                $.each(result, function () {
+                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                });
+            });
+        });
+
+        $.getJSON("/GetApi/GetSchoolTypes/", function (result) {
+            var $dropdown = $("#SchoolTypes");
+            $dropdown.append($("<option />").val(null).text("Tanlang..."));
+            $.each(result, function () {
+                if (this.id == @Model.TypeId) {
+                    $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
+                }
+                else {
+                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                }
+            });
+        });
+    });
+
+    ymaps.ready(init);
+
+    function init() {
+        var myMap = new ymaps.Map("mapholder", {
+            center: [@Model.Latitude, @Model.Longtitude],
+            zoom: 16,
+        },
+        {
+            suppressMapOpenBlock: true
+        },
+        {
+            searchControlProvider: 'yandex#search'
+        });
+
+        myPlacemark = createPlacemark([@Model.Latitude, @Model.Longtitude]);
+        myMap.geoObjects.add(myPlacemark);
+        myPlacemark.events.add('dragend', function () {
+            getAddress(myPlacemark.geometry.getCoordinates());
+        });
+        getAddress([@Model.Latitude, @Model.Longtitude]);
+
+        myMap.events.add('click', function (e) {
+            var coords = e.get('coords');
+            document.getElementById("mapholder").value = coords;
+            myPlacemark.geometry.setCoordinates(coords);
+            getAddress(coords);
+            document.getElementById("Latitude").value = coords[0];
+            document.getElementById("Longtitude").value = coords[1];
+        });
+
+        function createPlacemark(coords) {
+            return new ymaps.Placemark(coords, {
+                iconCaption: 'поиск...'
+
+
+            }, {
+                preset: 'islands#blueDotIconWithCaption',
+                draggable: true
+            });
+        }
+
+        function getAddress(coords) {
+            myPlacemark.properties.set('iconCaption', 'поиск...');
+            ymaps.geocode(coords).then(function (res) {
+                var firstGeoObject = res.geoObjects.get(0);
+
+                myPlacemark.properties
+                    .set({
+                        iconCaption: [
+                            firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                            firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                        ].filter(Boolean).join(', '),
+                        balloonContent: firstGeoObject.getAddressLine()
+                    });
+                document.getElementById("address").value = firstGeoObject.getAddressLine();
+                document.getElementById("Latitude").value = coords[0];
+                document.getElementById("Longtitude").value = coords[1];
+            });
+        }
+    }
+
+
+</script>

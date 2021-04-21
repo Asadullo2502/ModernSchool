@@ -1,0 +1,193 @@
+﻿@model User
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-info">
+                <h4 class="card-title">FOYDALANUVHCI PROFILI</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">ROL</label>
+                                <select class="custom-select" name="RoleId" id="Roles" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">VILOYAT</label>
+                                <select class="custom-select" name="RegionId" id="Regions">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">TUMAN</label>
+                                <select class="custom-select" name="DistrictId" id="Districts">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">MAKTAB</label>
+                                <select class="custom-select" name="SchoolId" id="Schools">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">F.I.SH.</label>
+                                <input type="text" class="form-control" name="FullName" value="@Model.FullName" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Login</label>
+                                <input type="text" class="form-control" name="Login" value="@Model.Login" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Parol</label>
+                                <input type="text" class="form-control" name="Password" value="@Model.Password" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="Phone" value="@Model.Phone" placeholder="TELEFON RAQAMI" id="phone" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-info pull-right">Saqlash</button>
+                    <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/Admin/Users/'">Ortga</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var role;
+    $(function () {
+        $("#phone").inputmask({ "mask": "+\\9\\98(99) 999-9999" });
+    })
+
+    $.getJSON("/GetApi/GetRoles/", function (result) {
+        var $dropdown = $("#Roles");
+        $dropdown.append($("<option />").val(null).text("Tanlang..."));
+        $.each(result, function () {
+            if (this.id == @Model.RoleId) {
+                $dropdown.append($("<option selected />").val(this.id).text(this.name));
+            }
+            else {
+                $dropdown.append($("<option />").val(this.id).text(this.name));
+            }
+        });
+    });
+
+    $.getJSON("/GetApi/GetRegions/", function (result) {
+        var $dropdown = $("#Regions");
+        $dropdown.append($("<option />").val(null).text("Tanlang..."));
+        $.each(result, function () {
+            if (this.id == getVal(@Model.RegionId)) {
+                $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
+            }
+            else {
+                $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+            }
+        });
+    });
+
+    $.getJSON("/GetApi/GetDistricts/" + getVal(@Model.RegionId), function (result) {
+        var $dropdown = $("#Districts");
+        $dropdown.append($("<option />").val(null).text("Tanlang..."));
+        $.each(result, function () {
+            if (this.id == getVal(@Model.DistrictId)) {
+                $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
+            }
+            else {
+                $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+            }
+        });
+    });
+
+    $.getJSON("/GetApi/GetSchools/" + getVal(@Model.DistrictId), function (result) {
+        var $dropdown = $("#Schools");
+        $dropdown.append($("<option />").val(null).text("Tanlang..."));
+        $.each(result, function () {
+            if (this.id == getVal(@Model.SchoolId)) {
+                $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
+            }
+            else {
+                $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+            }
+        });
+    });
+
+    $("#Roles").change(function () {
+        role = this.value;
+        if (role == 3 || role == 4 || role == 5) {
+            $('#Regions').empty();
+            $('#Districts').empty();
+            $('#Schools').empty();
+            $.getJSON("/GetApi/GetRegions/", function (result) {
+                var $dropdown = $("#Regions");
+                $dropdown.append($("<option />").val(null).text("Tanlang..."));
+                $.each(result, function () {
+                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                });
+            });
+        }
+        else {
+            $('#Regions').empty();
+            $('#Districts').empty();
+            $('#Schools').empty();
+        }
+    });
+
+    $("#Regions").change(function () {
+        var region = this.value;
+        $('#Districts').empty();
+        $('#Schools').empty();
+        if (role == 4 || role == 5) {
+            $.getJSON("/GetApi/GetDistricts/" + region, function (result) {
+                var $dropdown = $("#Districts");
+                $dropdown.append($("<option />").val(null).text("Tanlang..."));
+                $.each(result, function () {
+                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                });
+            });
+        }
+    });
+
+    $("#Districts").change(function () {
+        var district = this.value;
+        $('#Schools').empty();
+        if (role == 5) {
+            $.getJSON("/GetApi/GetSchools/" + district, function (result) {
+                var $dropdown = $("#Schools");
+                $dropdown.append($("<option />").val(null).text("Tanlang..."));
+                $.each(result, function () {
+                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                });
+            });
+        }
+    });
+
+    function getVal(val) {
+        if (val == null)
+            return 0;
+        else
+            return val;
+    }
+
+</script>
