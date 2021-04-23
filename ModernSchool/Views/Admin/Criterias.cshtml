@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-12 text-right">
-        <input type="button" class="btn btn-info" value="qo'shish" style="width:140px" onclick="window.location.href='/Admin/CreateCriteria'" />
+        <input type="button" class="btn btn-info" value="qo'shish"  onclick="window.location.href='/Admin/CreateCriteria'" />
     </div>
     <div class="col-md-12">
         <div class="card">
@@ -59,8 +59,12 @@
                                         @item.MaxBall
                                     </td>
                                     <td style="text-align:right">
-                                        <input type="button" class="btn btn-warning" value="o'zgartirish" style="width:140px" onclick="window.location.href = '/Admin/EditCriteria/@item.Id'" />
-                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" style="width:140px" onclick="deleteCriteria(@item.Id)">O'CHIRISH</button>
+                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditCriteria/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="O'zgartirish">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" onclick="deleteCriteria(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 i++;

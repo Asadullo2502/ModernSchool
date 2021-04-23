@@ -86,7 +86,8 @@
     <script src="~/toastr/toastr.js"></script>
 
     <div class="wrapper ">
-        <div class="sidebar" data-color="azure" data-background-color="white" data-image="/material-dashboard-master/assets/img/sidebar-3.jpg">
+        <div class="sidebar" data-color="azure" data-background-color="white" data-image="">
+        @*<div class="sidebar" data-color="azure" data-background-color="white" data-image="/material-dashboard-master/assets/img/sidebar-3.jpg">*@
             <!--
                 Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -106,9 +107,15 @@
                         </a>
                     </li>*@
                     <li class="nav-item ">
+                        <a class="nav-link" href="/Admin/Regions">
+                            <i class="material-icons">domain</i>
+                            <p>VILOYATLAR</p>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
                         <a class="nav-link" href="/Admin/Departments">
                             <i class="material-icons">domain</i>
-                            <p>HUDUDLAR</p>
+                            <p>TUMANLAR</p>
                         </a>
                     </li>
                     <li class="nav-item ">
@@ -361,6 +368,11 @@
 
 
     <script>
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
         $(function () {
             var url = window.location.pathname;
             if (url.endsWith('/'))

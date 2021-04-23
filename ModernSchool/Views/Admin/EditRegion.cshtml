@@ -8,18 +8,11 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-info">
-                <h4 class="card-title">TUMAN O'ZGARTIRISH</h4>
+                <h4 class="card-title">VILOYAT O'ZGARTIRISH</h4>
             </div>
             <div class="card-body">
                 <form method="post">
                     <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="bmd-label-floating">YO'QORI TASHKILOT</label>
-                                <select class="custom-select" name="ParentId" id="Regions" required>
-                                </select>
-                            </div>
-                        </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
@@ -45,27 +38,13 @@
                             </div>
                         </div>
                     </div>
-
+                    <input type="hidden" class="form-control" name="ParentId" value="@Model.ParentId">
+                    <input type="hidden" class="form-control" name="Type" value="@Model.Type">
                     <button type="submit" class="btn btn-info pull-right">Saqlash</button>
-                    <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/Admin/Departments/'">Ortga</button>
+                    <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/Admin/Regions/'">Ortga</button>
                     <div class="clearfix"></div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    $.getJSON("/GetApi/GetRegions/", function (result) {
-        var $dropdown = $("#Regions");
-        $dropdown.append($("<option />").val(null).text("Tanlang..."));
-        $.each(result, function () {
-            if (this.id == @Model.ParentId) {
-                $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
-            }
-            else {
-                $dropdown.append($("<option />").val(this.id).text(this.nameUz));
-            }
-        });
-    });
-</script>

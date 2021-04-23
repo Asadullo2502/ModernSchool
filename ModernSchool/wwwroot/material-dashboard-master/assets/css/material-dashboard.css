@@ -5042,7 +5042,7 @@ tbody.collapse.show {
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: #e9ecef;
+  background-color: #eeeeee;
   border-radius: 0.25rem;
 }
 
@@ -9433,9 +9433,9 @@ a.text-dark:focus {
 
 .btn {
   position: relative;
-  padding: 12px 30px;
+  /*padding: 12px 30px;*/
   margin: 0.3125rem 1px;
-  font-size: .75rem;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1.428571;
   text-decoration: none;

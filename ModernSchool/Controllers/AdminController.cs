@@ -26,9 +26,70 @@ namespace ModernSchool.Controllers
         }
 
         #region Departments
-        public async Task<IActionResult> Departments()
+        public async Task<IActionResult> Regions()
         {
-            return View(await db.Departments.ToListAsync());
+            return View(await db.Departments.Include(x=>x.Departments).Where(x => x.Type == 2).ToListAsync());
+        }
+
+        public IActionResult CreateRegion()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateRegion(Department department)
+        {
+            try
+            {
+                db.Departments.Add(department);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("Regions");
+        }
+
+        public IActionResult EditRegion(int id = 0)
+        {
+            return View(db.Departments.FirstOrDefault(x => x.Id == id));
+        }
+        [HttpPost]
+        public IActionResult EditRegion(Department department)
+        {
+            try
+            {
+                db.Entry(department).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("Regions");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteRegion(int id)
+        {
+            try
+            {
+                var department = db.Departments.FirstOrDefault(x => x.Id == id);
+                db.Departments.Remove(department);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("Regions");
+        }
+
+        public async Task<IActionResult> Departments(int? RegionId = 0)
+        {
+            if (RegionId != 0 && RegionId != null)
+            {
+                var data = await db.Departments.Include(x => x.Departments).Where(x => x.ParentId == RegionId).ToListAsync();
+                ViewBag.region = RegionId;
+                return View(data);
+            }
+            else
+            {
+                var data = await db.Departments.Include(x => x.Departments).Where(x => x.Type == 3).ToListAsync();
+                ViewBag.region = 0;
+                return View(data);
+            }
         }
 
         public IActionResult CreateDepartment()
@@ -184,9 +245,15 @@ namespace ModernSchool.Controllers
         #endregion
 
         #region Indexes
-        public async Task<IActionResult> Indexes()
+        public async Task<IActionResult> Indexes(int? id = 0)
         {
-            return View(await db.Indexes.ToListAsync());
+            //if (id != null && id != 0)
+            //{
+            //    return View(await db.Indexes.Include(x => x.Parent).Where(x => x.ParentId == id).ToListAsync());
+            //}
+            {
+                return View(await db.Indexes.ToListAsync());
+            }
         }
 
         public IActionResult CreateIndex()
@@ -240,7 +307,7 @@ namespace ModernSchool.Controllers
         #region Criterias
         public async Task<IActionResult> Criterias()
         {
-            return View(await db.Criterias.Include(x=>x.Index).ToListAsync());
+            return View(await db.Criterias.Include(x => x.Index).ToListAsync());
         }
 
         public IActionResult CreateCriteria()

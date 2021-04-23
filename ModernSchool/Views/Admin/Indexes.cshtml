@@ -6,9 +6,23 @@
 }
 
 <div class="row">
-    <div class="col-12 text-right">
-        <input type="button" class="btn btn-info" value="qo'shish" style="width:140px" onclick="window.location.href='/Admin/CreateIndex'" />
-    </div>
+    @*<div class="col-md-10">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Admin/Indexes/">Sohalar</a></li>
+                <li class="breadcrumb-item active" aria-current="page">xxx</li>
+            </ol>
+        </nav>
+    </div>*@
+    @*<div class="col-md-2">*@
+        <div class="col-12 text-right">
+            <input type="button" class="btn btn-info" value="qo'shish"  onclick="window.location.href='/Admin/CreateIndex'" />
+        </div>
+    @*</div>*@
+</div>
+
+<div class="row">
+    
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-info">
@@ -19,10 +33,10 @@
                     <table class="table" id="myTable">
                         <thead class="text-info">
                             <tr>
-                                <th width="5%">
+                                <th width="3%">
                                     #
                                 </th>
-                                <th width="10%">
+                                <th width="9%">
                                     YUQORI INDEKS
                                 </th>
                                 <th width="10%">
@@ -31,13 +45,13 @@
                                 <th width="25%">
                                     TO'LIQ NOMI
                                 </th>
-                                <th width="10%">
+                                <th width="9%">
                                     MAKSIMAL BALL
                                 </th>
-                                <th width="7%">
+                                <th width="6%">
                                     DARAJASI
                                 </th>
-                                <th width="10%"></th>
+                                <th width="5%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,8 +77,15 @@
                                         @item.Level
                                     </td>
                                     <td style="text-align:right">
-                                        <input type="button" class="btn btn-warning" value="o'zgartirish" style="width:140px" onclick="window.location.href = '/Admin/EditIndex/@item.Id'" />
-                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" style="width:140px" onclick="deleteIndex(@item.Id)">O'CHIRISH</button>
+                                        @*<button type="button" class="btn btn-info" onclick="window.location.href = '/Admin/Indexes/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>*@
+                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditIndex/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="O'zgartirish">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" onclick="deleteIndex(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 i++;
