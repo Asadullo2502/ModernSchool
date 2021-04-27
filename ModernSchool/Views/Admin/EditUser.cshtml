@@ -100,10 +100,10 @@
         $dropdown.append($("<option />").val(null).text("Tanlang..."));
         $.each(result, function () {
             if (this.id == getVal(@Model.RegionId)) {
-                $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
+                $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
             }
             else {
-                $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                $dropdown.append($("<option />").val(this.id).text(this.name_uz));
             }
         });
     });
@@ -113,10 +113,10 @@
         $dropdown.append($("<option />").val(null).text("Tanlang..."));
         $.each(result, function () {
             if (this.id == getVal(@Model.DistrictId)) {
-                $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
+                $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
             }
             else {
-                $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                $dropdown.append($("<option />").val(this.id).text(this.name_uz));
             }
         });
     });
@@ -144,7 +144,7 @@
                 var $dropdown = $("#Regions");
                 $dropdown.append($("<option />").val(null).text("Tanlang..."));
                 $.each(result, function () {
-                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
                 });
             });
         }
@@ -164,7 +164,7 @@
                 var $dropdown = $("#Districts");
                 $dropdown.append($("<option />").val(null).text("Tanlang..."));
                 $.each(result, function () {
-                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
                 });
             });
         }

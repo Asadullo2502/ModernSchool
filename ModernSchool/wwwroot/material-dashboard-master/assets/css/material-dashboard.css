@@ -11867,7 +11867,7 @@ form {
   border: 0;
   height: 36px;
   transition: background 0s ease-out;
-  padding-left: 0;
+  padding-left: 5px;
   padding-right: 0;
   border-radius: 0;
   font-size: 14px;
@@ -13243,6 +13243,7 @@ fieldset[disabled][disabled] .has-rose .form-control,
 .bmd-form-group [class*=' bmd-label'].bmd-label-floating {
   will-change: left, top, contents;
   margin: 0;
+  padding-left: 5px;
   line-height: 1.4;
   font-weight: 400;
 }

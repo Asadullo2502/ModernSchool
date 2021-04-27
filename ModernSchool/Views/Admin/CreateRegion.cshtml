@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "CreateDepartment";
+    ViewData["Title"] = "CreateRegion";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -16,30 +16,28 @@
                         <div class="col-md-12 mb-3 mt-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
-                                <input type="text" class="form-control" name="NameUz" required>
+                                <input type="text" class="form-control" name="name_uz" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA KIRIL)</label>
-                                <input type="text" class="form-control" name="NameUzk" required>
+                                <input type="text" class="form-control" name="name_uzk" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (RUSCHA)</label>
-                                <input type="text" class="form-control" name="NameRu" required>
+                                <input type="text" class="form-control" name="name_ru" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (INGLIZCHA)</label>
-                                <input type="text" class="form-control" name="NameEn" required>
+                                <input type="text" class="form-control" name="name_en" required>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" class="form-control" name="ParentId" value="1">
-                    <input type="hidden" class="form-control" name="Type" value="2">
                     <button type="submit" class="btn btn-info pull-right">Saqlash</button>
                     <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/Admin/Regions/'">Ortga</button>
                     <div class="clearfix"></div>

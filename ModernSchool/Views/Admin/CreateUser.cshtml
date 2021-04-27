@@ -100,7 +100,7 @@
                 var $dropdown = $("#Regions");
                 $dropdown.append($("<option />").val(null).text("Tanlang..."));
                 $.each(result, function () {
-                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
                 });
             });
         }
@@ -120,7 +120,7 @@
                 var $dropdown = $("#Districts");
                 $dropdown.append($("<option />").val(null).text("Tanlang..."));
                 $.each(result, function () {
-                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
                 });
             });
         }

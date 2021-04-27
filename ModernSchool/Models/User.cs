@@ -26,10 +26,10 @@ namespace ModernSchool.Models
         public virtual School School { get; set; }
 
         [ForeignKey(nameof(DistrictId))]
-        public virtual Department District { get; set; }
+        public virtual District District { get; set; }
 
         [ForeignKey(nameof(RegionId))]
-        public virtual Department Region { get; set; }
+        public virtual Region Region { get; set; }
 
 
     }

@@ -1,15 +1,14 @@
 ﻿@model School
 @{
-    ViewData["Title"] = "EditSchool";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutSchool.cshtml";
 }
-
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-info">
-                <h4 class="card-title">MAKTAB O'ZGARTIRISH</h4>
+                <h4 class="card-title">MAKTAB HAQIDA</h4>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -18,21 +17,21 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">HUDUD</label>
-                                <select class="custom-select" name="RegionId" id="Regions" required>
+                                <select class="custom-select" name="RegionId" id="Regions" value="@Model.RegionId" disabled>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">TUMAN</label>
-                                <select class="custom-select" name="DistrictId" id="Districts" value="@Model.DistrictId" required>
+                                <select class="custom-select" name="DistrictId" id="Districts" value="@Model.DistrictId" disabled>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">MAKTAB TURI</label>
-                                <select class="custom-select" name="TypeId" id="SchoolTypes" value="@Model.TypeId" required>
+                                <select class="custom-select" name="TypeId" id="SchoolTypes" value="@Model.TypeId" disabled>
                                 </select>
                             </div>
                         </div>
@@ -42,13 +41,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
-                                <input type="text" class="form-control" name="NameUz" value="@Model.NameUz" required>
+                                <input type="text" class="form-control" name="NameUz" value="@Model.NameUz" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA KIRIL)</label>
-                                <input type="text" class="form-control" name="NameUzk" value="@Model.NameUzk" required>
+                                <input type="text" class="form-control" name="NameUzk" value="@Model.NameUzk" readonly>
                             </div>
                         </div>
                     </div>
@@ -57,13 +56,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (RUSCHA)</label>
-                                <input type="text" class="form-control" name="NameRu" value="@Model.NameRu" required>
+                                <input type="text" class="form-control" name="NameRu" value="@Model.NameRu" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (INGLIZCHA)</label>
-                                <input type="text" class="form-control" name="NameEn" value="@Model.NameEn" required>
+                                <input type="text" class="form-control" name="NameEn" value="@Model.NameEn" readonly>
                             </div>
                         </div>
                     </div>
@@ -72,18 +71,18 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">MAKTAB RAQAMI</label>
-                                <input type="number" class="form-control" name="Number" value="@Model.Number">
+                                <input type="number" class="form-control" name="Number" value="@Model.Number" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">DIREKTOR</label>
-                                <input type="text" class="form-control" name="Director" value="@Model.Director">
+                                <input type="text" class="form-control" name="Director" value="@Model.Director" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="tel" class="form-control" name="Phone" id="phone" placeholder="TELEFON RAQAMI" value="@Model.Phone">
+                                <input type="tel" class="form-control" name="Phone" id="phone" placeholder="TELEFON RAQAMI" value="@Model.Phone" readonly>
                             </div>
                         </div>
                     </div>
@@ -97,7 +96,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label class="bmd-label-floating">Manzil</label>
-                                <input type="text" class="form-control" name="Address" id="address" value="@Model.Address" />
+                                <input type="text" class="form-control" name="Address" id="address" value="@Model.Address" readonly />
                             </div>
                         </div>
 
@@ -236,3 +235,4 @@
 
 
 </script>
+

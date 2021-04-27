@@ -17,10 +17,10 @@ namespace ModernSchool.DB
         public DbSet<SchoolType> SchoolTypes { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
-            //Database.EnsureCreated();   // создаем базу данных при первом обращении
-        }
+        public DbSet<Region> Regions { get; set; }
+        public DbSet<District> Districts { get; set; }
+
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         
     }
 }

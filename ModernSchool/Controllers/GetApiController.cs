@@ -17,17 +17,17 @@ namespace ModernSchool.Controllers
         }
         public JsonResult GetRegions()
         {
-            return Json(db.Departments.Where(x => x.Type == 2));
+            return Json(db.Regions.OrderBy(x=>x.name_uz));
         }
 
         public JsonResult GetDistricts(int id = 0)
         {
-            return Json(db.Departments.Where(x => x.ParentId == id));
+            return Json(db.Districts.Where(x => x.parent_id == id));
         }
 
         public JsonResult GetSchools(int id = 0)
         {
-            return Json(db.Schools.Where(x => x.DepartmentId == id));
+            return Json(db.Schools.Where(x => x.DistrictId == id));
         }
 
         public JsonResult GetSchoolTypes()

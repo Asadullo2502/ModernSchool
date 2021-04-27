@@ -1,6 +1,6 @@
-﻿@model Department
+﻿@model Region
 @{
-    ViewData["Title"] = "EditDepartment";
+    ViewData["Title"] = "EditRegion";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -13,33 +13,31 @@
             <div class="card-body">
                 <form method="post">
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-12 mb-3 mt-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
-                                <input type="text" class="form-control" name="NameUz" value="@Model.NameUz" required>
+                                <input type="text" class="form-control" name="name_uz" value="@Model.name_uz" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA KIRIL)</label>
-                                <input type="text" class="form-control" name="NameUzk" value="@Model.NameUzk" required>
+                                <input type="text" class="form-control" name="name_uzk" value="@Model.name_uzk" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (RUSCHA)</label>
-                                <input type="text" class="form-control" name="NameRu" value="@Model.NameRu" required>
+                                <input type="text" class="form-control" name="name_ru" value="@Model.name_ru" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (INGLIZCHA)</label>
-                                <input type="text" class="form-control" name="NameEn" value="@Model.NameEn" required>
+                                <input type="text" class="form-control" name="name_en" value="@Model.name_en" required>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" class="form-control" name="ParentId" value="@Model.ParentId">
-                    <input type="hidden" class="form-control" name="Type" value="@Model.Type">
                     <button type="submit" class="btn btn-info pull-right">Saqlash</button>
                     <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/Admin/Regions/'">Ortga</button>
                     <div class="clearfix"></div>

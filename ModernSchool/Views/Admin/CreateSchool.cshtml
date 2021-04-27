@@ -25,7 +25,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">TUMAN</label>
-                                <select class="custom-select" name="DepartmentId" id="Districts" required>
+                                <select class="custom-select" name="DistrictId" id="Districts" required>
                                 </select>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
             var $dropdown2 = $("#Districts");
             $dropdown2.append($("<option />").val(null).text("Tanlang..."));
             $.each(result, function () {
-                $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                $dropdown.append($("<option />").val(this.id).text(this.name_uz));
             });
         });
 
@@ -135,7 +135,7 @@
                 var $dropdown = $("#Districts");
                 $dropdown.append($("<option />").val(null).text("Tanlang..."));
                 $.each(result, function () {
-                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
+                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
                 });
             });
         });

@@ -36,10 +36,13 @@ namespace ModernSchool.Controllers
                     await Authenticate(user);
 
                     if (user.RoleId == 1)
-                        return RedirectToAction("Departments", "Admin");
+                        return RedirectToAction("Districts", "Admin");
 
                     if (user.RoleId == 2)
                         return RedirectToAction("Index", "Home");
+
+                    if (user.RoleId == 5)
+                        return RedirectToAction("Index", "SchoolProfile");
                 }
                 ViewBag.error = "Login yoki parol noto'gri";
             }

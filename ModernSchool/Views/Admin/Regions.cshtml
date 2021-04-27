@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Department>
+﻿@model IEnumerable<Region>
 @{
-    ViewData["Title"] = "Departments";
+    ViewData["Title"] = "Regions";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     int i = 1;
 }
@@ -48,22 +48,22 @@
                                         @i
                                     </td>
                                     <td>
-                                        @item.NameUz
+                                        @item.name_uz
                                     </td>
                                     <td>
-                                        @item.NameUzk
+                                        @item.name_uzk
                                     </td>
                                     <td>
-                                        @item.NameRu
+                                        @item.name_ru
                                     </td>
                                     <td>
-                                        @item.NameEn
+                                        @item.name_en
                                     </td>
                                     <td style="text-align:right">
-                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditRegion/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="O'zgartirish">
+                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditRegion/@item.id'" data-toggle="tooltip" data-placement="bottom" title="O'zgartirish">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </button>
-                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" onclick="deleteDepartment(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
+                                        <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteRegion(@item.id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
                                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                                         </button>
                                     </td>
@@ -93,8 +93,8 @@
         pageLength: 20,
     });
 
-    function deleteDepartment(id) {
-        $('#departmentID').val(id);
+    function deleteRegion(id) {
+        $('#RegionID').val(id);
         $('#exampleModal').modal('show');
     }
 </script>
@@ -111,7 +111,7 @@
                 </div>
                 <div class="modal-body">
                     <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
-                    <input type="hidden" id="departmentID" name="id" />
+                    <input type="hidden" id="RegionID" name="id" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>

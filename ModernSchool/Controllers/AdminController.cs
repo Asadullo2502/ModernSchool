@@ -22,13 +22,13 @@ namespace ModernSchool.Controllers
 
         public IActionResult Dashboard()
         {
-            return RedirectToAction("Departments");
+            return RedirectToAction("Districts");
         }
 
         #region Departments
         public async Task<IActionResult> Regions()
         {
-            return View(await db.Departments.Include(x=>x.Departments).Where(x => x.Type == 2).ToListAsync());
+            return View(await db.Regions.ToListAsync());
         }
 
         public IActionResult CreateRegion()
@@ -36,11 +36,11 @@ namespace ModernSchool.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreateRegion(Department department)
+        public IActionResult CreateRegion(Region region)
         {
             try
             {
-                db.Departments.Add(department);
+                db.Regions.Add(region);
                 db.SaveChanges();
             }
             catch { }
@@ -49,14 +49,14 @@ namespace ModernSchool.Controllers
 
         public IActionResult EditRegion(int id = 0)
         {
-            return View(db.Departments.FirstOrDefault(x => x.Id == id));
+            return View(db.Regions.FirstOrDefault(x => x.id == id));
         }
         [HttpPost]
-        public IActionResult EditRegion(Department department)
+        public IActionResult EditRegion(Region region)
         {
             try
             {
-                db.Entry(department).State = EntityState.Modified;
+                db.Entry(region).State = EntityState.Modified;
                 db.SaveChanges();
             }
             catch { }
@@ -68,82 +68,80 @@ namespace ModernSchool.Controllers
         {
             try
             {
-                var department = db.Departments.FirstOrDefault(x => x.Id == id);
-                db.Departments.Remove(department);
+                var region = db.Regions.FirstOrDefault(x => x.id == id);
+                db.Regions.Remove(region);
                 db.SaveChanges();
             }
             catch { }
             return RedirectToAction("Regions");
         }
 
-        public async Task<IActionResult> Departments(int? RegionId = 0)
+        public async Task<IActionResult> Districts(int? RegionId = 0)
         {
             if (RegionId != 0 && RegionId != null)
             {
-                var data = await db.Departments.Include(x => x.Departments).Where(x => x.ParentId == RegionId).ToListAsync();
+                var data = await db.Districts.Include(x => x.Region).Where(x => x.parent_id == RegionId).ToListAsync();
                 ViewBag.region = RegionId;
                 return View(data);
             }
             else
             {
-                var data = await db.Departments.Include(x => x.Departments).Where(x => x.Type == 3).ToListAsync();
+                var data = await db.Districts.Include(x => x.Region).ToListAsync();
                 ViewBag.region = 0;
                 return View(data);
             }
         }
 
-        public IActionResult CreateDepartment()
+        public IActionResult CreateDistrict()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult CreateDepartment(Department department)
+        public IActionResult CreateDistrict(District district)
         {
             try
             {
-                department.Type = db.Departments.FirstOrDefault(x => x.Id == department.ParentId).Type + 1;
-                db.Departments.Add(department);
+                db.Districts.Add(district);
                 db.SaveChanges();
             }
             catch { }
-            return RedirectToAction("Departments");
+            return RedirectToAction("Districts");
         }
 
-        public IActionResult EditDepartment(int id = 0)
+        public IActionResult EditDistrict(int id = 0)
         {
-            return View(db.Departments.FirstOrDefault(x => x.Id == id));
+            return View(db.Districts.FirstOrDefault(x => x.id == id));
         }
         [HttpPost]
-        public IActionResult EditDepartment(Department department)
+        public IActionResult EditDistrict(District district)
         {
             try
             {
-                department.Type = db.Departments.FirstOrDefault(x => x.Id == department.ParentId).Type + 1;
-                db.Entry(department).State = EntityState.Modified;
+                db.Entry(district).State = EntityState.Modified;
                 db.SaveChanges();
             }
             catch { }
-            return RedirectToAction("Departments");
+            return RedirectToAction("Districts");
         }
 
         [HttpPost]
-        public IActionResult DeleteDepartment(int id)
+        public IActionResult DeleteDistrict(int id)
         {
             try
             {
-                var department = db.Departments.FirstOrDefault(x => x.Id == id);
-                db.Departments.Remove(department);
+                var distict = db.Districts.FirstOrDefault(x => x.id == id);
+                db.Districts.Remove(distict);
                 db.SaveChanges();
             }
             catch { }
-            return RedirectToAction("Departments");
+            return RedirectToAction("Districts");
         }
         #endregion
 
         #region Schools
         public async Task<IActionResult> Schools()
         {
-            return View(await db.Schools.Include(x => x.Department.Departments).ToListAsync());
+            return View(await db.Schools.Include(x => x.District).Include(x => x.Region).ToListAsync());
         }
 
         public IActionResult CreateSchool()
@@ -164,7 +162,7 @@ namespace ModernSchool.Controllers
 
         public IActionResult EditSchool(int id = 0)
         {
-            return View(db.Schools.Include(x => x.Department.Departments).FirstOrDefault(x => x.Id == id));
+            return View(db.Schools.Include(x => x.District).FirstOrDefault(x => x.Id == id));
         }
         [HttpPost]
         public IActionResult EditSchool(School school)
