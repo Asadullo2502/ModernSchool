@@ -42,7 +42,7 @@ namespace ModernSchool.Controllers
                         return RedirectToAction("Index", "Home");
 
                     if (user.RoleId == 5)
-                        return RedirectToAction("Index", "SchoolProfile");
+                        return RedirectToAction("Profile", "SchoolProfile");
                 }
                 ViewBag.error = "Login yoki parol noto'gri";
             }

@@ -1,0 +1,44 @@
+﻿@model User
+@{
+    ViewData["Title"] = "UserProfile";
+    Layout = "~/Views/Shared/_LayoutSchool.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-info">
+                <h4 class="card-title">FOYDALANUVCHI PROFILI</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mt-3 mb-3">
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">F.I.SH.</label>
+                            <input type="text" class="form-control" name="FullName" value="@Model.FullName" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">TELEFON RAQAMI</label>
+                            <input type="text" class="form-control" name="Phone" value="@Model.Phone" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">LOGIN</label>
+                            <input type="text" class="form-control" name="Login" value="@Model.Login" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">PAROL</label>
+                            <input type="text" class="form-control" name="Password" value="@Model.Password" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

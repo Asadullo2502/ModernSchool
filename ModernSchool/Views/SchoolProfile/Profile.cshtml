@@ -2,13 +2,14 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutSchool.cshtml";
+    string lat = Model.Latitude == null ? "null" : "lat";
 }
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-info">
-                <h4 class="card-title">MAKTAB HAQIDA</h4>
+                <h4 class="card-title">MAKTAB PROFILI</h4>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -17,21 +18,24 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">HUDUD</label>
-                                <select class="custom-select" name="RegionId" id="Regions" value="@Model.RegionId" disabled>
+                                <select class="custom-select" name="RegionId" id="Regions" disabled>
+                                    <option selected value="@Model.RegionId">@Model.Region.name_uz</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">TUMAN</label>
-                                <select class="custom-select" name="DistrictId" id="Districts" value="@Model.DistrictId" disabled>
+                                <select class="custom-select" name="DistrictId" id="Districts" disabled>
+                                    <option selected value="@Model.DistrictId">@Model.District.name_uz</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">MAKTAB TURI</label>
-                                <select class="custom-select" name="TypeId" id="SchoolTypes" value="@Model.TypeId" disabled>
+                                <select class="custom-select" name="TypeId" id="SchoolTypes" disabled>
+                                    <option selected value="@Model.TypeId">@Model.SchoolType.NameUz</option>
                                 </select>
                             </div>
                         </div>
@@ -104,8 +108,7 @@
                         <input type="hidden" class="form-control" name="Longtitude" id="Longtitude" value="@Model.Longtitude" />
 
                     </div>
-                    <button type="submit" class="btn btn-info pull-right">Saqlash</button>
-                    <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/Admin/Schools/'">Ortga</button>
+                    <button type="button" class="btn btn-info pull-right" onclick="window.location.href='/SchoolProfile/EditProfile/'">O'zgartirish</button>
                     <div class="clearfix"></div>
                 </form>
             </div>
@@ -119,120 +122,59 @@
     })
 
     $(document).ready(function () {
-        $.getJSON("/GetApi/GetRegions/", function (result) {
-            var $dropdown = $("#Regions");
-            $dropdown.append($("<option />").val(null).text("Tanlang..."));
-            var $dropdown2 = $("#Districts");
-            $dropdown2.append($("<option />").val(null).text("Tanlang..."));
-            $.each(result, function () {
-                if (this.id == @Model.RegionId) {
-                    $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
-                }
-                else {
-                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
-                }
-            });
-        });
+        var r = $('#Latitude').val();
+        if (r != "") {
+            ymaps.ready(init);
 
-        $.getJSON("/GetApi/GetDistricts/" + @Model.RegionId, function (result) {
-            var $dropdown = $("#Districts");
-            $.each(result, function () {
-                if (this.id == @Model.DistrictId) {
-                    $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
-                }
-                else {
-                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
-                }
-            });
-        });
-
-        $("#Regions").change(function () {
-            var region = this.value;
-            $('#Districts').empty();
-            $.getJSON("/GetApi/GetDistricts/" + region, function (result) {
-                var $dropdown = $("#Districts");
-                $dropdown.append($("<option />").val(null).text("Tanlang..."));
-                $.each(result, function () {
-                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
+            function init() {
+                var myMap = new ymaps.Map("mapholder", {
+                    center: [@Model.Latitude, @Model.Longtitude],
+                    zoom: 17,
+                },
+                {
+                    suppressMapOpenBlock: true
+                },
+                {
+                    searchControlProvider: 'yandex#search'
                 });
-            });
-        });
 
-        $.getJSON("/GetApi/GetSchoolTypes/", function (result) {
-            var $dropdown = $("#SchoolTypes");
-            $dropdown.append($("<option />").val(null).text("Tanlang..."));
-            $.each(result, function () {
-                if (this.id == @Model.TypeId) {
-                    $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
-                }
-                else {
-                    $dropdown.append($("<option />").val(this.id).text(this.nameUz));
-                }
-            });
-        });
-    });
+                myPlacemark = createPlacemark([@Model.Latitude, @Model.Longtitude]);
+                myMap.geoObjects.add(myPlacemark);
+                myPlacemark.events.add(function () {
+                    getAddress(myPlacemark.geometry.getCoordinates());
+                });
+                getAddress([@Model.Latitude, @Model.Longtitude]);
 
-    ymaps.ready(init);
-
-    function init() {
-        var myMap = new ymaps.Map("mapholder", {
-            center: [@Model.Latitude, @Model.Longtitude],
-            zoom: 16,
-        },
-        {
-            suppressMapOpenBlock: true
-        },
-        {
-            searchControlProvider: 'yandex#search'
-        });
-
-        myPlacemark = createPlacemark([@Model.Latitude, @Model.Longtitude]);
-        myMap.geoObjects.add(myPlacemark);
-        myPlacemark.events.add('dragend', function () {
-            getAddress(myPlacemark.geometry.getCoordinates());
-        });
-        getAddress([@Model.Latitude, @Model.Longtitude]);
-
-        myMap.events.add('click', function (e) {
-            var coords = e.get('coords');
-            document.getElementById("mapholder").value = coords;
-            myPlacemark.geometry.setCoordinates(coords);
-            getAddress(coords);
-            document.getElementById("Latitude").value = coords[0];
-            document.getElementById("Longtitude").value = coords[1];
-        });
-
-        function createPlacemark(coords) {
-            return new ymaps.Placemark(coords, {
-                iconCaption: 'поиск...'
+                function createPlacemark(coords) {
+                    return new ymaps.Placemark(coords, {
+                        iconCaption: 'поиск...'
 
 
-            }, {
-                preset: 'islands#blueDotIconWithCaption',
-                draggable: true
-            });
-        }
-
-        function getAddress(coords) {
-            myPlacemark.properties.set('iconCaption', 'поиск...');
-            ymaps.geocode(coords).then(function (res) {
-                var firstGeoObject = res.geoObjects.get(0);
-
-                myPlacemark.properties
-                    .set({
-                        iconCaption: [
-                            firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
-                            firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
-                        ].filter(Boolean).join(', '),
-                        balloonContent: firstGeoObject.getAddressLine()
+                    }, {
+                        preset: 'islands#blueDotIconWithCaption',
+                        draggable: false
                     });
-                document.getElementById("address").value = firstGeoObject.getAddressLine();
-                document.getElementById("Latitude").value = coords[0];
-                document.getElementById("Longtitude").value = coords[1];
-            });
+                }
+
+                function getAddress(coords) {
+                    myPlacemark.properties.set('iconCaption', 'поиск...');
+                    ymaps.geocode(coords).then(function (res) {
+                        var firstGeoObject = res.geoObjects.get(0);
+
+                        myPlacemark.properties
+                            .set({
+                                iconCaption: [
+                                    firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                                    firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                                ].filter(Boolean).join(', '),
+                                balloonContent: firstGeoObject.getAddressLine()
+                            });
+                        document.getElementById("address").value = firstGeoObject.getAddressLine();
+                        document.getElementById("Latitude").value = coords[0];
+                        document.getElementById("Longtitude").value = coords[1];
+                    });
+                }
+            }
         }
-    }
-
-
+    });
 </script>
-
