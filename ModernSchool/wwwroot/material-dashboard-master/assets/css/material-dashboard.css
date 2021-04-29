@@ -9461,9 +9461,9 @@ a.text-dark:focus {
 
 .btn.btn-primary {
   color: #fff;
-  background-color: #2196f3;
+  background-color: #1e77bd;
   border-color: #2196f3;
-  box-shadow: 0 2px 2px 0 rgba(156, 39, 176, 0.14), 0 3px 1px -2px rgba(156, 39, 176, 0.2), 0 1px 5px 0 rgba(156, 39, 176, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(39, 119, 176, 0.14), 0 3px 1px -2px rgba(39, 119, 176, 0.2), 0 1px 5px 0 rgba(39, 119, 176, 0.12);
 }
 
 .btn.btn-primary:hover {
@@ -9476,8 +9476,8 @@ a.text-dark:focus {
 .btn.btn-primary.focus,
 .btn.btn-primary:hover {
   color: #fff;
-  background-color: #9124a3;
-  border-color: #701c7e;
+  background-color: #2457a3;
+  border-color: #1c367e;
 }
 
 .btn.btn-primary:active,
@@ -9503,7 +9503,7 @@ a.text-dark:focus {
 .show>.btn.btn-primary.dropdown-toggle:focus,
 .show>.btn.btn-primary.dropdown-toggle.focus {
   color: #fff;
-  background-color: #9124a3;
+  background-color: #2457a3;
   border-color: #3f1048;
 }
 
@@ -9533,7 +9533,7 @@ a.text-dark:focus {
 .btn.btn-primary:focus,
 .btn.btn-primary:active,
 .btn.btn-primary:hover {
-  box-shadow: 0 14px 26px -12px rgba(156, 39, 176, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2);
+  box-shadow: 0 14px 26px -12px rgba(39, 119, 176, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(39, 119, 176, 0.2);
 }
 
 .btn.btn-primary.btn-link {
@@ -14823,7 +14823,7 @@ h2.title {
 .dropdown-menu a:hover,
 .dropdown-menu a:focus,
 .dropdown-menu a:active {
-  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4);
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(23, 83, 144, 0.4);
   background-color: #2196f3;
   color: #FFFFFF;
 }
@@ -15466,8 +15466,8 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .sidebar[data-color="azure"] li.active>a {
-  background-color: #00bcd4;
-  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4);
+  background-color: #1e77bc;
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 65, 212, 0.4);
 }
 
 .sidebar[data-color="green"] li.active>a {
@@ -17518,7 +17518,7 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
 .card.bg-primary,
 .card.card-rotate.bg-primary .front,
 .card.card-rotate.bg-primary .back {
-  background: linear-gradient(60deg, #ab47bc, #8e24aa);
+  background: linear-gradient(60deg, #1e77bd, #256fb3);
 }
 
 .card .card-header-info .card-icon,
@@ -17569,7 +17569,7 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
 .card .card-header-primary .card-icon,
 .card .card-header-primary:not(.card-header-icon):not(.card-header-text),
 .card .card-header-primary .card-text {
-  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4);
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(39, 81, 176, 0.4);
 }
 
 .card .card-header-danger .card-icon,
