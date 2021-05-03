@@ -36,7 +36,7 @@ namespace ModernSchool.Controllers
                     await Authenticate(user);
 
                     if (user.RoleId == 1)
-                        return RedirectToAction("Districts", "Admin");
+                        return RedirectToAction("Indexes", "Admin");
 
                     if (user.RoleId == 2)
                         return RedirectToAction("Index", "Home");

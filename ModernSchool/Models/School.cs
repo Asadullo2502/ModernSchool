@@ -23,11 +23,7 @@ namespace ModernSchool.Models
         public string Longtitude { get; set; }
         public string Address { get; set; }
         public int? BuildedYear { get; set; }
-        public int? CapitalRebuilding { get; set; }
-        public int? PupilsMax { get; set; }
-        public int? PupilsNow { get; set; }
-        public int? TeachersMax { get; set; }
-        public int? MicrodistrictPupilsCount { get; set; }
+        public DateTime? UpdateDate { get; set; }
 
         [ForeignKey(nameof(RegionId))]
         public virtual Region Region { get; set; }
@@ -36,6 +32,8 @@ namespace ModernSchool.Models
 
         [ForeignKey(nameof(TypeId))]
         public virtual SchoolType SchoolType { get; set; }
+        public virtual SchoolInfo SchoolInfo { get; set; }
+        public virtual TeacherInfo TeacherInfo { get; set; }
     }
 
     public class SchoolApiModel

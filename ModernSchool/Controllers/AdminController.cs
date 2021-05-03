@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ModernSchool.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "1")]
     public class AdminController : Controller
     {
         private DataContext db;

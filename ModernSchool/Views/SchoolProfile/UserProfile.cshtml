@@ -21,7 +21,7 @@
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label class="bmd-label-floating">TELEFON RAQAMI</label>
-                            <input type="text" class="form-control" name="Phone" value="@Model.Phone" readonly>
+                            <input type="text" class="form-control" name="Phone" id="phone" value="@Model.Phone" readonly>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
@@ -43,14 +43,106 @@
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <button class="btn btn-primary">O'zgartirish</button>
-                        <button class="btn btn-primary">Parolni yangilash</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            Ma'lumotlarni yangilash
+                        </button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">
+                            Parolni yangilash
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<form id="form1" method="post" action="/SchoolProfile/UpdateUserProfile">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ma'lumotlarni yangilash</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 mt-3 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">F.I.SH.</label>
+                            <input type="text" class="form-control" name="FullName" value="@Model.FullName" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="Phone" id="phone2" placeholder="Telefon raqami" value="@Model.Phone" required>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="Login" value="@Model.Login" >
+                <input type="hidden" name="Password" value="@Model.Password" >
+                <input type="hidden" name="Id" value="@Model.Id" >
+                <input type="hidden" name="DistrictId" value="@Model.DistrictId" >
+                <input type="hidden" name="RegionId" value="@Model.RegionId" >
+                <input type="hidden" name="RoleId" value="@Model.RoleId" >
+                <input type="hidden" name="SchoolId" value="@Model.SchoolId" >
+                <input type="hidden" name="LastSeen" value="@Model.LastSeen" >
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form2" method="post" action="/SchoolProfile/UpdateUserPassword">
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Parolni yangilash</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 mt-3 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Yangi parolni kiriting</label>
+                            <input type="text" class="form-control" name="Password" id="pass1" minlength="6" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Parolni qaytaring</label>
+                            <input type="text" class="form-control" id="pass2" minlength="6" required>
+                        </div>
+                    </div>
+
+                    <p id="err" style="text-align:center; color:darkred"></p>
+
+                    <input type="hidden" name="Phone" value="@Model.Phone">
+                    <input type="hidden" name="FullName" value="@Model.FullName">
+                    <input type="hidden" name="Login" value="@Model.Login">
+                    <input type="hidden" name="Id" value="@Model.Id">
+                    <input type="hidden" name="DistrictId" value="@Model.DistrictId">
+                    <input type="hidden" name="RegionId" value="@Model.RegionId">
+                    <input type="hidden" name="RoleId" value="@Model.RoleId">
+                    <input type="hidden" name="SchoolId" value="@Model.SchoolId">
+                    <input type="hidden" name="LastSeen" value="@Model.LastSeen">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
+                    <button type="button" onclick="checkPass()" class="btn btn-primary">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <script>
     function showPass() {
@@ -61,4 +153,14 @@
             $('#password').prop('type', 'password');
         }
     }
+
+    function checkPass() {
+        if ($('#pass1').val() == $('#pass2').val()) {
+            $("#form2").submit();
+        }
+        else {
+            $("#err").append('parollar to`g`ri kelmayabti');
+        }
+    }
 </script>
+

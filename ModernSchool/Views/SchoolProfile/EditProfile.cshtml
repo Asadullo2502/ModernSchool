@@ -41,7 +41,7 @@
                         </div>
                     </div>
 
-                    <div class="row mt-3 mb-3">
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
@@ -58,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div class="row mt-3 mb-3">
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (RUSCHA)</label>
@@ -76,27 +76,33 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">MAKTAB RAQAMI</label>
-                                <input type="hidden" class="form-control" name="Number" value="@Model.Number" >
-                                <input type="text" class="form-control"  value="@Model.Number" readonly>
+                                <input type="hidden" class="form-control" name="Number" value="@Model.Number">
+                                <input type="text" class="form-control" value="@Model.Number" readonly>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">MAKTAB QURILGAN YIL</label>
+                                <input type="number" class="form-control" name="BuildedYear" value="@Model.BuildedYear" min="1900" max="@DateTime.Now.Year">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">DIREKTOR</label>
-                                <input type="text" class="form-control" name="Director" value="@Model.Director" >
+                                <input type="text" class="form-control" name="Director" value="@Model.Director">
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <input type="tel" class="form-control" name="Phone" id="phone" placeholder="TELEFON RAQAMI" value="@Model.Phone" >
+                                <input type="tel" class="form-control" name="Phone" id="phone" placeholder="TELEFON RAQAMI" value="@Model.Phone">
                             </div>
                         </div>
                     </div>
 
-                    <div class="row mb-5">
+                    <div class="row mb-3">
                         <div class="col-12">
                             <div id="mapholder" style="width: 100%; height: 400px">
 
@@ -104,21 +110,20 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Manzil</label>
-                                <input type="text" class="form-control" name="Address" id="address" value="@Model.Address"  />
+                                <input type="text" class="form-control" name="Address" placeholder="Manzil" id="address" value="@Model.Address" />
                             </div>
                         </div>
 
-                        <input type="hidden" class="form-control" name="DistrictId"  value="@Model.DistrictId" />
-                        <input type="hidden" class="form-control" name="RegionId"  value="@Model.RegionId" />
-                        <input type="hidden" class="form-control" name="TypeId"  value="@Model.TypeId" />
+                        <input type="hidden" class="form-control" name="DistrictId" value="@Model.DistrictId" />
+                        <input type="hidden" class="form-control" name="RegionId" value="@Model.RegionId" />
+                        <input type="hidden" class="form-control" name="TypeId" value="@Model.TypeId" />
                         <input type="hidden" class="form-control" name="Latitude" id="Latitude" value="@Model.Latitude" />
                         <input type="hidden" class="form-control" name="Longtitude" id="Longtitude" value="@Model.Longtitude" />
                         <input type="hidden" class="form-control" name="Id" id="Id" value="@Model.Id" />
 
                     </div>
-                    <button type="submit" class="btn btn-primary pull-right">Saqlash</button>
-                    <button type="button" class="btn btn-dark pull-right" onclick="window.location.href='/SchoolProfile/Profile/'">Ortga</button>
+                    <button type="submit" class="btn btn-primary ">Saqlash</button>
+                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/SchoolProfile/Profile/'">Ortga</button>
                     <div class="clearfix"></div>
                 </form>
             </div>

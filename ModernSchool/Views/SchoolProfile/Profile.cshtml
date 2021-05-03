@@ -41,7 +41,7 @@
                         </div>
                     </div>
 
-                    <div class="row mt-3 mb-3">
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
@@ -56,7 +56,7 @@
                         </div>
                     </div>
 
-                    <div class="row mt-3 mb-3">
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating">NOMI (RUSCHA)</label>
@@ -72,30 +72,39 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">MAKTAB RAQAMI</label>
                                 <input type="number" class="form-control" name="Number" value="@Model.Number" readonly>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">MAKTAB QURILGAN YILI</label>
+                                <input type="number" class="form-control" name="BuildedYear" value="@Model.BuildedYear" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">DIREKTOR</label>
                                 <input type="text" class="form-control" name="Director" value="@Model.Director" readonly>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <input type="tel" class="form-control" name="Phone" id="phone" placeholder="TELEFON RAQAMI" value="@Model.Phone" readonly>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row mb-5">
+                    <div class="row mb-3">
                         <div class="col-12">
-                            <div id="mapholder" style="width: 100%; height: 400px">
+                            @if (Model.Latitude != null && Model.Latitude != "")
+                            {
+                                <div id="mapholder" style="width: 100%; height: 400px">
 
-                            </div>
+                                </div>
+                            }
                         </div>
                         <div class="col-12">
                             <div class="form-group">
@@ -104,11 +113,15 @@
                             </div>
                         </div>
 
+                        <div class="col-12">
+                            <p style="text-align:right">Oxirgi o'zgartirilgan sana: <mark> @Model.UpdateDate </mark> </p>
+                        </div>
+
                         <input type="hidden" class="form-control" name="Latitude" id="Latitude" value="@Model.Latitude" />
                         <input type="hidden" class="form-control" name="Longtitude" id="Longtitude" value="@Model.Longtitude" />
 
                     </div>
-                    <button type="button" class="btn btn-primary pull-right" onclick="window.location.href='/SchoolProfile/EditProfile/'">O'zgartirish</button>
+                    <button type="button" class="btn btn-primary " onclick="window.location.href='/SchoolProfile/EditProfile/'">O'zgartirish</button>
                     <div class="clearfix"></div>
                 </form>
             </div>
