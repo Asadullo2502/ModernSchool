@@ -21,6 +21,10 @@ namespace ModernSchool.DB
         public DbSet<District> Districts { get; set; }
         public DbSet<SchoolInfo> SchoolInfos { get; set; }
         public DbSet<TeacherInfo> TeacherInfos { get; set; }
+        public DbSet<PupilInfo> PupilInfos { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<RepublicOlympiadWinner> RepublicOlympiadWinners { get; set; }
+        public DbSet<InternationOlympiadWinner> InternationOlympiadWinners { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 

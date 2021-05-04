@@ -120,5 +120,80 @@ namespace ModernSchool.Controllers
             catch { }
             return RedirectToAction("TeachersInfo");
         }
+
+        public IActionResult PupilsInfo()
+        {
+            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+            var model = db.Schools.Include(x => x.SchoolInfo).Include(x => x.PupilInfo).Include(x => x.InternationOlympiadWinners).Include(x => x.RepublicOlympiadWinners).FirstOrDefault(x => x.Id == school_id);
+            model.Subjects = db.Subjects.ToList();
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult PupilsInfo(PupilInfo pupilInfo)
+        {
+            try
+            {
+                pupilInfo.update_date = DateTime.Now;
+                pupilInfo.year = DateTime.Now.Year;
+                if (pupilInfo.id != 0)
+                    db.Entry(pupilInfo).State = EntityState.Modified;
+                else
+                    db.PupilInfos.Add(pupilInfo);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("PupilsInfo");
+        }
+        [HttpPost]
+        public IActionResult SaveRepublicOlympiadWinners(RepublicOlympiadWinner republicOlympiadWinner)
+        {
+            try
+            {
+                republicOlympiadWinner.update_date = DateTime.Now;
+                republicOlympiadWinner.year = DateTime.Now.Year;
+                db.RepublicOlympiadWinners.Add(republicOlympiadWinner);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("PupilsInfo");
+        }
+        [HttpPost]
+        public IActionResult SaveInternationOlympiadWinners(InternationOlympiadWinner internationOlympiadWinner)
+        {
+            try
+            {
+                internationOlympiadWinner.update_date = DateTime.Now;
+                internationOlympiadWinner.year = DateTime.Now.Year;
+                db.InternationOlympiadWinners.Add(internationOlympiadWinner);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("PupilsInfo");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteRepublicOlympiadWinners(int id)
+        {
+            try
+            {
+                var data = db.RepublicOlympiadWinners.FirstOrDefault(x => x.id == id);
+                db.RepublicOlympiadWinners.Remove(data);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("PupilsInfo");
+        }
+        [HttpPost]
+        public IActionResult DeleteInternationOlympiadWinners(int id)
+        {
+            try
+            {
+                var data = db.InternationOlympiadWinners.FirstOrDefault(x => x.id == id);
+                db.InternationOlympiadWinners.Remove(data);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("PupilsInfo");
+        }
     }
 }

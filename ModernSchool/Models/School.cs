@@ -34,6 +34,11 @@ namespace ModernSchool.Models
         public virtual SchoolType SchoolType { get; set; }
         public virtual SchoolInfo SchoolInfo { get; set; }
         public virtual TeacherInfo TeacherInfo { get; set; }
+        public virtual PupilInfo PupilInfo { get; set; }
+        public virtual List<RepublicOlympiadWinner> RepublicOlympiadWinners { get; set; }
+        public virtual List<InternationOlympiadWinner> InternationOlympiadWinners { get; set; }
+        [NotMapped]
+        public List<Subject> Subjects { get; set; }
     }
 
     public class SchoolApiModel

@@ -1,0 +1,659 @@
+﻿@model School
+@{
+    ViewData["Title"] = "PupilsInfo";
+    Layout = "~/Views/Shared/_LayoutSchool.cshtml";
+}
+
+<style>
+    @@keyframes glowing {
+      0% { background-color: #1e77bd; box-shadow: 0 0 5px #1e77bd; }
+      50% { background-color: #1e77bd; box-shadow: 0 0 15px #1e77bd; }
+      100% { background-color: #1e77bd; box-shadow: 0 0 5px #1e77bd; }
+      }
+
+.shinebtn {
+    animation: glowing 2000ms infinite;
+}
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">
+                    O‘quvchilar to‘g‘risida
+                    ma’lumotlar
+                </h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th rowspan="2"><b>O‘quvchilar soni</b></th>
+                            <th rowspan="2"><b>Shu jumladan, kitob.uz ga a’zo bo‘lganlar soni*</b></th>
+                            <th rowspan="2"><b>Umumta’lim muassasasi joylashgan mikrohududdan bo‘lgan o‘quvchilar soni</b></th>
+                            <th colspan="3"><b>Alohida ta’lim ehtiyojlari bo‘lgan o‘quvchilar soni</b></th>
+                        </tr>
+                        <tr>
+                            <th><b>Ko‘z</b></th>
+                            <th><b>Nutq</b></th>
+                            <th><b>Tayanch- harakat</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.SchoolInfo?.pupils_count</td>
+                            <td>@Model.PupilInfo?.kitob_uz_followers</td>
+                            <td>@Model.SchoolInfo?.microdistrict_pupils_count</td>
+                            <td>@Model.PupilInfo?.eye_problem_pupils_count</td>
+                            <td>@Model.PupilInfo?.speech_problem_pupils_count</td>
+                            <td>@Model.PupilInfo?.move_problem_pupils_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>*2021 yil uchun maktab kutubxonasiga a’zo bo‘lganlar hisoblanadi</p>
+
+                <p class="mt-5"><b>Respublika fan olimpiadalarida sovrindor bo‘lgan o‘quvchilar soni*</b></p>
+                <button type="button" class="btn btn-primary shinebtn" data-toggle="modal" data-target="#exampleModal2">
+                    Respublika fan olimpiadalarida sovrindor bo‘lgan o‘quvchilar ma'lumotlarini qo'shish
+                </button>
+                @foreach (var item in Model.RepublicOlympiadWinners)
+                {
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th colspan="3"><b>Fan</b></th>
+                                <th colspan="5"><b>@item.Subject?.subject_name</b></th>
+                                <th colspan="1">
+                                    <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteRepOlymp(@item.id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="3"><b>Ishtirokchilar soni</b></th>
+                                <th colspan="6"><b>@item.participants</b></th>
+                            </tr>
+                            <tr>
+                                <th colspan="3"><b>Tuman bosqichida erishilgan natija</b></th>
+                                <th colspan="3"><b>Hududiy bosqichda erishilgan natija</b></th>
+                                <th colspan="3"><b>Respublika bosqichida erishilgan natija</b></th>
+                            </tr>
+                            <tr>
+                                <th><b>1</b></th>
+                                <th><b>2</b></th>
+                                <th><b>3</b></th>
+                                <th><b>1</b></th>
+                                <th><b>2</b></th>
+                                <th><b>3</b></th>
+                                <th><b>1</b></th>
+                                <th><b>2</b></th>
+                                <th><b>3</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@item.district_first_place</td>
+                                <td>@item.district_second_place</td>
+                                <td>@item.district_third_place</td>
+                                <td>@item.region_first_place</td>
+                                <td>@item.region_second_place</td>
+                                <td>@item.region_third_place</td>
+                                <td>@item.republic_first_place</td>
+                                <td>@item.republic_second_place</td>
+                                <td>@item.republic_third_place</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                <p>*har bir fan uchun alohida to‘ldiriladi</p>
+
+                <p class="mt-5"><b>Xalqaro fan olimpiadalarida sovrindor bo‘lgan o‘quvchilar soni*</b></p>
+                <button type="button" class="btn btn-primary shinebtn" data-toggle="modal" data-target="#exampleModal3">
+                    Xalqaro fan olimpiadalarida sovrindor bo‘lgan o‘quvchilar ma'lumotlarini qo'shish
+                </button>
+                @foreach (var item in Model.InternationOlympiadWinners)
+                {
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th><b>Fan</b></th>
+                                <th colspan="2"><b>@item.Subject?.subject_name</b></th>
+                                <th>
+                                    <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteInterOlymp(@item.id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th><b>Ishtirokchilar soni</b></th>
+                                <th><b>bronza</b></th>
+                                <th><b>kumush</b></th>
+                                <th><b>oltin</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@item.participants</td>
+                                <td>@item.bronze</td>
+                                <td>@item.silver</td>
+                                <td>@item.gold</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                <p>*har bir fan uchun alohida to‘ldiriladi</p>
+
+                <p class="mt-5"><b>Respublika miqyosidagi turli rasmiy tanlovlar, festival va musobaqalarda g‘olib va sovrindor o‘quvchilar</b></p>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>Tuman (shahar) bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</b></th>
+                            <th><b>Hududiy bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</b></th>
+                            <th><b>Respublika bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.district_level_winners_count</td>
+                            <td>@Model.PupilInfo?.region_level_winners_count</td>
+                            <td>@Model.PupilInfo?.republic_level_winners_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p class="mt-5"><b>Rasmiy xalqaro miqyosidagi turli tanlovlar, festival va musobaqalarda g‘olib va sovrindor o‘quvchilar</b></p>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>Ishtirok etgan</b></th>
+                            <th><b>Sovrindor bo‘lgan</b></th>
+                            <th><b>G‘olib bo‘lgan</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.internation_level_participants_count</td>
+                            <td>@Model.PupilInfo?.internation_level_prizewinners_count</td>
+                            <td>@Model.PupilInfo?.internation_level_winners_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p class="mt-5"><b>OTMga kirish ko‘rsatkichlari</b></p>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>Hisobot yilida 11-sinfni tugatgan o‘quvchilar soni</b></th>
+                            <th><b>Respublika OTMlariga hujjat topshirgan bitiruvchilar soni</b></th>
+                            <th><b>O‘qishga o‘rnatilgan kvota doirasida kirganlar soni</b></th>
+                            <th><b>O‘qishga qo‘shimcha (“super”) kontrakt doirasida kirganlar soni</b></th>
+                            <th><b>Kirish imtihonlarida bitiruvchilar tomonidan to‘plangan jami ballar yig‘indisi</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.school_graduates_count</td>
+                            <td>@Model.PupilInfo?.uzb_enrollees_count</td>
+                            <td>@Model.PupilInfo?.students_count</td>
+                            <td>@Model.PupilInfo?.supercontract_students_count</td>
+                            <td>@Model.PupilInfo?.all_students_scored_ball</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>Xorijiy OTMlarning respublikamizdagi filiallariga o‘qishga kirganlari soni</b></th>
+                            <th><b>Xorijiy top-1000* universitetlarga o‘qishga kirganlar soni**</b></th>
+                            <th><b>Boshqa xorijiy oliy ta’lim muassasalariga o‘qishga kirgan o‘quvchilar soni</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.uzb_international_enrollees_count</td>
+                            <td>@Model.PupilInfo?.top1000_universities_enrolles_count</td>
+                            <td>@Model.PupilInfo?.other_international_universities_enrollees_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>* QS World University Rankings, Times Higher Education World University Rankings, Academic Ranking of World Universities reyting tizimlari bo‘yicha</p>
+                <p>**Xorijiy universitetlarning ro‘yxati taqdim etilishi lozim.</p>
+
+                <p class="mt-5"><b>O‘rta maxsus ta’lim muassasasiga kirish va ishga joylashish ko‘rsatkichlari</b></p>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>O‘rta maxsus ta’lim muassasasiga kirganlar soni</b></th>
+                            <th><b>Mehnat faoliyatini boshlagan o‘quvchilar soni</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.middle_spec_univ_pupils_count</td>
+                            <td>@Model.PupilInfo?.worker_pupils_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="text-align:right">Oxirgi o'zgartirilgan sana: <mark> @Model.TeacherInfo?.update_date </mark> </p>
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Ma'lumotlarni yangilash
+                </button>
+                <button type="button" class="btn btn-secondary " onclick="window.location.href='/SchoolProfile/Info/'">Ortga</button>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="form1" method="post">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ma'lumotlarni yangilash</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">kitob.uz ga a’zo bo‘lganlar soni</label>
+                            <input type="number" class="form-control" name="kitob_uz_followers" value="@Model.PupilInfo?.kitob_uz_followers" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Alohida ta’lim ehtiyojlari bo‘lgan o‘quvchilar soni (Ko'z)</label>
+                            <input type="number" class="form-control" name="eye_problem_pupils_count" value="@Model.PupilInfo?.eye_problem_pupils_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Alohida ta’lim ehtiyojlari bo‘lgan o‘quvchilar soni (Nutq)</label>
+                            <input type="number" class="form-control" name="speech_problem_pupils_count" value="@Model.PupilInfo?.speech_problem_pupils_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Alohida ta’lim ehtiyojlari bo‘lgan o‘quvchilar soni (Tayanch-harakat)</label>
+                            <input type="number" class="form-control" name="move_problem_pupils_count" value="@Model.PupilInfo?.move_problem_pupils_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Tuman (shahar) bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</label>
+                            <input type="number" class="form-control" name="district_level_winners_count" value="@Model.PupilInfo?.district_level_winners_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Hududiy bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</label>
+                            <input type="number" class="form-control" name="region_level_winners_count" value="@Model.PupilInfo?.region_level_winners_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Respublika bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</label>
+                            <input type="number" class="form-control" name="republic_level_winners_count" value="@Model.PupilInfo?.republic_level_winners_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Rasmiy xalqaro miqyosidagi turli tanlovlar, festival va musobaqalarda ishtirok etgan</label>
+                            <input type="number" class="form-control" name="internation_level_participants_count" value="@Model.PupilInfo?.internation_level_participants_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Rasmiy xalqaro miqyosidagi turli tanlovlar, festival va musobaqalarda sovrindor bo‘lgan</label>
+                            <input type="number" class="form-control" name="internation_level_prizewinners_count" value="@Model.PupilInfo?.internation_level_prizewinners_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Rasmiy xalqaro miqyosidagi turli tanlovlar, festival va musobaqalarda g‘olib bo‘lgan</label>
+                            <input type="number" class="form-control" name="internation_level_winners_count" value="@Model.PupilInfo?.internation_level_winners_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                Hisobot yilida
+                                11-sinfni tugatgan o‘quvchilar soni
+                            </label>
+                            <input type="number" class="form-control" name="school_graduates_count" value="@Model.PupilInfo?.school_graduates_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                Respublika OTMlariga hujjat topshirgan bitiruvchilar soni
+                            </label>
+                            <input type="number" class="form-control" name="uzb_enrollees_count" value="@Model.PupilInfo?.uzb_enrollees_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                O‘qishga o‘rnatilgan kvota doirasida kirganlar soni
+                            </label>
+                            <input type="number" class="form-control" name="students_count" value="@Model.PupilInfo?.students_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                O‘qishga qo‘shimcha (“super”) kontrakt doirasida kirganlar soni
+                            </label>
+                            <input type="number" class="form-control" name="supercontract_students_count" value="@Model.PupilInfo?.supercontract_students_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                Kirish imtihonlarida bitiruvchilar tomonidan to‘plangan jami ballar yig‘indisi
+                            </label>
+                            <input type="number" class="form-control" name="all_students_scored_ball" value="@Model.PupilInfo?.all_students_scored_ball" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                Xorijiy OTMlarning respublikamizdagi filiallariga o‘qishga kirganlari soni
+                            </label>
+                            <input type="number" class="form-control" name="uzb_international_enrollees_count" value="@Model.PupilInfo?.uzb_international_enrollees_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                Xorijiy top-1000* universitetlarga o‘qishga kirganlar soni**
+                            </label>
+                            <input type="number" class="form-control" name="top1000_universities_enrolles_count" value="@Model.PupilInfo?.top1000_universities_enrolles_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                Boshqa xorijiy oliy ta’lim muassasalariga o‘qishga kirgan o‘quvchilar soni
+                            </label>
+                            <input type="number" class="form-control" name="other_international_universities_enrollees_count" value="@Model.PupilInfo?.other_international_universities_enrollees_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                O‘rta maxsus ta’lim muassasasiga kirganlar soni
+                            </label>
+                            <input type="number" class="form-control" name="middle_spec_univ_pupils_count" value="@Model.PupilInfo?.middle_spec_univ_pupils_count" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">
+                                Mehnat faoliyatini boshlagan o‘quvchilar soni
+                            </label>
+                            <input type="number" class="form-control" name="worker_pupils_count" value="@Model.PupilInfo?.worker_pupils_count" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <input type="hidden" class="form-control" name="school_id" value="@Model.Id" />
+                <input type="hidden" class="form-control" name="id" value="@Model.PupilInfo?.id" />
+                <input type="hidden" class="form-control" name="year" value="@Model.PupilInfo?.year" />
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form2" method="post" action="/SchoolProfile/SaveRepublicOlympiadWinners">
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ma'lumotlarni qo'shish</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Fan</label>
+                            <input type="number" class="form-control" name="subject_id" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Ishtirokchilar soni</label>
+                            <input type="number" class="form-control" name="participants" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Tuman bosqichida birinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="district_first_place" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Tuman bosqichida ikkinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="district_second_place" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Tuman bosqichida uchinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="district_third_place" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Hududiy bosqichda birinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="region_first_place" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Hududiy bosqichda ikkinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="region_second_place" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Hududiy bosqichda uchinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="region_third_place" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Respublika bosqichida birinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="republic_first_place" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Respublika bosqichida ikkinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="republic_second_place" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Respublika bosqichida uchinchi o'ringa ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="republic_third_place" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <input type="hidden" class="form-control" name="school_id" value="@Model.Id" />
+                <input type="hidden" class="form-control" name="year" value="@Model.PupilInfo?.year" />
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form3" method="post" action="/SchoolProfile/SaveInternationOlympiadWinners">
+    <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ma'lumotlarni qo'shish</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Fan</label>
+                            <input type="number" class="form-control" name="subject_id" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Ishtirokchilar soni</label>
+                            <input type="number" class="form-control" name="participants" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Bronza medalga ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="bronze" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Kumush medalga ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="silver" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="bmd-label-floating">Oltin medalga ega bo'lganlar</label>
+                            <input type="number" class="form-control" name="gold" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <input type="hidden" class="form-control" name="school_id" value="@Model.Id" />
+                <input type="hidden" class="form-control" name="year" value="@Model.PupilInfo?.year" />
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form method="post" action="/SchoolProfile/DeleteRepublicOlympiadWinners/">
+    <div class="modal fade" id="exampleModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">O'CHIRISH</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
+                    <input type="hidden" id="RepOlympId" name="id" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>
+                    <button type="submit" class="btn btn-danger">O'CHIRISH</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form method="post" action="/SchoolProfile/DeleteInternationOlympiadWinners/">
+    <div class="modal fade" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">O'CHIRISH</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
+                    <input type="hidden" id="interOlympId" name="id" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>
+                    <button type="submit" class="btn btn-danger">O'CHIRISH</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function deleteInterOlymp(id) {
+        $('#interOlympId').val(id);
+        $('#exampleModal5').modal('show');
+    }
+    function deleteRepOlymp(id) {
+        $('#RepOlympId').val(id);
+        $('#exampleModal4').modal('show');
+    }
+</script>
