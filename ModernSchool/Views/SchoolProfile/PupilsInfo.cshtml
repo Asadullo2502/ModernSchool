@@ -6,14 +6,25 @@
 
 <style>
     @@keyframes glowing {
-      0% { background-color: #1e77bd; box-shadow: 0 0 5px #1e77bd; }
-      50% { background-color: #1e77bd; box-shadow: 0 0 15px #1e77bd; }
-      100% { background-color: #1e77bd; box-shadow: 0 0 5px #1e77bd; }
-      }
+        0% {
+            background-color: #1e77bd;
+            box-shadow: 0 0 5px #1e77bd;
+        }
 
-.shinebtn {
-    animation: glowing 2000ms infinite;
-}
+        50% {
+            background-color: #1e77bd;
+            box-shadow: 0 0 15px #1e77bd;
+        }
+
+        100% {
+            background-color: #1e77bd;
+            box-shadow: 0 0 5px #1e77bd;
+        }
+    }
+
+    .shinebtn {
+        animation: glowing 2000ms infinite;
+    }
 </style>
 
 <div class="row">
@@ -60,7 +71,7 @@
                 @foreach (var item in Model.RepublicOlympiadWinners)
                 {
                     <table class="table table-bordered text-center">
-                        <thead>
+                        <thead style="background-color:#f1f1f1">
                             <tr>
                                 <th colspan="3"><b>Fan</b></th>
                                 <th colspan="5"><b>@item.Subject?.subject_name</b></th>
@@ -115,7 +126,7 @@
                 @foreach (var item in Model.InternationOlympiadWinners)
                 {
                     <table class="table table-bordered text-center">
-                        <thead>
+                        <thead style="background-color:#f1f1f1">
                             <tr>
                                 <th><b>Fan</b></th>
                                 <th colspan="2"><b>@item.Subject?.subject_name</b></th>
@@ -452,7 +463,13 @@
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label class="bmd-label-floating">Fan</label>
-                            <input type="number" class="form-control" name="subject_id" required>
+                            <select class="custom-select" name="subject_id" required>
+                                <option value="@null">Tanlang...</option>
+                                @foreach (var item in Model.Subjects)
+                                {
+                                    <option value="@item.id">@item.subject_name</option>
+                                }
+                            </select>
                         </div>
                     </div>
 
@@ -555,7 +572,13 @@
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label class="bmd-label-floating">Fan</label>
-                            <input type="number" class="form-control" name="subject_id" required>
+                            <select class="custom-select" name="subject_id" required>
+                                <option value="@null">Tanlang...</option>
+                                @foreach (var item in Model.Subjects)
+                                {
+                                    <option value="@item.id">@item.subject_name</option>
+                                }
+                            </select>
                         </div>
                     </div>
 
