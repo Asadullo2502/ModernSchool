@@ -50,10 +50,10 @@ namespace ModernSchool.Controllers
 
                     var rate = new Rate
                     {
-                        CreateDate = DateTime.Now,
+                        UpdateDateInspektor = DateTime.Now,
                         IndexId = indexId,
                         CriteriaId = Convert.ToInt32(temp[0]),
-                        Value = Convert.ToDouble(temp[1]),
+                        ValueInspektor = Convert.ToDouble(temp[1]),
                         InspektorId = 1,
                         SchoolId = 1,
                     };

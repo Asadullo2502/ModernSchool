@@ -195,5 +195,15 @@ namespace ModernSchool.Controllers
             catch { }
             return RedirectToAction("PupilsInfo");
         }
+
+        public IActionResult ManageStrategyInfo()
+        {
+            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+            PageData pageData = new PageData();
+            pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
+            pageData.Criterias = db.Criterias;
+            pageData.Indexes = db.Indexes;
+            return View(pageData);
+        }
     }
 }

@@ -1,0 +1,48 @@
+﻿@model PageData
+@{
+    ViewData["Title"] = "ManageStrategyInfo";
+    Layout = "~/Views/Shared/_LayoutSchool.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Umumta’lim muassasasini boshqarish strategiyasi va moliyaviy faoliyati</h4>
+            </div>
+            <div class="card-body">
+
+                <p>Umumta’lim muassasasini boshqarish strategiyasi</p>
+                @foreach (var item in Model.Criterias.Where(x=>x.IndexId == 98))
+                {
+                    <div class="form-check mt-1">
+                        <label class="form-check-label">
+                            @try
+                            {
+                                <input class="form-check-input" type="checkbox" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == item.Id).ValueSchool == item.Id ? "checked" : "") disabled />
+                            }
+                            catch
+                            {
+                                <input class="form-check-input" type="checkbox" disabled />
+                            }
+                            @item.NameUz
+                            <span class="form-check-sign">
+                                <span class="check"></span>
+                            </span>
+                        </label>
+                    </div>
+                }
+
+
+                <p style="text-align:right">Oxirgi o'zgartirilgan sana: <mark> @Model.Rates.FirstOrDefault().UpdateDateSchool </mark> </p>
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Ma'lumotlarni yangilash
+                </button>
+                <button type="button" class="btn btn-secondary " onclick="window.location.href='/SchoolProfile/Info/'">Ortga</button>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
