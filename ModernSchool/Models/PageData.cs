@@ -11,5 +11,6 @@ namespace ModernSchool.Models
         public IEnumerable<Criteria> Criterias { get; set; }
         public IEnumerable<Index> Indexes { get; set; }
         public IEnumerable<Rate> Rates { get; set; }
+        public IEnumerable<SchoolMenu> SchoolMenus { get; set; }
     }
 }

@@ -36,6 +36,14 @@
         </li>
     }
 </ul>
+<ul class="nav nav-pills nav-justified mt-2">
+    @foreach (var item5 in Model.Where(x => x.Level == 5))
+    {
+        <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
+            <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index5_@item5.Id" onclick="level5click(@item5.Id)" href="#">@item5.ShortName</a>
+        </li>
+    }
+</ul>
 
 @foreach (var item in Model.Where(x => x.Level > 2))
 {
@@ -85,6 +93,7 @@
         $(".level2btn").css('display', 'none');
         $(".level3btn").css('display', 'none');
         $(".level4btn").css('display', 'none');
+        $(".level5btn").css('display', 'none');
         $(".criterias").css('display', 'none');
         $(".indexTitles").css('display', 'none');
     });
@@ -93,12 +102,14 @@
         $(".level2btn").removeClass('active');
         $(".level3btn").removeClass('active');
         $(".level4btn").removeClass('active');
+        $(".level5btn").removeClass('active');
 
         $("#index_" + id).addClass('active');
 
         $(".navlvl2").css('display', 'none');
         $(".navlvl3").css('display', 'none');
         $(".navlvl4").css('display', 'none');
+        $(".navlvl5").css('display', 'none');
         $(".criterias").css('display', 'none');
         $(".indexTitles").css('display', 'none');
 
@@ -109,11 +120,13 @@
         $(".level2btn").removeClass('active');
         $(".level3btn").removeClass('active');
         $(".level4btn").removeClass('active');
+        $(".level5btn").removeClass('active');
 
         $("#index2_" + id).addClass('active');
 
         $(".navlvl3").css('display', 'none');
         $(".navlvl4").css('display', 'none')
+        $(".navlvl5").css('display', 'none')
         $(".criterias").css('display', 'none');;
         $(".indexTitles").css('display', 'none');
 
@@ -123,10 +136,12 @@
     function level3click(id) {
         $(".level3btn").removeClass('active');
         $(".level4btn").removeClass('active');
+        $(".level5btn").removeClass('active');
 
         $("#index3_" + id).addClass('active');
 
         $(".navlvl4").css('display', 'none');
+        $(".navlvl5").css('display', 'none');
         $(".criterias").css('display', 'none');
 
         $(".level3Child_" + id).css('display', 'block');
@@ -139,8 +154,31 @@
     }
     function level4click(id) {
         $(".level4btn").removeClass('active');
+        $(".level5btn").removeClass('active');
 
         $("#index4_" + id).addClass('active');
+
+        $(".navlvl5").css('display', 'none');
+        $(".criterias").css('display', 'none');
+
+        $(".level4Child_" + id).css('display', 'block');
+        $(".navlvl4child_" + id).css('display', 'block');
+
+        $(".criterias").css('display', 'none');
+        $(".indexTitles").css('display', 'none');
+        $(".indexCriterias_" + id).css('display', 'block');
+        $(".indexTitle_" + id).css('display', 'block');
+    }
+    function level5click(id) {
+        $(".level5btn").removeClass('active');
+
+        $("#index5_" + id).addClass('active');
+
+        //$(".navlvl5").css('display', 'none');
+        //$(".criterias").css('display', 'none');
+
+        $(".level5Child_" + id).css('display', 'block');
+        $(".navlvl5child_" + id).css('display', 'block');
 
         $(".criterias").css('display', 'none');
         $(".indexTitles").css('display', 'none');
