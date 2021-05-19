@@ -206,5 +206,11 @@ namespace ModernSchool.Controllers
             pageData.SchoolMenus = db.SchoolMenus.Include(x=>x.Menu).Include(x=>x.Criteria).Include(x=>x.Criteria.Index).Where(x => x.menu_id == menu_id);
             return View(pageData);
         }
+        [HttpPost]
+        public IActionResult SaveQuestionnaire(Rate rate)
+        {
+            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+            return View();
+        }
     }
 }
