@@ -207,10 +207,49 @@ namespace ModernSchool.Controllers
             return View(pageData);
         }
         [HttpPost]
-        public IActionResult SaveQuestionnaire(Rate rate)
+        public JsonResult SaveQuestionnaire(string[] criteriaValues)
         {
-            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
-            return View();
+            var result = 0;
+
+            try
+            {
+                foreach (var item in criteriaValues)
+                {
+                    var temp = item.Split(';');
+                    var criteria = db.Criterias.FirstOrDefault(x => x.Id == Convert.ToInt32(temp[0]));
+                    List<Rate> rates = db.Rates.Where(x => x.IndexId == criteria.IndexId).ToList();
+                    if (rates != null)
+                    {
+                        db.Rates.RemoveRange(rates);
+                        db.SaveChanges();
+                    }
+                }
+                
+                foreach (var item in criteriaValues)
+                {
+                    var temp = item.Split(';');
+
+                    var rate = new Rate
+                    {
+                        UpdateDateSchool = DateTime.Now,
+                        IndexId = db.Criterias.FirstOrDefault(x => x.Id == Convert.ToInt32(temp[0])).IndexId,
+                        CriteriaId = Convert.ToInt32(temp[0]),
+                        ValueSchool = Convert.ToDouble(temp[1]),
+                        SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                        Year = 2021
+                    };
+
+                    db.Rates.Add(rate);
+                    db.SaveChanges();
+                }
+                result = 1;
+            }
+            catch (Exception e)
+            {
+                var r = e.Message;
+            }
+
+            return Json(result);
         }
     }
 }

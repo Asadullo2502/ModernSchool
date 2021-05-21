@@ -353,5 +353,57 @@ namespace ModernSchool.Controllers
             return RedirectToAction("Criterias");
         }
         #endregion
+
+        #region Menu
+        public async Task<IActionResult> Menu()
+        {
+            return View(await db.Menus.ToListAsync());
+        }
+
+        public IActionResult CreateMenu()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateMenu(Menu menu)
+        {
+            try
+            {
+                db.Menus.Add(menu);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("Menu");
+        }
+
+        public IActionResult EditMenu(int id = 0)
+        {
+            return View(db.Menus.FirstOrDefault(x => x.id == id));
+        }
+        [HttpPost]
+        public IActionResult EditMenu(Menu menu)
+        {
+            try
+            {
+                db.Entry(menu).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("Menu");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteMenu(int id)
+        {
+            try
+            {
+                var menu = db.Menus.FirstOrDefault(x => x.id == id);
+                db.Menus.Remove(menu);
+                db.SaveChanges();
+            }
+            catch { }
+            return RedirectToAction("Menu");
+        }
+        #endregion
     }
 }

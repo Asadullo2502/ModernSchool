@@ -26,23 +26,55 @@
                                     {
                                         if (cr.Type != "number")
                                         {
+                                            try
+                                            {
+                                                if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                                {
+                                                    <div class="form-check mt-3">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input" type="@cr.Type" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool == cr.Id ? "checked" : "") disabled />
+                                                            @cr.NameUz
+                                                            <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                                <span class="check"></span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                <div class="form-check mt-3">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="@cr.Type" disabled />
+                                                        @cr.NameUz
+                                                        <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            }
 
-                                            <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
-                                                <label class="form-check-label">
-                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
-                                                    @cr.NameUz
-                                                    <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
-                                                        <span class="check"></span>
-                                                    </span>
-                                                </label>
-                                            </div>
                                         }
                                         else
                                         {
-                                            <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
-                                                <label for="criteriaId_@cr.Id">@cr.NameUz</label>
-                                                <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0" style="width:200px;">
-                                            </div>
+                                            try
+                                            {
+                                                if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                                {
+                                                    <div class="form-group mt-3">
+                                                        <label>@cr.NameUz</label>
+                                                        <input type="@cr.Type" class="form-control" style="width:300px;" disabled value="@Model.Rates.FirstOrDefault(x=>x.CriteriaId == cr.Id).ValueSchool" />
+                                                    </div>
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                <div class="form-group mt-3">
+                                                    <label>@cr.NameUz</label>
+                                                    <input type="@cr.Type" class="form-control" style="width:300px;" disabled />
+                                                </div>
+                                            }
+
                                         }
                                     }
                                 </div>
@@ -61,7 +93,7 @@
     </div>
 </div>
 
-<form id="form1" method="post">
+<form id="form1">
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -84,25 +116,57 @@
                                     <div class="col-12">
                                         @foreach (var cr in Model.Criterias.Where(x => x.Id == item2.criteria_id))
                                         {
+
                                             if (cr.Type != "number")
                                             {
+                                                try
+                                                {
+                                                    if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                                    {
+                                                        <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input CriteriaId" type="@cr.Type" name="CriteriaId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool == cr.Id ? "checked" : "") onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" required />
+                                                                @cr.NameUz
+                                                                <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                                    <span class="check"></span>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                    <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                        <label class="form-check-label">
+                                                            <input class="form-check-input CriteriaId" type="@cr.Type" name="CriteriaId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" required />
+                                                            @cr.NameUz
+                                                            <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                                <span class="check"></span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                }
 
-                                                <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
-                                                        @cr.NameUz
-                                                        <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
-                                                            <span class="check"></span>
-                                                        </span>
-                                                    </label>
-                                                </div>
                                             }
                                             else
                                             {
-                                                <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
-                                                    <label for="criteriaId_@cr.Id">@cr.NameUz</label>
-                                                    <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0" style="width:200px;">
-                                                </div>
+                                                try
+                                                {
+                                                    if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                                    {
+                                                        <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                            <label for="criteriaId_@cr.Id">@cr.NameUz</label>
+                                                            <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="CriteriaId_@cr.IndexId" min="0" style="width:300px;" required value="@Model.Rates.FirstOrDefault(x=>x.CriteriaId == cr.Id).ValueSchool" />
+                                                        </div>
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                    <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                        <label for="criteriaId_@cr.Id">@cr.NameUz</label>
+                                                        <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="CriteriaId_@cr.IndexId" min="0" style="width:300px;" required />
+                                                    </div>
+                                                }
                                             }
                                         }
                                     </div>
@@ -114,9 +178,56 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
-                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                    <button type="button" class="btn btn-primary" onclick="SaveData()">Saqlash</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+<script>
+    function SaveData() {
+        var selected = [];
+        $('.criterias :input[type="number"]').each(function () {
+            selected.push($(this).attr('criteriaId') + ';' + $(this).prop("value"));
+        });
+        $("input[class='form-check-input CriteriaId']:checked").each(function () {
+            selected.push($(this).attr('criteriaId') + ';' + $(this).prop("value"));
+        });
+        $.ajax({
+            type: "POST",
+            url: "/SchoolProfile/SaveQuestionnaire",
+            data: { criteriaValues: selected },
+            success: function (result) {
+                if (result == true) {
+                    toastr.success("Maʼlumotlar saqlandi!", "", {
+                        "timeOut": "2500",
+                        "extendedTImeout": "0"
+                    });
+                    setTimeout(location.reload(), 2000);
+                }
+                else {
+                    toastr.warning("Maʼlumotlar saqlanmadi!", "Yana bir bor urinib ko'ring", {
+                        "timeOut": "2500",
+                        "extendedTImeout": "0"
+                    });
+                }
+            }
+        })
+    }
+
+    function clickRadio(criteriaId, indexId, ball) {
+        if (ball == 0) {
+            $("input[name = 'criteriaIndexId_" + indexId + "'][type='checkbox']").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+        else {
+            $("input[name = 'criteriaIndexId_" + indexId + "'][type='radio']").each(function () {
+                if ($(this).attr('qw') == 0) {
+                    $(this).prop('checked', false);
+                }
+            });
+        }
+    }
+</script>
