@@ -17,7 +17,6 @@ namespace ModernSchool.Models
         public string NameEn { get; set; }
         public double MaxBall { get; set; }
         public int Level { get; set; }
-        public int? MenuId { get; set; }
 
         [ForeignKey(nameof(ParentId))]
         public virtual Index Parent { get; set; }

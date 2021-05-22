@@ -16,8 +16,6 @@ namespace ModernSchool.Models
         public string NameEn { get; set; }
         public double MaxBall { get; set; }
         public string Type { get; set; }
-        public int? MenuId { get; set; }
-        public int? OrderBy { get; set; }
 
         [ForeignKey(nameof(IndexId))]
         public virtual Index Index { get; set; }

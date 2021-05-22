@@ -202,8 +202,7 @@ namespace ModernSchool.Controllers
             PageData pageData = new PageData();
             pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
             pageData.Criterias = db.Criterias;
-            pageData.Indexes = db.Indexes;
-            pageData.SchoolMenus = db.SchoolMenus.Include(x=>x.Menu).Include(x=>x.Criteria).Include(x=>x.Criteria.Index).Where(x => x.menu_id == menu_id);
+            pageData.SchoolMenus = db.SchoolMenus.Include(x=>x.Criteria.Index).Include(x=>x.Menu).Where(x => x.menu_id == menu_id);
             return View(pageData);
         }
         [HttpPost]
