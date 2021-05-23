@@ -1,0 +1,232 @@
+﻿@model School
+@{
+    ViewData["Title"] = "PupilsInfo";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">
+                    O‘quvchilar to‘g‘risida
+                    ma’lumotlar
+                </h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th rowspan="2"><b>O‘quvchilar soni</b></th>
+                            <th rowspan="2"><b>Shu jumladan, kitob.uz ga a’zo bo‘lganlar soni*</b></th>
+                            <th rowspan="2"><b>Umumta’lim muassasasi joylashgan mikrohududdan bo‘lgan o‘quvchilar soni</b></th>
+                            <th colspan="3"><b>Alohida ta’lim ehtiyojlari bo‘lgan o‘quvchilar soni</b></th>
+                        </tr>
+                        <tr>
+                            <th><b>Ko‘z</b></th>
+                            <th><b>Nutq</b></th>
+                            <th><b>Tayanch- harakat</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.SchoolInfo?.pupils_count</td>
+                            <td>@Model.PupilInfo?.kitob_uz_followers</td>
+                            <td>@Model.SchoolInfo?.microdistrict_pupils_count</td>
+                            <td>@Model.PupilInfo?.eye_problem_pupils_count</td>
+                            <td>@Model.PupilInfo?.speech_problem_pupils_count</td>
+                            <td>@Model.PupilInfo?.move_problem_pupils_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>*2021 yil uchun maktab kutubxonasiga a’zo bo‘lganlar hisoblanadi</p>
+
+                <p class="mt-5"><b>Respublika fan olimpiadalarida sovrindor bo‘lgan o‘quvchilar soni*</b></p>
+                
+                @foreach (var item in Model.RepublicOlympiadWinners)
+                {
+                    <table class="table table-bordered text-center">
+                        <thead style="background-color:#f1f1f1">
+                            <tr>
+                                <th colspan="3"><b>Fan</b></th>
+                                <th colspan="5"><b>@item.Subject?.subject_name</b></th>
+                                <th colspan="1">
+                                    <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteRepOlymp(@item.id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="3"><b>Ishtirokchilar soni</b></th>
+                                <th colspan="6"><b>@item.participants</b></th>
+                            </tr>
+                            <tr>
+                                <th colspan="3"><b>Tuman bosqichida erishilgan natija</b></th>
+                                <th colspan="3"><b>Hududiy bosqichda erishilgan natija</b></th>
+                                <th colspan="3"><b>Respublika bosqichida erishilgan natija</b></th>
+                            </tr>
+                            <tr>
+                                <th><b>1</b></th>
+                                <th><b>2</b></th>
+                                <th><b>3</b></th>
+                                <th><b>1</b></th>
+                                <th><b>2</b></th>
+                                <th><b>3</b></th>
+                                <th><b>1</b></th>
+                                <th><b>2</b></th>
+                                <th><b>3</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@item.district_first_place</td>
+                                <td>@item.district_second_place</td>
+                                <td>@item.district_third_place</td>
+                                <td>@item.region_first_place</td>
+                                <td>@item.region_second_place</td>
+                                <td>@item.region_third_place</td>
+                                <td>@item.republic_first_place</td>
+                                <td>@item.republic_second_place</td>
+                                <td>@item.republic_third_place</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                <p>*har bir fan uchun alohida to‘ldiriladi</p>
+
+                <p class="mt-5"><b>Xalqaro fan olimpiadalarida sovrindor bo‘lgan o‘quvchilar soni*</b></p>
+             
+                @foreach (var item in Model.InternationOlympiadWinners)
+                {
+                    <table class="table table-bordered text-center">
+                        <thead style="background-color:#f1f1f1">
+                            <tr>
+                                <th><b>Fan</b></th>
+                                <th colspan="2"><b>@item.Subject?.subject_name</b></th>
+                                <th>
+                                    <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteInterOlymp(@item.id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th><b>Ishtirokchilar soni</b></th>
+                                <th><b>bronza</b></th>
+                                <th><b>kumush</b></th>
+                                <th><b>oltin</b></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@item.participants</td>
+                                <td>@item.bronze</td>
+                                <td>@item.silver</td>
+                                <td>@item.gold</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                <p>*har bir fan uchun alohida to‘ldiriladi</p>
+
+                <p class="mt-5"><b>Respublika miqyosidagi turli rasmiy tanlovlar, festival va musobaqalarda g‘olib va sovrindor o‘quvchilar</b></p>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>Tuman (shahar) bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</b></th>
+                            <th><b>Hududiy bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</b></th>
+                            <th><b>Respublika bosqichida g‘olib yoki sovrindor bo‘lgan o‘quvchilar</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.district_level_winners_count</td>
+                            <td>@Model.PupilInfo?.region_level_winners_count</td>
+                            <td>@Model.PupilInfo?.republic_level_winners_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p class="mt-5"><b>Rasmiy xalqaro miqyosidagi turli tanlovlar, festival va musobaqalarda g‘olib va sovrindor o‘quvchilar</b></p>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>Ishtirok etgan</b></th>
+                            <th><b>Sovrindor bo‘lgan</b></th>
+                            <th><b>G‘olib bo‘lgan</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.internation_level_participants_count</td>
+                            <td>@Model.PupilInfo?.internation_level_prizewinners_count</td>
+                            <td>@Model.PupilInfo?.internation_level_winners_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p class="mt-5"><b>OTMga kirish ko‘rsatkichlari</b></p>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>Hisobot yilida 11-sinfni tugatgan o‘quvchilar soni</b></th>
+                            <th><b>Respublika OTMlariga hujjat topshirgan bitiruvchilar soni</b></th>
+                            <th><b>O‘qishga o‘rnatilgan kvota doirasida kirganlar soni</b></th>
+                            <th><b>O‘qishga qo‘shimcha (“super”) kontrakt doirasida kirganlar soni</b></th>
+                            <th><b>Kirish imtihonlarida bitiruvchilar tomonidan to‘plangan jami ballar yig‘indisi</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.school_graduates_count</td>
+                            <td>@Model.PupilInfo?.uzb_enrollees_count</td>
+                            <td>@Model.PupilInfo?.students_count</td>
+                            <td>@Model.PupilInfo?.supercontract_students_count</td>
+                            <td>@Model.PupilInfo?.all_students_scored_ball</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>Xorijiy OTMlarning respublikamizdagi filiallariga o‘qishga kirganlari soni</b></th>
+                            <th><b>Xorijiy top-1000* universitetlarga o‘qishga kirganlar soni**</b></th>
+                            <th><b>Boshqa xorijiy oliy ta’lim muassasalariga o‘qishga kirgan o‘quvchilar soni</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.uzb_international_enrollees_count</td>
+                            <td>@Model.PupilInfo?.top1000_universities_enrolles_count</td>
+                            <td>@Model.PupilInfo?.other_international_universities_enrollees_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>* QS World University Rankings, Times Higher Education World University Rankings, Academic Ranking of World Universities reyting tizimlari bo‘yicha</p>
+                <p>**Xorijiy universitetlarning ro‘yxati taqdim etilishi lozim.</p>
+
+                <p class="mt-5"><b>O‘rta maxsus ta’lim muassasasiga kirish va ishga joylashish ko‘rsatkichlari</b></p>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th><b>O‘rta maxsus ta’lim muassasasiga kirganlar soni</b></th>
+                            <th><b>Mehnat faoliyatini boshlagan o‘quvchilar soni</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PupilInfo?.middle_spec_univ_pupils_count</td>
+                            <td>@Model.PupilInfo?.worker_pupils_count</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="text-align:right">Oxirgi o'zgartirilgan sana: <mark> @Model.TeacherInfo?.update_date </mark> </p>
+
+                <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/SchoolProfile/'">Ortga</button>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+

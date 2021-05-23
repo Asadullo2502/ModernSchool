@@ -1,0 +1,95 @@
+﻿@model IEnumerable<School>
+@{
+    ViewData["Title"] = "Schools";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int i = 1;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title ">MAKTABLAR</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table" id="myTable">
+                        <thead class="text-primary">
+                            <tr>
+                                <th width="5%">
+                                    #
+                                </th>
+                                <th width="15%">
+                                    Hudud
+                                </th>
+                                <th width="15%">
+                                    Tuman
+                                </th>
+                                <th width="20%">
+                                    Nomi
+                                </th>
+                                <th width="15%">
+                                    Direktor
+                                </th>
+                                <th width="15%">
+                                    Telefon
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @item.Region?.name_uz
+                                    </td>
+                                    <td>
+                                        @item.District?.name_uz
+                                    </td>
+                                    <td>
+                                        @item.NameUz
+                                    </td>
+                                    <td>
+                                        @item.Director
+                                    </td>
+                                    <td>
+                                        @item.Phone
+                                    </td>
+                                    <td style="text-align:right">
+                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/SchoolProfile/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#myTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'excel',
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+            },
+            'print'
+        ],
+        pageLength: 10,
+    });
+
+</script>
+

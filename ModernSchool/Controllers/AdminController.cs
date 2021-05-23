@@ -405,5 +405,41 @@ namespace ModernSchool.Controllers
             return RedirectToAction("Menu");
         }
         #endregion
+
+        public async Task<IActionResult> Orders()
+        {
+            return View(await db.Schools.Include(x => x.District).Include(x => x.Region).Take(1000).ToListAsync());
+        }
+        public IActionResult SchoolProfile(int? id)
+        {
+            if (id != null) Response.Cookies.Append("school_id", id.ToString());
+            return View();
+        }
+        public IActionResult Questionnaire(int menu_id)
+        {
+            int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
+            PageData pageData = new PageData();
+            pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
+            pageData.Criterias = db.Criterias;
+            pageData.SchoolMenus = db.SchoolMenus.Include(x => x.Criteria.Index).Include(x => x.Menu).Where(x => x.menu_id == menu_id);
+            return View(pageData);
+        }
+        public IActionResult MainInfo()
+        {
+            int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
+            return View(db.Schools.Include(x => x.Region).Include(x => x.District).Include(x => x.SchoolType).Include(x => x.SchoolInfo).FirstOrDefault(x => x.Id == school_id));
+        }
+        public IActionResult TeachersInfo()
+        {
+            int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
+            return View(db.Schools.Include(x => x.SchoolInfo).Include(x => x.TeacherInfo).FirstOrDefault(x => x.Id == school_id));
+        }
+        public IActionResult PupilsInfo()
+        {
+            int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
+            var model = db.Schools.Include(x => x.SchoolInfo).Include(x => x.PupilInfo).Include(x => x.InternationOlympiadWinners).Include(x => x.RepublicOlympiadWinners).FirstOrDefault(x => x.Id == school_id);
+            model.Subjects = db.Subjects.ToList();
+            return View(model);
+        }
     }
 }
