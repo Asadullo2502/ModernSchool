@@ -1,4 +1,4 @@
-﻿@model School 
+﻿@model School
 @{
     ViewData["Title"] = "MainInfo";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
@@ -150,6 +150,17 @@
                     </div>
                 </div>
 
+                <div class="row mb-3">
+                    <div class="col-12">
+                        @if (Model.Latitude != null && Model.Latitude != "")
+                        {
+                            <div id="mapholder" style="width: 100%; height: 400px">
+
+                            </div>
+                        }
+                    </div>
+                </div>
+
                 <p style="text-align:right">Oxirgi o'zgartirilgan sana: <mark> @Model.SchoolInfo?.update_date </mark> </p>
 
                 <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/SchoolProfile/'">Ortga</button>
@@ -159,3 +170,61 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        var r = $('#Latitude').val();
+        if (r != "") {
+            ymaps.ready(init);
+
+            function init() {
+                var myMap = new ymaps.Map("mapholder", {
+                    center: [@Model.Latitude, @Model.Longtitude],
+                    zoom: 17,
+                },
+                {
+                    suppressMapOpenBlock: true
+                },
+                {
+                    searchControlProvider: 'yandex#search'
+                });
+
+                myPlacemark = createPlacemark([@Model.Latitude, @Model.Longtitude]);
+                myMap.geoObjects.add(myPlacemark);
+                myPlacemark.events.add(function () {
+                    getAddress(myPlacemark.geometry.getCoordinates());
+                });
+                getAddress([@Model.Latitude, @Model.Longtitude]);
+
+                function createPlacemark(coords) {
+                    return new ymaps.Placemark(coords, {
+                        iconCaption: 'поиск...'
+
+
+                    }, {
+                        preset: 'islands#blueDotIconWithCaption',
+                        draggable: false
+                    });
+                }
+
+                function getAddress(coords) {
+                    myPlacemark.properties.set('iconCaption', 'поиск...');
+                    ymaps.geocode(coords).then(function (res) {
+                        var firstGeoObject = res.geoObjects.get(0);
+
+                        myPlacemark.properties
+                            .set({
+                                iconCaption: [
+                                    firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                                    firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                                ].filter(Boolean).join(', '),
+                                balloonContent: firstGeoObject.getAddressLine()
+                            });
+                        document.getElementById("address").value = firstGeoObject.getAddressLine();
+                        document.getElementById("Latitude").value = coords[0];
+                        document.getElementById("Longtitude").value = coords[1];
+                    });
+                }
+            }
+        }
+    });
+</script>

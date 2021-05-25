@@ -408,12 +408,30 @@ namespace ModernSchool.Controllers
 
         public async Task<IActionResult> Orders()
         {
-            return View(await db.Schools.Include(x => x.District).Include(x => x.Region).Take(1000).ToListAsync());
+            var schools = await db.Schools.FromSqlRaw(@"select *,
+            (select sum(c.MaxBall)
+            from Rates r
+            left join Criterias c on c.Id = r.CriteriaId
+            where r.SchoolId = s.Id) ball
+            from Schools s").Include(x => x.District).Include(x=>x.Region).Take(100).ToListAsync();
+
+            return View(schools);
         }
         public IActionResult SchoolProfile(int? id)
         {
-            if (id != null) Response.Cookies.Append("school_id", id.ToString());
-            return View();
+            if (id != null)
+            {
+                Response.Cookies.Append("school_id", id.ToString());
+                School school = db.Schools.Include(x => x.Region).Include(x => x.District).FirstOrDefault(x => x.Id == (int)id);
+                return View(school);
+            }
+            else
+            {
+                int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
+                School school = db.Schools.Include(x => x.Region).Include(x => x.District).FirstOrDefault(x => x.Id == school_id);
+                return View(school);
+            }
+            
         }
         public IActionResult Questionnaire(int menu_id)
         {

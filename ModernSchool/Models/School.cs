@@ -39,6 +39,8 @@ namespace ModernSchool.Models
         public virtual List<InternationOlympiadWinner> InternationOlympiadWinners { get; set; }
         [NotMapped]
         public List<Subject> Subjects { get; set; }
+        [NotMapped]
+        public double ball { get; set; }
     }
 
     public class SchoolApiModel

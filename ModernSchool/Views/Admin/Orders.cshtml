@@ -16,24 +16,26 @@
                     <table class="table" id="myTable">
                         <thead class="text-primary">
                             <tr>
-                                <th width="5%">
+                                <th>
                                     #
                                 </th>
-                                <th width="15%">
+                                <th>
                                     Hudud
                                 </th>
-                                <th width="15%">
+                                <th>
                                     Tuman
                                 </th>
-                                <th width="20%">
+                                <th>
                                     Nomi
                                 </th>
-                                <th width="15%">
+                                <th>
                                     Direktor
                                 </th>
-                                <th width="15%">
+                                <th>
                                     Telefon
                                 </th>
+                                <th>Ball</th>
+                                <th>Holati</th>
                                 <th>
                                 </th>
                             </tr>
@@ -60,9 +62,13 @@
                                     <td>
                                         @item.Phone
                                     </td>
+                                    <td>
+                                        @item.ball
+                                    </td>
+                                    <td>Sertifikatlanmagan</td>
                                     <td style="text-align:right">
-                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/SchoolProfile/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <button type="button" class="btn btn-info" onclick="window.location.href = '/Admin/SchoolProfile/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </tr>
