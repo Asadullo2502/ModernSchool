@@ -4,12 +4,6 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<style>
-    .ul {
-        height: 300px;
-    }
-</style>
-
 <ul class="nav nav-pills nav-justified">
     @foreach (var item in Model.Where(x => x.Level == 1))
     {
@@ -51,7 +45,6 @@
     }
 </ul>
 
-
 @foreach (var item in Model.Where(x => x.Level > 2))
 {
     if (item.Criterias.Count > 0)
@@ -65,6 +58,7 @@
                         {
                             if (cr.Type != "number")
                             {
+                                
                                 <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
@@ -239,7 +233,7 @@
     function Reset(indexId) {
         $('.indexCriterias_' + indexId + ' :input').each(function () {
             $(this).prop("checked", false);
-            $(this).prop("value", "");
+            $(this).prop("value","");
         });
     }
 </script>
