@@ -4,11 +4,17 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+<style>
+    .ul {
+        height: 300px;
+    }
+</style>
+
 <ul class="nav nav-pills nav-justified">
     @foreach (var item in Model.Where(x => x.Level == 1))
     {
         <li class="nav-item">
-            <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#">@item.ShortName</a>
+            <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#">@item.NameUz</a>
         </li>
     }
 </ul>
@@ -16,7 +22,7 @@
     @foreach (var item2 in Model.Where(x => x.Level == 2))
     {
         <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
-            <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index2_@item2.Id" onclick="level2click(@item2.Id)" href="#">@item2.ShortName</a>
+            <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index2_@item2.Id" onclick="level2click(@item2.Id)" href="#">@item2.NameUz</a>
         </li>
     }
 </ul>
@@ -24,7 +30,7 @@
     @foreach (var item3 in Model.Where(x => x.Level == 3))
     {
         <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
-            <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index3_@item3.Id" onclick="level3click(@item3.Id)" href="#">@item3.ShortName</a>
+            <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index3_@item3.Id" onclick="level3click(@item3.Id)" href="#">@item3.NameUz</a>
         </li>
     }
 </ul>
@@ -32,7 +38,7 @@
     @foreach (var item4 in Model.Where(x => x.Level == 4))
     {
         <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
-            <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index4_@item4.Id" onclick="level4click(@item4.Id)" href="#">@item4.ShortName</a>
+            <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index4_@item4.Id" onclick="level4click(@item4.Id)" href="#">@item4.NameUz</a>
         </li>
     }
 </ul>
@@ -40,10 +46,11 @@
     @foreach (var item5 in Model.Where(x => x.Level == 5))
     {
         <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
-            <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index5_@item5.Id" onclick="level5click(@item5.Id)" href="#">@item5.ShortName</a>
+            <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index5_@item5.Id" onclick="level5click(@item5.Id)" href="#">@item5.NameUz</a>
         </li>
     }
 </ul>
+
 
 @foreach (var item in Model.Where(x => x.Level > 2))
 {
@@ -58,7 +65,6 @@
                         {
                             if (cr.Type != "number")
                             {
-                                
                                 <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
@@ -233,7 +239,7 @@
     function Reset(indexId) {
         $('.indexCriterias_' + indexId + ' :input').each(function () {
             $(this).prop("checked", false);
-            $(this).prop("value","");
+            $(this).prop("value", "");
         });
     }
 </script>
