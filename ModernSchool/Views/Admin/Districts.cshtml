@@ -1,26 +1,27 @@
 ﻿@model IEnumerable<District>
 @{
     ViewData["Title"] = "Districts";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
+    string lang = Context.Request.Cookies["lang"];
     int i = 1;
 }
 
 
 <div class="row">
-    <div class="col-12 text-right">
-        <input type="button" class="btn btn-primary" value="qo'shish" onclick="window.location.href='/Admin/CreateDistrict'" />
+    <div class="col-12 mb-2">
+        <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("add", lang).ToUpper()" onclick="window.location.href='/Admin/CreateDistrict'" />
     </div>
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title ">TUMANLAR</h4>
+                <h4 class="card-title ">@Localization.GetTranslate("districts", lang).ToUpper()</h4>
             </div>
             <div class="card-body">
                 <form>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Hudud</label>
+                                <label>@Localization.GetTranslate("region", lang).ToUpper()</label>
                                 <select class="custom-select" name="RegionId" id="Regions">
                                 </select>
                             </div>
@@ -31,7 +32,7 @@
                                     <span class="btn-icon-wrapper pr-2 opacity-9">
                                         <i class="fa fa-search fa-w-20"></i>
                                     </span>
-                                    FILTRLASH
+                                    @Localization.GetTranslate("search", lang).ToUpper()
                                 </button>
                             </div>
                         </div>
@@ -45,19 +46,19 @@
                                     #
                                 </th>
                                 <th>
-                                    Yuqori tashkilot
+                                    @Localization.GetTranslate("region", lang).ToUpper()
                                 </th>
                                 <th>
-                                    Nomi (o'zbekcha)
+                                    @Localization.GetTranslate("name_uz", lang).ToUpper()
                                 </th>
                                 <th>
-                                    Nomi (kirilcha)
+                                    @Localization.GetTranslate("name_uzk", lang).ToUpper()
                                 </th>
                                 <th>
-                                    Nomi (ruscha)
+                                    @Localization.GetTranslate("name_ru", lang).ToUpper()
                                 </th>
                                 <th>
-                                    Nomi (inglizcha)
+                                    @Localization.GetTranslate("name_en", lang).ToUpper()
                                 </th>
                                 <th>
 
@@ -86,11 +87,11 @@
                                         @item.name_en
                                     </td>
                                     <td style="text-align:right">
-                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditDistrict/@item.id'" data-toggle="tooltip" data-placement="bottom" title="O'zgartirish">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditDistrict/@item.id'" data-toggle="tooltip" data-placement="bottom" title="@Localization.GetTranslate("edit", lang).ToUpper()">
+                                            <i class="fa fa-edit" aria-hidden="true"></i>
                                         </button>
-                                        <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteDistrict(@item.id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
-                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteDistrict(@item.id)" data-toggle="modal" data-target="#exampleModal" data-placement="bottom" title="@Localization.GetTranslate("delete", lang).ToUpper()">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -121,12 +122,13 @@
 
     function deleteDistrict(id) {
         $('#DistrictID').val(id);
-        $('#exampleModal').modal('show');
+        //$('#exampleModal').modal('show');
+        $('#exampleModal').appendTo("body");
     }
 
     $.getJSON("/GetApi/GetRegions/", function (result) {
         var $dropdown = $("#Regions");
-        $dropdown.append($("<option />").val(0).text("Barcha viloyatlar"));
+        $dropdown.append($("<option />").val(0).text('@Html.Raw(Localization.GetTranslate("all_regions", lang).ToUpper())'));
         $.each(result, function () {
             if (@ViewBag.region == this.id) {
                 $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
@@ -138,25 +140,26 @@
     });
 </script>
 
-<form method="post" action="/Admin/DeleteDistrict/">
+
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">TUMAN O'CHIRISH</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
-                    <input type="hidden" id="DistrictID" name="id" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>
-                    <button type="submit" class="btn btn-danger">O'CHIRISH</button>
-                </div>
+                <form method="post" action="/Admin/DeleteDistrict/">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("district", lang).ToUpper() (@Localization.GetTranslate("delete", lang).ToUpper())</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>@Localization.GetTranslate("delete_warning_text", lang).ToUpper()</p>
+                        <input type="hidden" id="DistrictID" name="id" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">@Localization.GetTranslate("cancel", lang).ToUpper()</button>
+                        <button type="submit" class="btn btn-danger">@Localization.GetTranslate("delete", lang).ToUpper()</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</form>

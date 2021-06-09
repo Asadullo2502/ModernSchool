@@ -27,6 +27,7 @@ namespace ModernSchool.DB
         public DbSet<InternationOlympiadWinner> InternationOlympiadWinners { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<SchoolMenu> SchoolMenus { get; set; }
+        public DbSet<Resource> Resources { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 

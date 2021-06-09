@@ -1,7 +1,8 @@
 ﻿@model School
 @{
     ViewData["Title"] = "Admin";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
+    string lang = Context.Request.Cookies["lang"];
 }
 
 <style>

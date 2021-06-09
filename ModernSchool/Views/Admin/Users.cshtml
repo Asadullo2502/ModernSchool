@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<User>
 @{
     ViewData["Title"] = "Users";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
+    string lang = Context.Request.Cookies["lang"];
     int i = 1;
 }
 

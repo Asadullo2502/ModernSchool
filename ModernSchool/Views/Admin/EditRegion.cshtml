@@ -1,45 +1,46 @@
 ﻿@model Region
 @{
     ViewData["Title"] = "EditRegion";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
+    string lang = Context.Request.Cookies["lang"];
 }
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title">VILOYAT O'ZGARTIRISH</h4>
+                <h4 class="card-title">@Localization.GetTranslate("region", lang).ToUpper() (@Localization.GetTranslate("edit", lang).ToUpper())</h4>
             </div>
             <div class="card-body">
                 <form method="post">
                     <div class="row">
                         <div class="col-md-12 mb-3 mt-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_uz", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="name_uz" value="@Model.name_uz" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA KIRIL)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_uzk", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="name_uzk" value="@Model.name_uzk" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (RUSCHA)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_ru", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="name_ru" value="@Model.name_ru" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (INGLIZCHA)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_en", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="name_en" value="@Model.name_en" required>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary ">Saqlash</button>
-                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/Regions/'">Ortga</button>
+                    <button type="submit" class="btn btn-primary ">@Localization.GetTranslate("save", lang).ToUpper()</button>
+                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/Regions/'">@Localization.GetTranslate("back", lang).ToUpper()</button>
                     <div class="clearfix"></div>
                 </form>
             </div>

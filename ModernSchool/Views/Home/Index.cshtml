@@ -1,7 +1,8 @@
 ﻿@model IList<ModernSchool.Models.Index>
 @{
     ViewData["Title"] = "Home Page";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
+    string lang = Context.Request.Cookies["lang"];
 }
 
 <ul class="nav nav-pills nav-justified">

@@ -3,6 +3,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutSchool.cshtml";
     string lat = Model.Latitude == null ? "null" : "lat";
+    string lang = Context.Request.Cookies["lang"];
 }
 
 <div class="row">

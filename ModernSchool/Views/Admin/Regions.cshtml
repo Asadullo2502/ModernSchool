@@ -1,19 +1,20 @@
 ﻿@model IEnumerable<Region>
 @{
     ViewData["Title"] = "Regions";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
+    string lang = Context.Request.Cookies["lang"];
     int i = 1;
 }
 
 
 <div class="row">
-    <div class="col-12 text-right">
-        <input type="button" class="btn btn-primary" value="qo'shish"  onclick="window.location.href='/Admin/CreateRegion'" />
+    <div class="col-12 mb-2">
+        <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("add",lang).ToUpper()"  onclick="window.location.href='/Admin/CreateRegion'" />
     </div>
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header card-header-primary">
-                <h4 class="card-title ">VILOYATLAR</h4>
+            <div class="card-header card-header-primary ">
+                <h4 class="card-title">@Localization.GetTranslate("Regions", lang).ToUpper()</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -24,16 +25,16 @@
                                     #
                                 </th>
                                 <th>
-                                    Nomi (o'zbekcha)
+                                    @Localization.GetTranslate("name_uz", lang).ToUpper()
                                 </th>
                                 <th>
-                                    Nomi (kirilcha)
+                                    @Localization.GetTranslate("name_uzk", lang).ToUpper()
                                 </th>
                                 <th>
-                                    Nomi (ruscha)
+                                    @Localization.GetTranslate("name_ru", lang).ToUpper()
                                 </th>
                                 <th>
-                                    Nomi (inglizcha)
+                                    @Localization.GetTranslate("name_en", lang).ToUpper()
                                 </th>
                                 <th>
 
@@ -60,11 +61,11 @@
                                         @item.name_en
                                     </td>
                                     <td style="text-align:right">
-                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditRegion/@item.id'" data-toggle="tooltip" data-placement="bottom" title="O'zgartirish">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditRegion/@item.id'" data-toggle="tooltip" data-placement="bottom" title="@Localization.GetTranslate("edit", lang).ToUpper()">
+                                            <i class="fa fa-edit" aria-hidden="true"></i>
                                         </button>
-                                        <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteRegion(@item.id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
-                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        <button class="btn btn-danger open-exampleModal" data-target="#exampleModal" value="@item.id" onclick="deleteRegion(@item.id)" data-toggle="modal" data-placement="bottom" title="@Localization.GetTranslate("delete", lang).ToUpper()">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -77,6 +78,31 @@
         </div>
     </div>
 </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="/Admin/DeleteRegion/">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("delete", lang).ToUpper()</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>@Localization.GetTranslate("delete_warning_text", lang).ToUpper()</p>
+                        <input type="hidden" id="RegionID" name="id" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">@Localization.GetTranslate("cancel", lang).ToUpper()</button>
+                        <button type="submit" class="btn btn-danger">@Localization.GetTranslate("delete", lang).ToUpper()</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
 <script>
     $('#myTable').DataTable({
@@ -95,29 +121,8 @@
 
     function deleteRegion(id) {
         $('#RegionID').val(id);
-        $('#exampleModal').modal('show');
+        $('#exampleModal').appendTo("body");
+        //$('#exampleModal').modal('show');
     }
 </script>
 
-<form method="post" action="/Admin/DeleteRegion/">
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">VILOYAT O'CHIRISH</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
-                    <input type="hidden" id="RegionID" name="id" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>
-                    <button type="submit" class="btn btn-danger">O'CHIRISH</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
