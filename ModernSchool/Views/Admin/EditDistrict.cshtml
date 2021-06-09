@@ -9,46 +9,46 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title">TUMAN O'ZGARTIRISH</h4>
+                <h4 class="card-title">@Localization.GetTranslate("district", lang).ToUpper() (@Localization.GetTranslate("edit", lang).ToUpper())</h4>
             </div>
             <div class="card-body">
                 <form method="post">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">YO'QORI TASHKILOT</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("region", lang).ToUpper()</label>
                                 <select class="custom-select" name="parent_id" id="Regions" required>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_uz", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="name_uz" value="@Model.name_uz" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA KIRIL)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_uzk", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="name_uzk" value="@Model.name_uzk" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (RUSCHA)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_ru", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="name_ru" value="@Model.name_ru" required>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (INGLIZCHA)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_en", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="name_en" value="@Model.name_en" required>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary ">Saqlash</button>
-                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/Districts/'">Ortga</button>
+                    <button type="submit" class="btn btn-primary ">@Localization.GetTranslate("save", lang).ToUpper()</button>
+                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/Districts/'">@Localization.GetTranslate("back", lang).ToUpper()</button>
                     <div class="clearfix"></div>
                 </form>
             </div>
@@ -59,7 +59,7 @@
 <script>
     $.getJSON("/GetApi/GetRegions/", function (result) {
         var $dropdown = $("#Regions");
-        $dropdown.append($("<option />").val(null).text("Tanlang..."));
+        $dropdown.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
         $.each(result, function () {
             if (this.id == @Model.parent_id) {
                 $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));

@@ -36,9 +36,8 @@
                                 <th>
                                     @Localization.GetTranslate("name_en", lang).ToUpper()
                                 </th>
-                                <th>
-
-                                </th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,8 +63,10 @@
                                         <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditRegion/@item.id'" data-toggle="tooltip" data-placement="bottom" title="@Localization.GetTranslate("edit", lang).ToUpper()">
                                             <i class="fa fa-edit" aria-hidden="true"></i>
                                         </button>
-                                        <button class="btn btn-danger open-exampleModal" data-target="#exampleModal" value="@item.id" onclick="deleteRegion(@item.id)" data-toggle="modal" data-placement="bottom" title="@Localization.GetTranslate("delete", lang).ToUpper()">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger open-exampleModal" data-target="#exampleModal" value="@item.id" onclick="deleteRegion(@item.id)" data-toggle="modal" data-placement="bottom">
+                                            <i data-toggle="tooltip" data-placement="bottom" title="@Localization.GetTranslate("delete", lang).ToUpper()" class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </tr>

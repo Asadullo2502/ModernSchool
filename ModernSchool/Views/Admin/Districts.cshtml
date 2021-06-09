@@ -60,9 +60,8 @@
                                 <th>
                                     @Localization.GetTranslate("name_en", lang).ToUpper()
                                 </th>
-                                <th>
-
-                                </th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,8 +89,10 @@
                                         <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditDistrict/@item.id'" data-toggle="tooltip" data-placement="bottom" title="@Localization.GetTranslate("edit", lang).ToUpper()">
                                             <i class="fa fa-edit" aria-hidden="true"></i>
                                         </button>
-                                        <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteDistrict(@item.id)" data-toggle="modal" data-target="#exampleModal" data-placement="bottom" title="@Localization.GetTranslate("delete", lang).ToUpper()">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger open-exampleModal" value="@item.id" onclick="deleteDistrict(@item.id)" data-toggle="modal" data-target="#exampleModal" data-placement="bottom" >
+                                            <i class="fa fa-trash" data-toggle="tooltip" data-placement="bottom" title="@Localization.GetTranslate("delete", lang).ToUpper()" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -146,7 +147,7 @@
             <div class="modal-content">
                 <form method="post" action="/Admin/DeleteDistrict/">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("district", lang).ToUpper() (@Localization.GetTranslate("delete", lang).ToUpper())</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("delete", lang).ToUpper()</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
