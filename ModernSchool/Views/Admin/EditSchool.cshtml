@@ -10,7 +10,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title">MAKTAB O'ZGARTIRISH</h4>
+                <h4 class="card-title">@Localization.GetTranslate("school", lang).ToUpper() (@Localization.GetTranslate("edit", lang).ToUpper())</h4>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -18,21 +18,21 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="bmd-label-floating">HUDUD</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("region", lang).ToUpper()</label>
                                 <select class="custom-select" name="RegionId" id="Regions" required>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="bmd-label-floating">TUMAN</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("district", lang).ToUpper()</label>
                                 <select class="custom-select" name="DistrictId" id="Districts" value="@Model.DistrictId" required>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="bmd-label-floating">MAKTAB TURI</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("school_type", lang).ToUpper()</label>
                                 <select class="custom-select" name="TypeId" id="SchoolTypes" value="@Model.TypeId" required>
                                 </select>
                             </div>
@@ -42,13 +42,13 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA LOTIN)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_uz", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="NameUz" value="@Model.NameUz" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (O'ZBEKCHA KIRIL)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_uzk", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="NameUzk" value="@Model.NameUzk" required>
                             </div>
                         </div>
@@ -57,13 +57,13 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (RUSCHA)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_ru", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="NameRu" value="@Model.NameRu" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="bmd-label-floating">NOMI (INGLIZCHA)</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("name_en", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="NameEn" value="@Model.NameEn" required>
                             </div>
                         </div>
@@ -72,19 +72,20 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="bmd-label-floating">MAKTAB RAQAMI</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("school_number", lang).ToUpper()</label>
                                 <input type="number" class="form-control" name="Number" value="@Model.Number">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="bmd-label-floating">DIREKTOR</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("director", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="Director" value="@Model.Director">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="tel" class="form-control" name="Phone" id="phone" placeholder="TELEFON RAQAMI" value="@Model.Phone">
+                                <label class="bmd-label-floating">@Localization.GetTranslate("phone_number", lang).ToUpper()</label>
+                                <input type="tel" class="form-control" name="Phone" id="phone" value="@Model.Phone">
                             </div>
                         </div>
                     </div>
@@ -97,7 +98,7 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Manzil</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("address", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="Address" id="address" value="@Model.Address" />
                             </div>
                         </div>
@@ -106,8 +107,8 @@
                         <input type="hidden" class="form-control" name="Longtitude" id="Longtitude" value="@Model.Longtitude" />
 
                     </div>
-                    <button type="submit" class="btn btn-primary ">Saqlash</button>
-                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/Schools/'">Ortga</button>
+                    <button type="submit" class="btn btn-primary ">@Localization.GetTranslate("save", lang).ToUpper()</button>
+                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/Schools/'">@Localization.GetTranslate("back", lang).ToUpper()</button>
                     <div class="clearfix"></div>
                 </form>
             </div>
@@ -123,9 +124,9 @@
     $(document).ready(function () {
         $.getJSON("/GetApi/GetRegions/", function (result) {
             var $dropdown = $("#Regions");
-            $dropdown.append($("<option />").val(null).text("Tanlang..."));
+            $dropdown.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
             var $dropdown2 = $("#Districts");
-            $dropdown2.append($("<option />").val(null).text("Tanlang..."));
+            $dropdown2.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
             $.each(result, function () {
                 if (this.id == @Model.RegionId) {
                     $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
@@ -153,7 +154,7 @@
             $('#Districts').empty();
             $.getJSON("/GetApi/GetDistricts/" + region, function (result) {
                 var $dropdown = $("#Districts");
-                $dropdown.append($("<option />").val(null).text("Tanlang..."));
+                $dropdown.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
                 $.each(result, function () {
                     $dropdown.append($("<option />").val(this.id).text(this.name_uz));
                 });
@@ -162,7 +163,7 @@
 
         $.getJSON("/GetApi/GetSchoolTypes/", function (result) {
             var $dropdown = $("#SchoolTypes");
-            $dropdown.append($("<option />").val(null).text("Tanlang..."));
+            $dropdown.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
             $.each(result, function () {
                 if (this.id == @Model.TypeId) {
                     $dropdown.append($("<option selected />").val(this.id).text(this.nameUz));
