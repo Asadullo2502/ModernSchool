@@ -7,13 +7,13 @@
 }
 
 <div class="row">
-    <div class="col-12 text-right">
-        <input type="button" class="btn btn-primary" value="qo'shish"  onclick="window.location.href='/Admin/CreateCriteria'" />
+    <div class="col-12 mb-2">
+        <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("add", lang).ToUpper()"  onclick="window.location.href='/Admin/CreateCriteria'" />
     </div>
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title ">KRITERIYALAR</h4>
+                <h4 class="card-title ">@Localization.GetTranslate("criterias", lang).ToUpper()</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -24,20 +24,19 @@
                                     #
                                 </th>
                                 <th width="10%">
-                                    Indeks
+                                    @Localization.GetTranslate("index", lang).ToUpper()
                                 </th>
                                 <th width="50%">
-                                    Nomi
+                                    @Localization.GetTranslate("name", lang).ToUpper()
                                 </th>
                                 <th width="5%">
-                                    Turi
+                                    @Localization.GetTranslate("type", lang).ToUpper()
                                 </th>
                                 <th width="10%">
-                                    Maksimal ball
+                                    @Localization.GetTranslate("max_ball", lang).ToUpper()
                                 </th>
-                                <th width="10%">
-
-                                </th>
+                                <th width="5%"></th>
+                                <th width="5%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,10 +60,12 @@
                                     </td>
                                     <td style="text-align:right">
                                         <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditCriteria/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="O'zgartirish">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            <i class="fa fa-edit" aria-hidden="true"></i>
                                         </button>
-                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" onclick="deleteCriteria(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
-                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" onclick="deleteCriteria(@item.Id)" data-toggle="modal" data-target="#exampleModal">
+                                            <i class="fa fa-trash" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="O'chirish"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -95,7 +96,7 @@
 
     function deleteCriteria(id) {
         $('#criteriaID').val(id);
-        $('#exampleModal').modal('show');
+        $('#exampleModal').appendTo('body');
     }
 </script>
 
@@ -104,18 +105,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">KRITERIYA O'CHIRISH</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("delete", lang).ToUpper()</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
+                    <p>@Localization.GetTranslate("delete_warning_text", lang).ToUpper()</p>
                     <input type="hidden" id="criteriaID" name="id" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>
-                    <button type="submit" class="btn btn-danger">O'CHIRISH</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">@Localization.GetTranslate("back", lang).ToUpper()</button>
+                    <button type="submit" class="btn btn-danger">@Localization.GetTranslate("delete", lang).ToUpper()</button>
                 </div>
             </div>
         </div>

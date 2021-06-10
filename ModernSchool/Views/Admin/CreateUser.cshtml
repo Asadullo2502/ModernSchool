@@ -9,7 +9,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title">FOYDALANUVHCI QO'SHISH</h4>
+                <h4 class="card-title">@Localization.GetTranslate("user", lang).ToUpper() (@Localization.GetTranslate("add", lang).ToUpper())</h4>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -17,59 +17,60 @@
                     <div class="row">
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">ROL</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("role", lang).ToUpper()</label>
                                 <select class="custom-select" name="RoleId" id="Roles" required>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">VILOYAT</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("region", lang).ToUpper()</label>
                                 <select class="custom-select" name="RegionId" id="Regions" >
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">TUMAN</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("district", lang).ToUpper()</label>
                                 <select class="custom-select" name="DistrictId" id="Districts" >
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">MAKTAB</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("school", lang).ToUpper()</label>
                                 <select class="custom-select" name="SchoolId" id="Schools" >
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">F.I.SH.</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("fish", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="FullName" required>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Login</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("login", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="Login" required>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Parol</label>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("password", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="Password" required>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="Phone" placeholder="TELEFON RAQAMI" id="phone" required>
+                                <label class="bmd-label-floating">@Localization.GetTranslate("phone_number", lang).ToUpper()</label>
+                                <input type="text" class="form-control" name="Phone" id="phone" required>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary ">Saqlash</button>
-                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/Users/'">Ortga</button>
+                    <button type="submit" class="btn btn-primary ">@Localization.GetTranslate("save", lang).ToUpper()</button>
+                    <button type="button" class="btn btn-secondary " onclick="window.location.href='/Admin/Users/'">@Localization.GetTranslate("back", lang).ToUpper()</button>
                     <div class="clearfix"></div>
                 </form>
             </div>
@@ -85,7 +86,7 @@
 
     $.getJSON("/GetApi/GetRoles/", function (result) {
         var $dropdown = $("#Roles");
-        $dropdown.append($("<option />").val(null).text("Tanlang..."));
+        $dropdown.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
         $.each(result, function () {
             $dropdown.append($("<option />").val(this.id).text(this.name));
         });
@@ -99,7 +100,7 @@
             $('#Schools').empty();
             $.getJSON("/GetApi/GetRegions/", function (result) {
                 var $dropdown = $("#Regions");
-                $dropdown.append($("<option />").val(null).text("Tanlang..."));
+                $dropdown.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
                 $.each(result, function () {
                     $dropdown.append($("<option />").val(this.id).text(this.name_uz));
                 });
@@ -119,7 +120,7 @@
         if (role == 4 || role == 5) {
             $.getJSON("/GetApi/GetDistricts/" + region, function (result) {
                 var $dropdown = $("#Districts");
-                $dropdown.append($("<option />").val(null).text("Tanlang..."));
+                $dropdown.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
                 $.each(result, function () {
                     $dropdown.append($("<option />").val(this.id).text(this.name_uz));
                 });
@@ -133,7 +134,7 @@
         if (role == 5) {
             $.getJSON("/GetApi/GetSchools/" + district, function (result) {
                 var $dropdown = $("#Schools");
-                $dropdown.append($("<option />").val(null).text("Tanlang..."));
+                $dropdown.append($("<option />").val(null).text("@Html.Raw(Localization.GetTranslate("select...", lang).ToUpper())"));
                 $.each(result, function () {
                     $dropdown.append($("<option />").val(this.id).text(this.nameUz));
                 });

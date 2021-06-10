@@ -27,7 +27,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title ">INDEKSLAR</h4>
+                <h4 class="card-title ">@Localization.GetTranslate("indexes", lang).ToUpper()</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -38,20 +38,21 @@
                                     #
                                 </th>
                                 <th width="9%">
-                                    YUQORI INDEKS
+                                    @Localization.GetTranslate("upper_index", lang).ToUpper()
                                 </th>
                                 <th width="10%">
-                                    QISQACHA NOMI
+                                    @Localization.GetTranslate("short_name", lang).ToUpper()
                                 </th>
                                 <th width="25%">
-                                    TO'LIQ NOMI
+                                    @Localization.GetTranslate("full_name", lang).ToUpper()
                                 </th>
                                 <th width="9%">
-                                    MAKSIMAL BALL
+                                    @Localization.GetTranslate("max_ball", lang).ToUpper()
                                 </th>
                                 <th width="6%">
-                                    DARAJASI
+                                    @Localization.GetTranslate("level", lang).ToUpper()
                                 </th>
+                                <th width="5%"></th>
                                 <th width="5%"></th>
                             </tr>
                         </thead>
@@ -84,8 +85,10 @@
                                         <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditIndex/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="O'zgartirish">
                                             <i class="fa fa-edit" aria-hidden="true"></i>
                                         </button>
-                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" onclick="deleteIndex(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="O'chirish">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </td>
+                                        <td>
+                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" onclick="deleteIndex(@item.Id)" data-toggle="modal" data-target="#exampleModal">
+                                            <i class="fa fa-trash" aria-hidden="true" data-placement="bottom" title="O'chirish" data-toggle="tooltip" ></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -116,7 +119,7 @@
 
     function deleteIndex(id) {
         $('#indexID').val(id);
-        $('#exampleModal').modal('show');
+        $('#exampleModal').appendTo('body');
     }
 </script>
 
@@ -125,18 +128,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">INDEKS O'CHIRISH</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("delete", lang).ToUpper()</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>O'chirilgan ma'lumotlar qayta tiklanmaydi</p>
+                    <p>@Localization.GetTranslate("delete_warning_text", lang).ToUpper()</p>
                     <input type="hidden" id="indexID" name="id" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">ORTGA</button>
-                    <button type="submit" class="btn btn-danger">O'CHIRISH</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">@Localization.GetTranslate("back", lang).ToUpper()</button>
+                    <button type="submit" class="btn btn-danger">@Localization.GetTranslate("delete", lang).ToUpper()</button>
                 </div>
             </div>
         </div>
