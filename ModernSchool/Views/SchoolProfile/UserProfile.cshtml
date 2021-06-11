@@ -1,7 +1,7 @@
 ﻿@model User
 @{
     ViewData["Title"] = "UserProfile";
-    Layout = "~/Views/Shared/_LayoutSchool.cshtml";
+    Layout = "~/Views/Shared/_LayoutSchoolNew.cshtml";
     string lang = Context.Request.Cookies["lang"];
 }
 
@@ -9,31 +9,31 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title">FOYDALANUVCHI PROFILI</h4>
+                <h4 class="card-title">@Localization.GetTranslate("User", lang).ToUpper()</h4>
             </div>
             <div class="card-body">
                 <div class="row mt-3 mb-3">
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label class="bmd-label-floating">F.I.SH.</label>
+                            <label class="bmd-label-floating">@Localization.GetTranslate("fish", lang).ToUpper()</label>
                             <input type="text" class="form-control" name="FullName" value="@Model.FullName" readonly>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label class="bmd-label-floating">TELEFON RAQAMI</label>
+                            <label class="bmd-label-floating">@Localization.GetTranslate("phone_number", lang).ToUpper()</label>
                             <input type="text" class="form-control" name="Phone" id="phone" value="@Model.Phone" readonly>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label class="bmd-label-floating">LOGIN</label>
+                            <label class="bmd-label-floating">@Localization.GetTranslate("login", lang).ToUpper()</label>
                             <input type="text" class="form-control" name="Login" value="@Model.Login" readonly>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label class="bmd-label-floating">PAROL</label>
+                            <label class="bmd-label-floating">@Localization.GetTranslate("password", lang).ToUpper()</label>
                             @*<input type="text" class="form-control" name="Password" value="@Model.Password" readonly>*@
                             <div class="input-group">
                                 <input type="password" class="form-control" placeholder="Parol" name="password" id="password" value="@Model.Password" aria-label="Parol" aria-describedby="basic-addon2" readonly>
@@ -45,10 +45,10 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Ma'lumotlarni yangilash
+                            @Localization.GetTranslate("edit", lang).ToUpper()
                         </button>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">
-                            Parolni yangilash
+                            @Localization.GetTranslate("update_password", lang).ToUpper()
                         </button>
                     </div>
                 </div>
@@ -57,77 +57,34 @@
     </div>
 </div>
 
-<form id="form1" method="post" action="/SchoolProfile/UpdateUserProfile">
+
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ma'lumotlarni yangilash</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-12 mt-3 mb-3">
-                        <div class="form-group">
-                            <label class="bmd-label-floating">F.I.SH.</label>
-                            <input type="text" class="form-control" name="FullName" value="@Model.FullName" required>
-                        </div>
+        <div class="modal-dialog modal-lg" role="document">
+            <form id="form1" method="post" action="/SchoolProfile/UpdateUserProfile">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("edit", lang).ToUpper()</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="Phone" id="phone2" placeholder="Telefon raqami" value="@Model.Phone" required>
+                    <div class="modal-body">
+                        <div class="col-md-12 mt-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">@Localization.GetTranslate("fish", lang).ToUpper()</label>
+                                <input type="text" class="form-control" name="FullName" value="@Model.FullName" required>
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <input type="hidden" name="Login" value="@Model.Login" >
-                <input type="hidden" name="Password" value="@Model.Password" >
-                <input type="hidden" name="Id" value="@Model.Id" >
-                <input type="hidden" name="DistrictId" value="@Model.DistrictId" >
-                <input type="hidden" name="RegionId" value="@Model.RegionId" >
-                <input type="hidden" name="RoleId" value="@Model.RoleId" >
-                <input type="hidden" name="SchoolId" value="@Model.SchoolId" >
-                <input type="hidden" name="LastSeen" value="@Model.LastSeen" >
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
-                    <button type="submit" class="btn btn-primary">Saqlash</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-
-<form id="form2" method="post" action="/SchoolProfile/UpdateUserPassword">
-    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Parolni yangilash</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-12 mt-3 mb-3">
-                        <div class="form-group">
-                            <label class="bmd-label-floating">Yangi parolni kiriting</label>
-                            <input type="text" class="form-control" name="Password" id="pass1" minlength="6" required>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <div class="form-group">
-                            <label class="bmd-label-floating">Parolni qaytaring</label>
-                            <input type="text" class="form-control" id="pass2" minlength="6" required>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">@Localization.GetTranslate("phone_number", lang).ToUpper()</label>
+                                <input type="text" class="form-control" name="Phone" id="phone2" value="@Model.Phone" required>
+                            </div>
                         </div>
                     </div>
 
-                    <p id="err" style="text-align:center; color:darkred"></p>
-
-                    <input type="hidden" name="Phone" value="@Model.Phone">
-                    <input type="hidden" name="FullName" value="@Model.FullName">
                     <input type="hidden" name="Login" value="@Model.Login">
+                    <input type="hidden" name="Password" value="@Model.Password">
                     <input type="hidden" name="Id" value="@Model.Id">
                     <input type="hidden" name="DistrictId" value="@Model.DistrictId">
                     <input type="hidden" name="RegionId" value="@Model.RegionId">
@@ -135,17 +92,74 @@
                     <input type="hidden" name="SchoolId" value="@Model.SchoolId">
                     <input type="hidden" name="LastSeen" value="@Model.LastSeen">
 
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localization.GetTranslate("back", lang).ToUpper()</button>
+                        <button type="submit" class="btn btn-primary">@Localization.GetTranslate("save", lang).ToUpper()</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
-                    <button type="button" onclick="checkPass()" class="btn btn-primary">Saqlash</button>
-                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form id="form2" method="post" action="/SchoolProfile/UpdateUserPassword">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("update_password", lang).ToUpper()</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12 mt-3 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">@Localization.GetTranslate("enter_password", lang).ToUpper()</label>
+                                <input type="text" class="form-control" name="Password" id="pass1" minlength="6" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">@Localization.GetTranslate("enter_password_again", lang).ToUpper()</label>
+                                <input type="text" class="form-control" id="pass2" minlength="6" required>
+                            </div>
+                        </div>
+
+                        <p id="err" style="text-align:center; color:darkred"></p>
+
+                        <input type="hidden" name="Phone" value="@Model.Phone">
+                        <input type="hidden" name="FullName" value="@Model.FullName">
+                        <input type="hidden" name="Login" value="@Model.Login">
+                        <input type="hidden" name="Id" value="@Model.Id">
+                        <input type="hidden" name="DistrictId" value="@Model.DistrictId">
+                        <input type="hidden" name="RegionId" value="@Model.RegionId">
+                        <input type="hidden" name="RoleId" value="@Model.RoleId">
+                        <input type="hidden" name="SchoolId" value="@Model.SchoolId">
+                        <input type="hidden" name="LastSeen" value="@Model.LastSeen">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localization.GetTranslate("back", lang).ToUpper()</button>
+                        <button type="button" onclick="checkPass()" class="btn btn-primary">@Localization.GetTranslate("save", lang).ToUpper()</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</form>
+
 
 <script>
+
+    $('#exampleModal').appendTo('body');
+    $('#exampleModal2').appendTo('body');
+
+    $(function () {
+        $("#phone2").inputmask({ "mask": "+\\9\\98(99) 999-9999" });
+    })
+
+
     function showPass() {
         if ($('#password').attr('type') == "password") {
             $('#password').prop('type', 'text');

@@ -250,5 +250,55 @@ namespace ModernSchool.Controllers
 
             return Json(result);
         }
+
+        public IActionResult Indexes(int menu_id)
+        {
+            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+            PageData pageData = new PageData();
+            pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
+            pageData.Criterias = db.Criterias;
+            pageData.Indexes = db.Indexes.Include(x=>x.Criterias);
+            return View(pageData);
+        }
+        [HttpPost]
+        public JsonResult SaveIndex(int indexId, string[] criteriaValues)
+        {
+            var result = 0;
+
+            try
+            {
+                List<Rate> rates = db.Rates.Where(x => x.IndexId == indexId).ToList();
+                if (rates != null)
+                {
+                    db.Rates.RemoveRange(rates);
+                    db.SaveChanges();
+                }
+                foreach (var item in criteriaValues)
+                {
+                    var temp = item.Split(';');
+
+                    var rate = new Rate
+                    {
+                        UpdateDateSchool = DateTime.Now,
+                        IndexId = indexId,
+                        CriteriaId = Convert.ToInt32(temp[0]),
+                        ValueSchool = Convert.ToDouble(temp[1]),
+                        SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                        Year = 2021,
+                        
+                    };
+
+                    db.Rates.Add(rate);
+                    db.SaveChanges();
+                }
+                result = 1;
+            }
+            catch (Exception e)
+            {
+                var r = e.Message;
+            }
+
+            return Json(result);
+        }
     }
 }
