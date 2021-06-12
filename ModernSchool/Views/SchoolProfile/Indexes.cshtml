@@ -2,77 +2,241 @@
 @{
     ViewData["Title"] = "Indexes";
     Layout = "~/Views/Shared/_LayoutSchoolNew.cshtml";
+    string lang = Context.Request.Cookies["lang"];
 }
 
-<ul class="nav nav-pills nav-justified">
-    @foreach (var item in Model.Indexes.Where(x => x.Level == 1))
-    {
-        <li class="nav-item">
-            <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#">@item.NameUz</a>
-        </li>
-    }
-</ul>
-<ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2))
-    {
-        <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
-            <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index2_@item2.Id" onclick="level2click(@item2.Id)" href="#">@item2.NameUz</a>
-        </li>
-    }
-</ul>
-<ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3))
-    {
-        <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
-            <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index3_@item3.Id" onclick="level3click(@item3.Id)" href="#">@item3.NameUz</a>
-        </li>
-    }
-</ul>
-<ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4))
-    {
-        <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
-            <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index4_@item4.Id" onclick="level4click(@item4.Id)" href="#">@item4.NameUz</a>
-        </li>
-    }
-</ul>
-<ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5))
-    {
-        <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
-            <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index5_@item5.Id" onclick="level5click(@item5.Id)" href="#">@item5.NameUz</a>
-        </li>
-    }
-</ul>
 
-@foreach (var item in Model.Indexes.Where(x => x.Level > 2))
+@if (lang == "ru")
 {
-    if (item.Criterias.Count > 0)
+    <ul class="nav nav-pills nav-justified">
+        @foreach (var item in Model.Indexes.Where(x => x.Level == 1))
+        {
+            <li class="nav-item">
+                <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#">@item.NameRu <span class="badge badge-light">1/6</span></a>
+            </li>
+        }
+    </ul>
+    <ul class="nav nav-pills nav-justified mt-2">
+        @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2))
+        {
+            <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
+                <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#">@item2.NameRu</a>
+            </li>
+        }
+    </ul>
+    <ul class="nav nav-pills nav-justified mt-2">
+        @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3))
+        {
+            if (Model.Rates.Where(x => x.IndexId == item3.Id).Count() > 0)
+            {
+                <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
+                    <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="background:#a6e4a9;">@item3.NameRu</a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
+                    <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#">@item3.NameRu</a>
+                </li>
+            }
+
+        }
+    </ul>
+    <ul class="nav nav-pills nav-justified mt-2">
+        @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4))
+        {
+            <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
+                <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#">@item4.NameRu</a>
+            </li>
+        }
+    </ul>
+    <ul class="nav nav-pills nav-justified mt-2">
+        @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5))
+        {
+            <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
+                <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#">@item5.NameRu</a>
+            </li>
+        }
+    </ul>
+
+    @foreach (var item in Model.Indexes.Where(x => x.Level > 2))
     {
-        <div class="row indexTitle_@item.Id indexTitles mt-3">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header" style="font-weight:700">@item.NameUz</div>
-                    <div class="card-body">
-                        @foreach (var cr in item.Criterias)
-                        {
-                            if (cr.Type != "number")
+        if (item.Criterias.Count > 0)
+        {
+            <div class="row indexTitle_@item.Id indexTitles mt-3">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header" style="font-weight:700">@item.NameRu</div>
+                        <div class="card-body">
+                            @foreach (var cr in item.Criterias)
                             {
-                                try
+                                if (cr.Type != "number")
                                 {
-                                    if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                    try
+                                    {
+                                        if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                        {
+                                            <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                <label class="form-check-label">
+                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
+                                                    @cr.NameRu
+                                                    <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                        <span class="check"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                <label class="form-check-label">
+                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
+                                                    @cr.NameRu
+                                                    <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                        <span class="check"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        }
+                                    }
+                                    catch
                                     {
                                         <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                             <label class="form-check-label">
-                                                <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
-                                                @cr.NameUz
+                                                <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
+                                                @cr.NameRu
                                                 <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
                                                     <span class="check"></span>
                                                 </span>
                                             </label>
                                         </div>
                                     }
-                                    else
+
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                        {
+                                            <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                <label for="criteriaId_@cr.Id">@cr.NameRu</label>
+                                                <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" value="@Model.Rates.FirstOrDefault(x=>x.CriteriaId == cr.Id).ValueSchool" min="0">
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                <label for="criteriaId_@cr.Id">@cr.NameRu</label>
+                                                <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0">
+                                            </div>
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                            <label for="criteriaId_@cr.Id">@cr.NameRu</label>
+                                            <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0">
+                                        </div>
+                                    }
+
+                                }
+                            }
+                            <div class="footer mt-5">
+                                <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("save",lang).ToUpper()" onclick="SaveData(@item.Id)" />
+                                <input type="button" class="btn btn-light" value="@Localization.GetTranslate("reset",lang).ToUpper()" onclick="Reset(@item.Id)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+else
+{
+    <ul class="nav nav-pills nav-justified">
+        @foreach (var item in Model.Indexes.Where(x => x.Level == 1))
+        {
+            <li class="nav-item">
+                <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#">@item.NameUz</a>
+            </li>
+        }
+    </ul>
+    <ul class="nav nav-pills nav-justified mt-2">
+        @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2))
+        {
+            <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
+                <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#">@item2.NameUz</a>
+            </li>
+        }
+    </ul>
+    <ul class="nav nav-pills nav-justified mt-2">
+        @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3))
+        {
+            <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
+                <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#">@item3.NameUz</a>
+            </li>
+        }
+    </ul>
+    <ul class="nav nav-pills nav-justified mt-2">
+        @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4))
+        {
+            <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
+                <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#">@item4.NameUz</a>
+            </li>
+        }
+    </ul>
+    <ul class="nav nav-pills nav-justified mt-2">
+        @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5))
+        {
+            <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
+                <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#">@item5.NameUz</a>
+            </li>
+        }
+    </ul>
+
+    @foreach (var item in Model.Indexes.Where(x => x.Level > 2))
+    {
+        if (item.Criterias.Count > 0)
+        {
+            <div class="row indexTitle_@item.Id indexTitles mt-3">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header" style="font-weight:700">@item.NameUz</div>
+                        <div class="card-body">
+                            @foreach (var cr in item.Criterias)
+                            {
+                                if (cr.Type != "number")
+                                {
+                                    try
+                                    {
+                                        if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                        {
+                                            <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                <label class="form-check-label">
+                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
+                                                    @cr.NameUz
+                                                    <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                        <span class="check"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                <label class="form-check-label">
+                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
+                                                    @cr.NameUz
+                                                    <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                        <span class="check"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        }
+                                    }
+                                    catch
                                     {
                                         <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                             <label class="form-check-label">
@@ -84,60 +248,49 @@
                                             </label>
                                         </div>
                                     }
-                                }
-                                catch
-                                {
-                                    <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
-                                            @cr.NameUz
-                                            <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
-                                                <span class="check"></span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                }
 
-                            }
-                            else
-                            {
-                                try
+                                }
+                                else
                                 {
-                                    if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                    try
                                     {
-                                        <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
-                                            <label for="criteriaId_@cr.Id">@cr.NameUz</label>
-                                            <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" value="@Model.Rates.FirstOrDefault(x=>x.CriteriaId == cr.Id).ValueSchool" min="0">
-                                        </div>
+                                        if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool != null)
+                                        {
+                                            <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                <label for="criteriaId_@cr.Id">@cr.NameUz</label>
+                                                <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" value="@Model.Rates.FirstOrDefault(x=>x.CriteriaId == cr.Id).ValueSchool" min="0">
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                <label for="criteriaId_@cr.Id">@cr.NameUz</label>
+                                                <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0">
+                                            </div>
+                                        }
                                     }
-                                    else
+                                    catch
                                     {
                                         <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
                                             <label for="criteriaId_@cr.Id">@cr.NameUz</label>
                                             <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0">
                                         </div>
                                     }
-                                }
-                                catch
-                                {
-                                    <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
-                                        <label for="criteriaId_@cr.Id">@cr.NameUz</label>
-                                        <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0">
-                                    </div>
-                                }
 
+                                }
                             }
-                        }
-                        <div class="footer mt-5">
-                            <input type="button" class="btn btn-success" value="SAQLASH" onclick="SaveData(@item.Id)" />
-                            <input type="button" class="btn btn-danger" value="BEKOR QILISH" onclick="Reset(@item.Id)" />
+                            <div class="footer mt-5">
+                                <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("save",lang).ToUpper()" onclick="SaveData(@item.Id)" />
+                                <input type="button" class="btn btn-light" value="@Localization.GetTranslate("reset",lang).ToUpper()" onclick="Reset(@item.Id)" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     }
 }
+
 
 <script>
     $(document).ready(function () {
@@ -173,7 +326,7 @@
         $(".level4btn").removeClass('active');
         $(".level5btn").removeClass('active');
 
-        $("#index2_" + id).addClass('active');
+        $("#index_" + id).addClass('active');
 
         $(".navlvl3").css('display', 'none');
         $(".navlvl4").css('display', 'none')
@@ -189,7 +342,7 @@
         $(".level4btn").removeClass('active');
         $(".level5btn").removeClass('active');
 
-        $("#index3_" + id).addClass('active');
+        $("#index_" + id).addClass('active');
 
         $(".navlvl4").css('display', 'none');
         $(".navlvl5").css('display', 'none');
@@ -207,7 +360,7 @@
         $(".level4btn").removeClass('active');
         $(".level5btn").removeClass('active');
 
-        $("#index4_" + id).addClass('active');
+        $("#index_" + id).addClass('active');
 
         $(".navlvl5").css('display', 'none');
         $(".criterias").css('display', 'none');
@@ -223,7 +376,7 @@
     function level5click(id) {
         $(".level5btn").removeClass('active');
 
-        $("#index5_" + id).addClass('active');
+        $("#index_" + id).addClass('active');
 
         //$(".navlvl5").css('display', 'none');
         //$(".criterias").css('display', 'none');
@@ -270,6 +423,7 @@
                         "timeOut": "2500",
                         "extendedTImeout": "0"
                     });
+                    
                 }
                 else {
                     toastr.warning("Maʼlumotlar saqlanmadi!", "Yana bir bor urinib ko'ring", {
@@ -282,10 +436,16 @@
     }
 
     function Reset(indexId) {
-        $('.indexCriterias_' + indexId + ' :input').each(function () {
-            $(this).prop("checked", false);
-            $(this).prop("value", "");
-        });
+
+        var r = confirm("@Html.Raw(Localization.GetTranslate("delete_warning_text", lang))");
+        if (r == true) {
+            $('.indexCriterias_' + indexId + ' :input').each(function () {
+                $(this).prop("checked", false);
+                $(this).prop("value", "");
+            });
+        } else {
+            
+        }
     }
 </script>
 
