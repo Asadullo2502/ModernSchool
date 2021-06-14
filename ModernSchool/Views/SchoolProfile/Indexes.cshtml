@@ -5,14 +5,13 @@
     string lang = Context.Request.Cookies["lang"];
 }
 
-
 @if (lang == "ru")
 {
     <ul class="nav nav-pills nav-justified">
         @foreach (var item in Model.Indexes.Where(x => x.Level == 1))
         {
             <li class="nav-item">
-                <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#">@item.NameRu <span class="badge badge-light">1/6</span></a>
+                <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "background:#5cd85c59" : "")">@item.NameRu <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -20,33 +19,23 @@
         @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2))
         {
             <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
-                <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#">@item2.NameRu</a>
+                <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count ? "background:#5cd85c59" : "")">@item2.NameRu <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count)</span></a>
             </li>
         }
     </ul>
     <ul class="nav nav-pills nav-justified mt-2">
         @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3))
         {
-            if (Model.Rates.Where(x => x.IndexId == item3.Id).Count() > 0)
-            {
-                <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
-                    <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="background:#a6e4a9;">@item3.NameRu</a>
-                </li>
-            }
-            else
-            {
-                <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
-                    <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#">@item3.NameRu</a>
-                </li>
-            }
-
+            <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
+                <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count ? "background:#5cd85c59" : "")" >@item3.NameRu <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count)</span></a>
+            </li>
         }
     </ul>
     <ul class="nav nav-pills nav-justified mt-2">
         @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4))
         {
             <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
-                <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#">@item4.NameRu</a>
+                <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count ? "background:#5cd85c59" : "")">@item4.NameRu <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -54,7 +43,7 @@
         @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5))
         {
             <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
-                <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#">@item5.NameRu</a>
+                <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count ? "background:#5cd85c59" : "")">@item5.NameRu <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -159,7 +148,7 @@ else
         @foreach (var item in Model.Indexes.Where(x => x.Level == 1))
         {
             <li class="nav-item">
-                <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#">@item.NameUz</a>
+                <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "background:#5cd85c59" : "")">@item.NameUz <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -167,7 +156,7 @@ else
         @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2))
         {
             <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
-                <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#">@item2.NameUz</a>
+                <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count ? "background:#5cd85c59" : "")">@item2.NameUz <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -175,7 +164,7 @@ else
         @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3))
         {
             <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
-                <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#">@item3.NameUz</a>
+                <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count ? "background:#5cd85c59" : "")">@item3.NameUz <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -183,7 +172,7 @@ else
         @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4))
         {
             <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
-                <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#">@item4.NameUz</a>
+                <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count ? "background:#5cd85c59" : "")">@item4.NameUz <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -191,7 +180,7 @@ else
         @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5))
         {
             <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
-                <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#">@item5.NameUz</a>
+                <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count ? "background:#5cd85c59" : "")">@item5.NameUz <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -423,7 +412,6 @@ else
                         "timeOut": "2500",
                         "extendedTImeout": "0"
                     });
-                    
                 }
                 else {
                     toastr.warning("Maʼlumotlar saqlanmadi!", "Yana bir bor urinib ko'ring", {
@@ -444,7 +432,7 @@ else
                 $(this).prop("value", "");
             });
         } else {
-            
+
         }
     }
 </script>

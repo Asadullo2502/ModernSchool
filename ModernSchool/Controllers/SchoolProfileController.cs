@@ -14,10 +14,11 @@ namespace ModernSchool.Controllers
     public class SchoolProfileController : Controller
     {
         private DataContext db;
-
+        private DataManager data;
         public SchoolProfileController(DataContext context)
         {
             db = context;
+            data = new DataManager(db);
         }
         public IActionResult Profile()
         {
@@ -203,6 +204,7 @@ namespace ModernSchool.Controllers
             pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
             pageData.Criterias = db.Criterias;
             pageData.SchoolMenus = db.SchoolMenus.Include(x=>x.Criteria.Index).Include(x=>x.Menu).Where(x => x.menu_id == menu_id);
+                                   
             return View(pageData);
         }
         [HttpPost]
@@ -258,8 +260,20 @@ namespace ModernSchool.Controllers
             pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
             pageData.Criterias = db.Criterias;
             pageData.Indexes = db.Indexes.Include(x=>x.Criterias);
+            pageData.IndexesDataStatuses = data.IndexesStatus();
             return View(pageData);
         }
+        public IActionResult Indexes2(int menu_id)
+        {
+            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+            PageData pageData = new PageData();
+            pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
+            pageData.Criterias = db.Criterias;
+            pageData.Indexes = db.Indexes.Include(x => x.Criterias);
+            pageData.IndexesDataStatuses = data.IndexesStatus();
+            return View(pageData);
+        }
+
         [HttpPost]
         public JsonResult SaveIndex(int indexId, string[] criteriaValues)
         {

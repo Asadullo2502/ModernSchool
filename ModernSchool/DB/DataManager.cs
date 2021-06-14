@@ -16,7 +16,53 @@ namespace ModernSchool.DB
             db = context;
         }
 
-		
+		public IEnumerable<IndexesDataStatusViewModel> IndexesStatus()
+        {
+            return db.IndexesDataStatuses.FromSqlRaw(@"
+                with 
+				DB as (
+					select 
+						i.Id,
+
+						isnull((select top (1) 1
+						from Rates r
+						where r.IndexId = i.Id),0) +
+
+						isnull((select top (1) 1
+						from Rates r
+						where r.IndexId = i2.Id),0) +
+
+						isnull((select top (1) 1
+						from Rates r
+						where r.IndexId = i3.Id),0) +
+
+						isnull((select top (1) 1
+						from Rates r
+						where r.IndexId = i4.Id),0) +
+
+						isnull((select top (1) 1
+						from Rates r
+						where r.IndexId = i5.Id),0) as Selected
+
+					from [Indexes] i
+					left join [Indexes] i2 on i.Id = i2.ParentId
+					left join [Indexes] i3 on i2.Id = i3.ParentId
+					left join [Indexes] i4 on i3.Id = i4.ParentId
+					left join [Indexes] i5 on i4.Id = i5.ParentId
+				)
+
+				select 
+					i.Id, 
+					(select sum(db.Selected) from DB db where db.Id = i.Id) selected,
+					count(*) [count]
+				from [Indexes] i
+				left join [Indexes] i2 on i.Id = i2.ParentId
+				left join [Indexes] i3 on i2.Id = i3.ParentId
+				left join [Indexes] i4 on i3.Id = i4.ParentId
+				left join [Indexes] i5 on i4.Id = i5.ParentId
+				group by i.Id
+            ");
+        }
 
 	}
 }

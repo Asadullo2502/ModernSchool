@@ -28,6 +28,7 @@ namespace ModernSchool.DB
         public DbSet<Menu> Menus { get; set; }
         public DbSet<SchoolMenu> SchoolMenus { get; set; }
         public DbSet<Resource> Resources { get; set; }
+        public DbSet<IndexesDataStatusViewModel> IndexesDataStatuses { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
