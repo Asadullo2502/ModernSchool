@@ -16,9 +16,9 @@ namespace ModernSchool.DB
             db = context;
         }
 
-		public IEnumerable<IndexesDataStatusViewModel> IndexesStatus()
+		public async Task<IEnumerable<IndexesDataStatusViewModel>> IndexesStatus()
         {
-            return db.IndexesDataStatuses.FromSqlRaw(@"
+            return await db.IndexesDataStatuses.FromSqlRaw(@"
                 with 
 				DB as (
 					select 
@@ -61,8 +61,8 @@ namespace ModernSchool.DB
 				left join [Indexes] i4 on i3.Id = i4.ParentId
 				left join [Indexes] i5 on i4.Id = i5.ParentId
 				group by i.Id
-            ");
-        }
+            ").ToListAsync();
+		}
 
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ModernSchool.DB;
 using ModernSchool.Models;
 using System;
@@ -29,7 +30,7 @@ namespace ModernSchool.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = db.Users.FirstOrDefault(x => x.Login == login && x.Password == password);
+                var user = await db.Users.FirstOrDefaultAsync(x => x.Login == login && x.Password == password);
 
                 if (user != null)
                 {
