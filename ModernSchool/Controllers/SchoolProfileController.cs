@@ -116,7 +116,7 @@ namespace ModernSchool.Controllers
                         
                     };
 
-                    db.Rates.Add(rate);
+                    await db.Rates.AddAsync(rate);
                     await db.SaveChangesAsync();
                 }
                 result = 1;

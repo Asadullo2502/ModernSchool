@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ModernSchool.DB;
 using System;
 using System.Collections.Generic;
@@ -15,33 +16,33 @@ namespace ModernSchool.Controllers
         {
             db = context;
         }
-        public JsonResult GetRegions()
+        public async Task<JsonResult> GetRegions()
         {
-            return Json(db.Regions.OrderBy(x=>x.name_uz));
+            return Json(await db.Regions.OrderBy(x=>x.name_uz).ToListAsync());
         }
 
-        public JsonResult GetDistricts(int id = 0)
+        public async Task<JsonResult> GetDistricts(int id = 0)
         {
-            return Json(db.Districts.Where(x => x.parent_id == id));
+            return Json(await db.Districts.Where(x => x.parent_id == id).ToListAsync());
         }
 
-        public JsonResult GetSchools(int id = 0)
+        public async Task<JsonResult> GetSchools(int id = 0)
         {
-            return Json(db.Schools.Where(x => x.DistrictId == id));
+            return Json(await db.Schools.Where(x => x.DistrictId == id).ToListAsync());
         }
 
-        public JsonResult GetSchoolTypes()
+        public async Task<JsonResult> GetSchoolTypes()
         {
-            return Json(db.SchoolTypes.Where(x => x.IsSpec == false));
+            return Json(await db.SchoolTypes.Where(x => x.IsSpec == false).ToListAsync());
         }
-        public JsonResult GetRoles()
+        public async Task<JsonResult> GetRoles()
         {
-            return Json(db.Roles);
+            return Json(await db.Roles.ToListAsync());
         }
 
-        public JsonResult GetIndexes(int id)
+        public async Task<JsonResult> GetIndexes(int id)
         {
-            return Json(db.Indexes.Where(x => x.Level < id).OrderBy(x => x.Level).ThenBy(x => x.Id));
+            return Json(await db.Indexes.Where(x => x.Level < id).OrderBy(x => x.Level).ThenBy(x => x.Id).ToListAsync());
         }
     }
 }

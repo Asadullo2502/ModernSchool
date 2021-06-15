@@ -32,17 +32,17 @@ namespace ModernSchool.Controllers
         }
 
         [HttpPost]
-        public JsonResult Save(int indexId, string[] criteriaValues)
+        public async Task<JsonResult> Save(int indexId, string[] criteriaValues)
         {
             var result = 0;
 
             try
             {
-                List<Rate> rates = db.Rates.Where(x => x.IndexId == indexId).ToList();
+                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId).ToListAsync();
                 if (rates != null)
                 {
                     db.Rates.RemoveRange(rates);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 foreach (var item in criteriaValues)
                 {
@@ -58,8 +58,8 @@ namespace ModernSchool.Controllers
                         SchoolId = 1,
                     };
 
-                    db.Rates.Add(rate);
-                    db.SaveChanges();
+                    await db.Rates.AddAsync(rate);
+                    await db.SaveChangesAsync();
                 }
                 result = 1;
             }

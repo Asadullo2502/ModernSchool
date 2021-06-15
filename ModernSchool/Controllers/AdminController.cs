@@ -40,7 +40,7 @@ namespace ModernSchool.Controllers
         {
             try
             {
-                db.Regions.Add(region);
+                await db.Regions.AddAsync(region);
                 await db.SaveChangesAsync();
             }
             catch { }
@@ -101,7 +101,7 @@ namespace ModernSchool.Controllers
         {
             try
             {
-                db.Districts.Add(district);
+                await db.Districts.AddAsync(district);
                 await db.SaveChangesAsync();
             }
             catch { }
@@ -153,7 +153,7 @@ namespace ModernSchool.Controllers
         {
             try
             {
-                db.Schools.Add(school);
+                await db.Schools.AddAsync(school);
                 await db.SaveChangesAsync();
             }
             catch { }
@@ -205,7 +205,7 @@ namespace ModernSchool.Controllers
         {
             try
             {
-                db.Users.Add(user);
+                await db.Users.AddAsync(user);
                 await db.SaveChangesAsync();
             }
             catch { }
@@ -264,7 +264,7 @@ namespace ModernSchool.Controllers
             try
             {
                 index.Level = db.Indexes.FirstOrDefault(x => x.Id == index.ParentId).Level + 1;
-                db.Indexes.Add(index);
+                await db.Indexes.AddAsync(index);
                 await db.SaveChangesAsync();
             }
             catch { }
@@ -317,7 +317,7 @@ namespace ModernSchool.Controllers
         {
             try
             {
-                db.Criterias.Add(criteria);
+                await db.Criterias.AddAsync(criteria);
                 await db.SaveChangesAsync();
             }
             catch { }
@@ -369,7 +369,7 @@ namespace ModernSchool.Controllers
         {
             try
             {
-                db.Menus.Add(menu);
+                await db.Menus.AddAsync(menu);
                 await db.SaveChangesAsync();
             }
             catch { }
