@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModernSchool.DB;
 using ModernSchool.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace ModernSchool.Controllers
@@ -15,10 +19,12 @@ namespace ModernSchool.Controllers
     {
         private DataContext db;
         private DataManager data;
-        public SchoolProfileController(DataContext context)
+        readonly IWebHostEnvironment _appEnvironment;
+        public SchoolProfileController(DataContext context, IWebHostEnvironment hostEnvironment)
         {
             db = context;
             data = new DataManager(db);
+            _appEnvironment = hostEnvironment;
         }
         public async Task<IActionResult> Profile()
         {
@@ -129,7 +135,21 @@ namespace ModernSchool.Controllers
             return Json(result);
         }
 
+        public IActionResult OnPostMyUploader(IFormFile MyUploader)
+        {
+            if (MyUploader != null)
+            {
+                string uploadsFolder = Path.Combine(_appEnvironment.WebRootPath, "uploads");
+                string filePath = Path.Combine(uploadsFolder, MyUploader.FileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    MyUploader.CopyTo(fileStream);
+                }
+                return new ObjectResult(new { status = "success" });
+            }
+            return new ObjectResult(new { status = "fail" });
 
+        }
 
 
 

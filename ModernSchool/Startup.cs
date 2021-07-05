@@ -30,6 +30,7 @@ namespace ModernSchool
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(connection));
 
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
             services.AddControllersWithViews();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

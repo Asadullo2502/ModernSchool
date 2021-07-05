@@ -27,7 +27,7 @@
         @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3))
         {
             <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
-                <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count ? "background:#5cd85c59" : "")" >@item3.NameRu <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count)</span></a>
+                <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count ? "background:#5cd85c59" : "")">@item3.NameRu <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count)</span></a>
             </li>
         }
     </ul>
@@ -278,11 +278,64 @@ else
                         </div>
                     </div>
                 </div>
+                <div class="col-12 mt-3">
+                    <div class="card">
+                        <div class="card-header">
+                            files
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class=" form-group  text-center ">
+                                    <div class="custom-file">
+                                        <input type="file" id="fileUpload" class="fileUpload">
+                                        <button id="btnUpload" class="btn btn-success">Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
         }
     }
 }
 
+<script>
+    $("#fileUpload").on('change', function () {
+
+    });
+
+    // If you want to upload file on button click, then use below button click event
+    $("#btnUpload").on('click',function(){
+       var files = $('#fileUpload').prop("files");
+	    var url = '@Url.Action("OnPostMyUploader", "SchoolProfile")';
+	    formData = new FormData();
+	    formData.append("MyUploader", files[0]);
+
+	    jQuery.ajax({
+		    type: 'POST',
+		    url: url,
+		    data: formData,
+		    cache: false,
+		    contentType: false,
+		    processData: false,
+		    beforeSend: function (xhr) {
+			    xhr.setRequestHeader("XSRF-TOKEN",
+				    $('input:hidden[name="__RequestVerificationToken"]').val());
+		    },
+		    success: function (repo) {
+			    if (repo.status == "success") {
+				    alert("File : " + repo.filename + " is uploaded successfully");
+			    }
+		    },
+		    error: function() {
+			    alert("Error occurs");
+		    }
+	    });
+    });
+</script>
 
 <script>
     $(document).ready(function () {
