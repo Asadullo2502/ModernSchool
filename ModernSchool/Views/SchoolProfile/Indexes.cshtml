@@ -3,6 +3,7 @@
     ViewData["Title"] = "Indexes";
     Layout = "~/Views/Shared/_LayoutSchoolNew.cshtml";
     string lang = Context.Request.Cookies["lang"];
+    int j = 1;
 }
 
 @if (lang == "ru")
@@ -207,9 +208,9 @@ else
                                         {
                                             <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
+                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
                                                     @cr.NameUz
-                                                    <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                    <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
                                                         <span class="check"></span>
                                                     </span>
                                                 </label>
@@ -219,9 +220,9 @@ else
                                         {
                                             <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
+                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
                                                     @cr.NameUz
-                                                    <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                    <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
                                                         <span class="check"></span>
                                                     </span>
                                                 </label>
@@ -232,9 +233,9 @@ else
                                     {
                                         <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                             <label class="form-check-label">
-                                                <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',','.'))" />
+                                                <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
                                                 @cr.NameUz
-                                                <span class="@(cr.Type=="checkbox"?"form-check-sign":"circle")">
+                                                <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
                                                     <span class="check"></span>
                                                 </span>
                                             </label>
@@ -250,7 +251,7 @@ else
                                         {
                                             <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
                                                 <label for="criteriaId_@cr.Id">@cr.NameUz</label>
-                                                <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" value="@Model.Rates.FirstOrDefault(x=>x.CriteriaId == cr.Id).ValueSchool" min="0">
+                                                <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" value="@Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id).ValueSchool" min="0">
                                             </div>
                                         }
                                         else
@@ -272,24 +273,44 @@ else
                                 }
                             }
                             <div class="footer mt-5">
-                                <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("save",lang).ToUpper()" onclick="SaveData(@item.Id)" />
-                                <input type="button" class="btn btn-light" value="@Localization.GetTranslate("reset",lang).ToUpper()" onclick="Reset(@item.Id)" />
+                                <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("save", lang).ToUpper()" onclick="SaveData(@item.Id)" />
+                                <input type="button" class="btn btn-light" value="@Localization.GetTranslate("reset", lang).ToUpper()" onclick="Reset(@item.Id)" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 mt-3">
+                <div class="col-12 mt-3 mb-3">
                     <div class="card">
                         <div class="card-header">
-                            files
+                            Yuklangan fayllar
                         </div>
                         <div class="card-body">
+                            <div id="refDiv_@item.Id">
+                                <div class="row">
+                                    @{ j = 1; }
+                                    @foreach (var files in Model.UploadFiles.Where(x => x.IndexId == item.Id))
+                                    {
+                                        <div class="col-12"><a target="_blank" href="~/uploads/@files.FileGuid">@j.  @files.FileName</a></div>
+                                        j++;
+                                    }
+                                </div>
+                            </div>
+                            <hr />
                             <div class="row">
-                                <div class=" form-group  text-center ">
-                                    <div class="custom-file">
-                                        <input type="file" id="fileUpload" class="fileUpload">
-                                        <button id="btnUpload" class="btn btn-success">Upload</button>
-                                    </div>
+                                <div class="col-4">
+                                    <label class="btn btn-light" for="fileUpload_@item.Id" style="margin-bottom:0px">
+                                        <input id="fileUpload_@item.Id" type="file" style="display:none"
+                                               onchange="$('#upload-file-info_@item.Id').text(this.files[0].name)">
+                                        Faylni tanlang
+                                    </label>
+                                    <span class='label label-info' id="upload-file-info_@item.Id"></span>
+                                    <button class="btn btn-primary" id="btnUpload" type="button" onclick="uploadFile(@item.Id)">
+                                        Faylni saqlash
+                                    </button>
+                                    <button class="btn btn-primary" id="btnUpload2" type="button" disabled style="display:none">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Faylni saqlash
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -303,16 +324,26 @@ else
 }
 
 <script>
-    $("#fileUpload").on('change', function () {
+    var $loading = $('#btnUpload');
+    var $loading2 = $('#btnUpload2').hide();
 
-    });
+    $(document)
+        .ajaxStart(function () {
+            $loading2.show();
+            $loading.hide();
+        })
+        .ajaxStop(function () {
+            $loading.show();
+            $loading2.hide();
+        });
 
-    // If you want to upload file on button click, then use below button click event
-    $("#btnUpload").on('click',function(){
-       var files = $('#fileUpload').prop("files");
+
+    function uploadFile(id) {
+        var files = $('#fileUpload_' + id).prop("files");
 	    var url = '@Url.Action("OnPostMyUploader", "SchoolProfile")';
 	    formData = new FormData();
 	    formData.append("MyUploader", files[0]);
+        formData.append("IndexId", id);
 
 	    jQuery.ajax({
 		    type: 'POST',
@@ -327,14 +358,20 @@ else
 		    },
 		    success: function (repo) {
 			    if (repo.status == "success") {
-				    alert("File : " + repo.filename + " is uploaded successfully");
-			    }
+                    toastr.success("Maʼlumotlar saqlandi!", "", {
+                        "timeOut": "2500",
+                        "extendedTImeout": "0"
+                    });
+                }
+                $('#refDiv_' + id).load('@Url.Action("Indexes", "SchoolProfile")' + ' #refDiv_' + id);
+                $('#fileUpload_' + id).val('');
+                $('#upload-file-info_' + id).text('');
 		    },
 		    error: function() {
 			    alert("Error occurs");
 		    }
 	    });
-    });
+    };
 </script>
 
 <script>
@@ -364,6 +401,7 @@ else
 
         $(".level1Child_" + id).css('display', 'block');
         $(".navlvl1child_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
     }
     function level2click(id) {
         $(".level2btn").removeClass('active');
@@ -381,6 +419,7 @@ else
 
         $(".level2Child_" + id).css('display', 'block');
         $(".navlvl2child_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
     }
     function level3click(id) {
         $(".level3btn").removeClass('active');
@@ -400,6 +439,7 @@ else
         $(".indexTitles").css('display', 'none');
         $(".indexCriterias_" + id).css('display', 'block');
         $(".indexTitle_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
     }
     function level4click(id) {
         $(".level4btn").removeClass('active');
@@ -417,6 +457,7 @@ else
         $(".indexTitles").css('display', 'none');
         $(".indexCriterias_" + id).css('display', 'block');
         $(".indexTitle_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
     }
     function level5click(id) {
         $(".level5btn").removeClass('active');
@@ -430,6 +471,7 @@ else
         $(".indexTitles").css('display', 'none');
         $(".indexCriterias_" + id).css('display', 'block');
         $(".indexTitle_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
     }
 
     function clickRadio(criteriaId, indexId, ball) {

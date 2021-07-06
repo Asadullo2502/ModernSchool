@@ -88,6 +88,7 @@ namespace ModernSchool.Controllers
             int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
             PageData pageData = new();
             pageData.Rates = await db.Rates.Where(x => x.SchoolId == school_id).ToListAsync();
+            pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == school_id).ToListAsync();
             pageData.Criterias = await db.Criterias.ToListAsync();
             pageData.Indexes = await db.Indexes.Include(x=>x.Criterias).ToListAsync();
             pageData.IndexesDataStatuses = await data.IndexesStatus();
@@ -135,16 +136,31 @@ namespace ModernSchool.Controllers
             return Json(result);
         }
 
-        public IActionResult OnPostMyUploader(IFormFile MyUploader)
+        public IActionResult OnPostMyUploader(IFormFile MyUploader, int IndexId)
         {
             if (MyUploader != null)
             {
+                UploadFile uploadFile = new();
                 string uploadsFolder = Path.Combine(_appEnvironment.WebRootPath, "uploads");
-                string filePath = Path.Combine(uploadsFolder, MyUploader.FileName);
+                string extension = Path.GetExtension(MyUploader.FileName);
+                string fileGuidName = Guid.NewGuid().ToString() + extension;
+                string filePath = Path.Combine(uploadsFolder, fileGuidName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     MyUploader.CopyTo(fileStream);
                 }
+
+                uploadFile.CreateDate = DateTime.Now;
+                uploadFile.CreatedBy = 1;
+                uploadFile.FileExtension = extension;
+                uploadFile.FileGuid = fileGuidName;
+                uploadFile.FileName = MyUploader.FileName;
+                uploadFile.IndexId = IndexId;
+                uploadFile.SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+
+                db.UploadFiles.Add(uploadFile);
+                db.SaveChanges();
+
                 return new ObjectResult(new { status = "success" });
             }
             return new ObjectResult(new { status = "fail" });
