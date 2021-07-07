@@ -21,6 +21,21 @@ namespace ModernSchool.Controllers
         }
         public IActionResult Login()
         {
+            try
+            {
+                int role = Convert.ToInt32(User.FindFirst(x => x.Type == "RoleId").Value);
+
+                if (role == 1)
+                    return RedirectToAction("Indexes", "Admin");
+
+                if (role == 2)
+                    return RedirectToAction("Index", "Home");
+
+                if (role == 5)
+                    return RedirectToAction("Profile", "SchoolProfile");
+            }
+            catch { }
+
             return View();
         }
 
@@ -58,7 +73,8 @@ namespace ModernSchool.Controllers
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleId.ToString()),
                 new Claim("RegionId", user.RegionId.ToString()),
                 new Claim("DistrictId", user.DistrictId.ToString()),
-                new Claim("SchoolId", user.SchoolId.ToString())
+                new Claim("SchoolId", user.SchoolId.ToString()),
+                new Claim("RoleId", user.RoleId.ToString())
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));

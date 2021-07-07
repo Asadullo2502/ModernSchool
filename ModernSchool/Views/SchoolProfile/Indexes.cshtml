@@ -290,7 +290,10 @@ else
                                     @{ j = 1; }
                                     @foreach (var files in Model.UploadFiles.Where(x => x.IndexId == item.Id))
                                     {
-                                        <div class="col-12"><a target="_blank" href="~/uploads/@files.FileGuid">@j.  @files.FileName</a></div>
+                                        <div class="col-12 mb-1">
+                                            <a target="_blank" href="~/uploads/@files.FileGuid">@j.  @files.FileName</a>
+                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="deleteUploadFile(@files.Id,@item.Id)"><span class="fa fa-trash-alt"></span></button>
+                                        </div>
                                         j++;
                                     }
                                 </div>
@@ -323,7 +326,57 @@ else
     }
 }
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Faylni o`chirish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                O`chirilgan fayllar tiklanmaydi
+                <input type="hidden" id="deletedFileId" />
+                <input type="hidden" id="refDivId" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
+                <button type="button" class="btn btn-primary" onclick="confirmDeleteUploadFile()">O`chirish</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    $('#exampleModal').appendTo("body");
+    function deleteUploadFile(id,id2) {
+        $('#deletedFileId').val(id);
+        $('#refDivId').val(id2);
+    };
+    function confirmDeleteUploadFile() {
+        var refDivId = $('#refDivId').val();
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteUploadFile", "SchoolProfile")',
+            data: { "id": $('#deletedFileId').val() },
+		    success: function (repo) {
+			    if (repo.status == "success") {
+                    toastr.success("Fayl o`chirildi!", "", {
+                        "timeOut": "2500",
+                        "extendedTImeout": "0"
+                    });
+                }
+                $('#refDiv_' + refDivId).load('@Url.Action("Indexes", "SchoolProfile")' + ' #refDiv_' + refDivId);
+                $("#exampleModal .close").click();
+		    },
+		    error: function() {
+			    alert("Error occurs");
+		    }
+	    });
+    };
+
+
     var $loading = $('#btnUpload');
     var $loading2 = $('#btnUpload2').hide();
 

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ModernSchool.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "1")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

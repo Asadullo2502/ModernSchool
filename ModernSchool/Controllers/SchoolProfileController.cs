@@ -167,6 +167,26 @@ namespace ModernSchool.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult DeleteUploadFile(int id)
+        {
+            try
+            {
+                var item = db.UploadFiles.FirstOrDefault(x => x.Id == id);
+
+                FileInfo file = new(_appEnvironment.WebRootPath + "/uploads/" + item.FileGuid);
+                if (file.Exists)
+                {
+                    file.Delete();
+                }
+
+                db.UploadFiles.Remove(item);
+                db.SaveChanges();
+                return new ObjectResult(new { status = "success" });
+            }
+            catch { return new ObjectResult(new { status = "fail" }); }
+            
+        }
 
 
         #region comment 
