@@ -83,6 +83,7 @@ namespace ModernSchool.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        [AllowAnonymous]
         public IActionResult ChangeCulture(string lang)
         {
             Uri baseUri = new Uri(Request.Headers["Referer"].ToString());

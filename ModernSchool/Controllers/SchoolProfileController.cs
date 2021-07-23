@@ -91,7 +91,7 @@ namespace ModernSchool.Controllers
             pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == school_id).ToListAsync();
             pageData.Criterias = await db.Criterias.ToListAsync();
             pageData.Indexes = await db.Indexes.Include(x=>x.Criterias).ToListAsync();
-            pageData.IndexesDataStatuses = await data.IndexesStatus();
+            pageData.IndexesDataStatuses = await data.IndexesStatus(school_id);
             return View(pageData);
         }
 
@@ -211,104 +211,104 @@ namespace ModernSchool.Controllers
             catch { }
             return RedirectToAction("MainInfo");
         }
-        public async Task<IActionResult> TeachersInfo()
-        {
-            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
-            return View(await db.Schools.Include(x => x.SchoolInfo).Include(x => x.TeacherInfo).FirstOrDefaultAsync(x => x.Id == school_id));
-        }
-        [HttpPost]
-        public async Task<IActionResult> TeachersInfo(TeacherInfo teacherInfo)
-        {
-            try
-            {
-                var tyutors_existence = Request.Form["tyutors_existence"];
-                teacherInfo.tyutors_existence = tyutors_existence == "on" ? true : false;
-                teacherInfo.update_date = DateTime.Now;
-                teacherInfo.year = DateTime.Now.Year;
-                if (teacherInfo.id != 0)
-                    db.Entry(teacherInfo).State = EntityState.Modified;
-                else
-                    db.TeacherInfos.Add(teacherInfo);
-                await db.SaveChangesAsync();
-            }
-            catch { }
-            return RedirectToAction("TeachersInfo");
-        }
+        //public async Task<IActionResult> TeachersInfo()
+        //{
+        //    int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+        //    return View(await db.Schools.Include(x => x.SchoolInfo).Include(x => x.TeacherInfo).FirstOrDefaultAsync(x => x.Id == school_id));
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> TeachersInfo(TeacherInfo teacherInfo)
+        //{
+        //    try
+        //    {
+        //        var tyutors_existence = Request.Form["tyutors_existence"];
+        //        teacherInfo.tyutors_existence = tyutors_existence == "on" ? true : false;
+        //        teacherInfo.update_date = DateTime.Now;
+        //        teacherInfo.year = DateTime.Now.Year;
+        //        if (teacherInfo.id != 0)
+        //            db.Entry(teacherInfo).State = EntityState.Modified;
+        //        else
+        //            db.TeacherInfos.Add(teacherInfo);
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch { }
+        //    return RedirectToAction("TeachersInfo");
+        //}
 
-        public async Task<IActionResult> PupilsInfo()
-        {
-            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
-            var model = await db.Schools.Include(x => x.SchoolInfo).Include(x => x.PupilInfo).Include(x => x.InternationOlympiadWinners).Include(x => x.RepublicOlympiadWinners).FirstOrDefaultAsync(x => x.Id == school_id);
-            model.Subjects = await db.Subjects.ToListAsync();
-            return View(model);
-        }
-        [HttpPost]
-        public async Task<IActionResult> PupilsInfo(PupilInfo pupilInfo)
-        {
-            try
-            {
-                pupilInfo.update_date = DateTime.Now;
-                pupilInfo.year = DateTime.Now.Year;
-                if (pupilInfo.id != 0)
-                    db.Entry(pupilInfo).State = EntityState.Modified;
-                else
-                    db.PupilInfos.Add(pupilInfo);
-                await db.SaveChangesAsync();
-            }
-            catch { }
-            return RedirectToAction("PupilsInfo");
-        }
-        [HttpPost]
-        public async Task<IActionResult> SaveRepublicOlympiadWinners(RepublicOlympiadWinner republicOlympiadWinner)
-        {
-            try
-            {
-                republicOlympiadWinner.update_date = DateTime.Now;
-                republicOlympiadWinner.year = DateTime.Now.Year;
-                db.RepublicOlympiadWinners.Add(republicOlympiadWinner);
-                await db.SaveChangesAsync();
-            }
-            catch { }
-            return RedirectToAction("PupilsInfo");
-        }
-        [HttpPost]
-        public async Task<IActionResult> SaveInternationOlympiadWinners(InternationOlympiadWinner internationOlympiadWinner)
-        {
-            try
-            {
-                internationOlympiadWinner.update_date = DateTime.Now;
-                internationOlympiadWinner.year = DateTime.Now.Year;
-                db.InternationOlympiadWinners.Add(internationOlympiadWinner);
-                await db.SaveChangesAsync();
-            }
-            catch { }
-            return RedirectToAction("PupilsInfo");
-        }
+        //public async Task<IActionResult> PupilsInfo()
+        //{
+        //    int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+        //    var model = await db.Schools.Include(x => x.SchoolInfo).Include(x => x.PupilInfo).Include(x => x.InternationOlympiadWinners).Include(x => x.RepublicOlympiadWinners).FirstOrDefaultAsync(x => x.Id == school_id);
+        //    model.Subjects = await db.Subjects.ToListAsync();
+        //    return View(model);
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> PupilsInfo(PupilInfo pupilInfo)
+        //{
+        //    try
+        //    {
+        //        pupilInfo.update_date = DateTime.Now;
+        //        pupilInfo.year = DateTime.Now.Year;
+        //        if (pupilInfo.id != 0)
+        //            db.Entry(pupilInfo).State = EntityState.Modified;
+        //        else
+        //            db.PupilInfos.Add(pupilInfo);
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch { }
+        //    return RedirectToAction("PupilsInfo");
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> SaveRepublicOlympiadWinners(RepublicOlympiadWinner republicOlympiadWinner)
+        //{
+        //    try
+        //    {
+        //        republicOlympiadWinner.update_date = DateTime.Now;
+        //        republicOlympiadWinner.year = DateTime.Now.Year;
+        //        db.RepublicOlympiadWinners.Add(republicOlympiadWinner);
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch { }
+        //    return RedirectToAction("PupilsInfo");
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> SaveInternationOlympiadWinners(InternationOlympiadWinner internationOlympiadWinner)
+        //{
+        //    try
+        //    {
+        //        internationOlympiadWinner.update_date = DateTime.Now;
+        //        internationOlympiadWinner.year = DateTime.Now.Year;
+        //        db.InternationOlympiadWinners.Add(internationOlympiadWinner);
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch { }
+        //    return RedirectToAction("PupilsInfo");
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> DeleteRepublicOlympiadWinners(int id)
-        {
-            try
-            {
-                var data = await db.RepublicOlympiadWinners.FirstOrDefaultAsync(x => x.id == id);
-                db.RepublicOlympiadWinners.Remove(data);
-                await db.SaveChangesAsync();
-            }
-            catch { }
-            return RedirectToAction("PupilsInfo");
-        }
-        [HttpPost]
-        public async Task<IActionResult> DeleteInternationOlympiadWinners(int id)
-        {
-            try
-            {
-                var data = await db.InternationOlympiadWinners.FirstOrDefaultAsync(x => x.id == id);
-                db.InternationOlympiadWinners.Remove(data);
-                await db.SaveChangesAsync();
-            }
-            catch { }
-            return RedirectToAction("PupilsInfo");
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> DeleteRepublicOlympiadWinners(int id)
+        //{
+        //    try
+        //    {
+        //        var data = await db.RepublicOlympiadWinners.FirstOrDefaultAsync(x => x.id == id);
+        //        db.RepublicOlympiadWinners.Remove(data);
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch { }
+        //    return RedirectToAction("PupilsInfo");
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> DeleteInternationOlympiadWinners(int id)
+        //{
+        //    try
+        //    {
+        //        var data = await db.InternationOlympiadWinners.FirstOrDefaultAsync(x => x.id == id);
+        //        db.InternationOlympiadWinners.Remove(data);
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch { }
+        //    return RedirectToAction("PupilsInfo");
+        //}
 
         public IActionResult Questionnaire(int menu_id)
         {

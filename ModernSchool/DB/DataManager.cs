@@ -16,7 +16,7 @@ namespace ModernSchool.DB
             db = context;
         }
 
-		public async Task<IEnumerable<IndexesDataStatusViewModel>> IndexesStatus()
+		public async Task<IEnumerable<IndexesDataStatusViewModel>> IndexesStatus(int school_id)
         {
             return await db.IndexesDataStatuses.FromSqlRaw(@"
                 with 
@@ -26,23 +26,23 @@ namespace ModernSchool.DB
 
 						isnull((select top (1) 1
 						from Rates r
-						where r.IndexId = i.Id),0) +
+						where r.IndexId = i.Id and r.SchoolId = " + school_id + @"),0) +
 
 						isnull((select top (1) 1
 						from Rates r
-						where r.IndexId = i2.Id),0) +
+						where r.IndexId = i2.Id and r.SchoolId = " + school_id + @"),0) +
 
 						isnull((select top (1) 1
 						from Rates r
-						where r.IndexId = i3.Id),0) +
+						where r.IndexId = i3.Id and r.SchoolId = " + school_id + @"),0) +
 
 						isnull((select top (1) 1
 						from Rates r
-						where r.IndexId = i4.Id),0) +
+						where r.IndexId = i4.Id and r.SchoolId = " + school_id + @"),0) +
 
 						isnull((select top (1) 1
 						from Rates r
-						where r.IndexId = i5.Id),0) as Selected
+						where r.IndexId = i5.Id and r.SchoolId = " + school_id + @"),0) as Selected
 
 					from [Indexes] i
 					left join [Indexes] i2 on i.Id = i2.ParentId
