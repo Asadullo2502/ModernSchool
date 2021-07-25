@@ -1,12 +1,71 @@
-﻿@model IEnumerable<School>
+﻿@model IList<SchoolViewModel>
 @{
     ViewData["Title"] = "Schools";
     Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
     string lang = Context.Request.Cookies["lang"];
     int i = 1;
+
+    int page = 1;
+
+    try
+    {
+        page = ViewBag.CurrentPage;
+    }
+    catch { }
+
+    var pageLinksCount = 20;
+    var diff = page - pageLinksCount / 2;
+    var startPage = 1 + diff;
+    var endPage = pageLinksCount + diff;
+
+    if (startPage < 1)
+    {
+        endPage = Math.Min(ViewBag.PageCount, pageLinksCount);
+        startPage = 1;
+    }
+
+    if (endPage > ViewBag.PageCount)
+    {
+        startPage = Math.Max(1, ViewBag.PageCount - pageLinksCount + 1);
+        endPage = ViewBag.PageCount;
+    }
 }
 
-<div class="row">
+<form>
+    <div class="card card-body mb-4">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label>@Localization.GetTranslate("region", lang)</label>
+                    <select class="custom-select" name="RegionId" id="Regions">
+                        <option selected value="0">@Localization.GetTranslate("select...", lang)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label>@Localization.GetTranslate("district", lang)</label>
+                    <select class="custom-select" name="DistrictId" id="Districts">
+                        <option selected value="0">@Localization.GetTranslate("select...", lang)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>&ensp;</label>
+                    <button class="btn btn-primary form-control" type="submit">
+                        <span class="btn-icon-wrapper pr-2 opacity-9">
+                            <i class="fa fa-search fa-w-20"></i>
+                        </span>
+                        @Localization.GetTranslate("search", lang)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row mb-3">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
@@ -30,12 +89,6 @@
                                     Nomi
                                 </th>
                                 <th>
-                                    Direktor
-                                </th>
-                                <th>
-                                    Telefon
-                                </th>
-                                <th>
                                     Ball
                                 </th>
                                 <th>
@@ -53,22 +106,16 @@
                             {
                                 <tr>
                                     <td>
-                                        @i
+                                        @item.PageNumber
                                     </td>
                                     <td>
-                                        @item.Region?.name_uz
+                                        @item.RegionName
                                     </td>
                                     <td>
-                                        @item.District?.name_uz
+                                        @item.DistrictName
                                     </td>
                                     <td>
                                         @item.NameUz
-                                    </td>
-                                    <td>
-                                        @item.Director
-                                    </td>
-                                    <td>
-                                        @item.Phone
                                     </td>
                                     <td>
                                         @item.ball
@@ -76,7 +123,7 @@
                                     <td>Sertifikatlanmagan</td>
                                     <td></td>
                                     <td style="text-align:right">
-                                        <button type="button" class="btn btn-info" onclick="window.location.href = '/Admin/CheckIndexes/'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
+                                        <button type="button" class="btn btn-info" onclick="window.location.href = '/Admin/CheckIndexes/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
                                             <i class="fa fa-eye" aria-hidden="true"></i>
                                         </button>
                                     </td>
@@ -90,20 +137,68 @@
         </div>
     </div>
 </div>
+<ul class="pagination">
+    <li class="paginate_button previous">
+        <a href="/Admin/Orders/?page=1&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">&laquo;</a>
+    </li>
 
+    @for (int j = startPage; j <= endPage; j++)
+    {
+        <li class="paginate_button @(j == ViewBag.CurrentPage ? "active" : null) ">
+            <a href="/Admin/Orders/?page=@j&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">@j</a>
+        </li>
+    }
+    <li class="paginate_button next)">
+        <a href="/Admin/Orders/?page=@ViewBag.PageCount&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">&raquo;</a>
+    </li>
+</ul>
 <script>
     $('#myTable').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            'excel',
-            {
-                extend: 'pdfHtml5',
-                orientation: 'landscape',
-                pageSize: 'LEGAL',
-            },
-            'print'
-        ],
-        //pageLength: 10,
+        dom: 'ltpr',
+        "paging": false,
+    });
+
+    $.getJSON("/GetApi/GetRegions/", function (result) {
+        var $dropdown = $("#Regions");
+        $.each(result, function () {
+            if (this.id == @ViewBag.RegionId) {
+                $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
+            }
+            else {
+                $dropdown.append($("<option />").val(this.id).text(this.name_uz));
+            }
+        });
+    });
+
+    if (@ViewBag.RegionId > 0) {
+        $.getJSON("/GetApi/GetDistricts/" + @ViewBag.RegionId, function (result) {
+            var $dropdown = $("#Districts");
+            $.each(result, function () {
+                if (this.id == @ViewBag.DistrictId) {
+                    $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
+                }
+                else {
+                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
+                }
+            });
+        });
+    }
+
+    $("#Regions").change(function () {
+        var region = this.value;
+        $('#Districts').empty();
+        $.getJSON("/GetApi/GetDistricts/" + region, function (result) {
+            var $dropdown = $("#Districts");
+            $dropdown.append($("<option />").val(null).text("Tanlang..."));
+            $.each(result, function () {
+                if (this.id == @ViewBag.DistrictId) {
+                    $dropdown.append($("<option selected />").val(this.id).text(this.name_uz));
+                }
+                else {
+                    $dropdown.append($("<option />").val(this.id).text(this.name_uz));
+                }
+            });
+        });
     });
 
 </script>

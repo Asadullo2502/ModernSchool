@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using ModernSchool.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace ModernSchool.Controllers
 {
@@ -359,62 +361,199 @@ namespace ModernSchool.Controllers
         }
         #endregion
 
-        public async Task<IActionResult> Orders()
+        public async Task<IActionResult> Orders(int page = 1, int RegionId = 0, int DistrictId = 0)
         {
-            var schools = await db.Schools.FromSqlRaw(@"select *,
-            (select sum(c.MaxBall)
-            from Rates r
-            left join Criterias c on c.Id = r.CriteriaId
-            where r.SchoolId = s.Id) ball
-            from Schools s").Include(x => x.District).Include(x=>x.Region).ToListAsync();
 
+            string filter = "1=1";
+            filter += (RegionId > 0) ? "and r.id = " + RegionId : "";
+            filter += (DistrictId > 0) ? "and d.id = " + DistrictId : "";
+
+            var schools = await db.SchoolViewModel.FromSqlRaw(@"
+                with db as (
+                    select s.*,
+                    r.short_name RegionName,
+                    d.short_name DistrictName,
+                    (
+                        select sum(c.MaxBall)
+                        from Rates r
+                        left join Criterias c on c.Id = r.CriteriaId
+                        where r.SchoolId = s.Id
+                    ) ball,
+                    ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
+                    from Schools s
+                    left join Regions r on r.id = s.RegionId
+                    left join Districts d on d.id = s.DistrictId
+                    where " + filter + @" 
+                )
+                select top 10 *
+                from db
+                WHERE PageNumber > 10 * " + (page - 1) + @"
+            ").ToListAsync();
+
+            var ss = await db.Schools.FromSqlRaw(@"
+                select s.*,
+                (
+                    select sum(c.MaxBall)
+                    from Rates r
+                    left join Criterias c on c.Id = r.CriteriaId
+                    where r.SchoolId = s.Id
+                ) ball,
+                ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
+                from Schools s
+                left join Regions r on r.id = s.RegionId
+                left join Districts d on d.id = s.DistrictId
+                where " + filter + @" 
+            ").ToListAsync();
+
+            int count = ss.Count();
+            ViewBag.CurrentPage = page;
+            ViewBag.RegionId = RegionId;
+            ViewBag.DistrictId = DistrictId;
+            ViewBag.PageCount = count / 10 + (count % 10 == 0 ? 0 : 1);
             return View(schools);
         }
-        public async Task<IActionResult> SchoolProfile(int? id)
+        
+
+        public async Task<IActionResult> CheckIndexes(int? id)
         {
             if (id != null)
             {
                 Response.Cookies.Append("school_id", id.ToString());
-                School school = await db.Schools.Include(x => x.Region).Include(x => x.District).FirstOrDefaultAsync(x => x.Id == (int)id);
-                return View(school);
-            }
-            else
-            {
-                int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
-                School school = await db.Schools.Include(x => x.Region).Include(x => x.District).FirstOrDefaultAsync(x => x.Id == school_id);
-                return View(school);
             }
             
-        }
-
-        public async Task<IActionResult> CheckIndexes()
-        {
-            int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
             PageData pageData = new();
-            pageData.Rates = await db.Rates.Where(x => x.SchoolId == school_id).ToListAsync();
-            pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == school_id).ToListAsync();
+            pageData.Rates = await db.Rates.Where(x => x.SchoolId == id).ToListAsync();
+            pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == id).ToListAsync();
             pageData.Criterias = await db.Criterias.ToListAsync();
             pageData.Indexes = await db.Indexes.Include(x => x.Criterias).ToListAsync();
-            pageData.IndexesDataStatuses = await data.IndexesStatus(school_id);
+            pageData.IndexesDataStatuses = await data.IndexesStatus((int)id);
             return View(pageData);
         }
 
-        public async Task<IActionResult> Questionnaire(int menu_id)
+        [HttpPost]
+        public async Task<JsonResult> SaveIndex(int indexId, string[] criteriaValues)
         {
-            int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
-            PageData pageData = new()
+            var result = 0;
+
+            try
             {
-                Rates = await db.Rates.Where(x => x.SchoolId == school_id).ToListAsync(),
-                Criterias = await db.Criterias.ToListAsync(),
-                SchoolMenus = await db.SchoolMenus.Include(x => x.Criteria.Index).Include(x => x.Menu).Where(x => x.menu_id == menu_id).ToListAsync()
-            };
-            return View(pageData);
+                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueInspektor != null).ToListAsync();
+                if (rates != null)
+                {
+                    db.Rates.RemoveRange(rates);
+                    await db.SaveChangesAsync();
+                }
+                foreach (var item in criteriaValues)
+                {
+                    var temp = item.Split(';');
+
+                    var rate = new Rate
+                    {
+                        UpdateDateSchool = DateTime.Now,
+                        IndexId = indexId,
+                        CriteriaId = Convert.ToInt32(temp[0]),
+                        ValueInspektor = Convert.ToDouble(temp[1]),
+                        SchoolId = Convert.ToInt32(Request.Cookies["school_id"]),
+                        Year = 2021,
+
+                    };
+
+                    await db.Rates.AddAsync(rate);
+                    await db.SaveChangesAsync();
+                }
+                result = 1;
+            }
+            catch (Exception e)
+            {
+                var r = e.Message;
+            }
+
+            return Json(result);
         }
-        public async Task<IActionResult> MainInfo()
+
+        public IActionResult OnPostMyUploader(IFormFile MyUploader, int IndexId)
         {
-            int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
-            return View(await db.Schools.Include(x => x.Region).Include(x => x.District).Include(x => x.SchoolType).Include(x => x.SchoolInfo).FirstOrDefaultAsync(x => x.Id == school_id));
+            if (MyUploader != null)
+            {
+                UploadFile uploadFile = new();
+                string uploadsFolder = Path.Combine(_appEnvironment.WebRootPath, "uploads");
+                string extension = Path.GetExtension(MyUploader.FileName);
+                string fileGuidName = Guid.NewGuid().ToString() + extension;
+                string filePath = Path.Combine(uploadsFolder, fileGuidName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    MyUploader.CopyTo(fileStream);
+                }
+
+                uploadFile.CreateDate = DateTime.Now;
+                uploadFile.CreatedBy = 2;
+                uploadFile.FileExtension = extension;
+                uploadFile.FileGuid = fileGuidName;
+                uploadFile.FileName = MyUploader.FileName;
+                uploadFile.IndexId = IndexId;
+                uploadFile.SchoolId = Convert.ToInt32(Request.Cookies["school_id"]);
+
+                db.UploadFiles.Add(uploadFile);
+                db.SaveChanges();
+
+                return new ObjectResult(new { status = "success" });
+            }
+            return new ObjectResult(new { status = "fail" });
+
         }
+
+        [HttpPost]
+        public IActionResult DeleteUploadFile(int id)
+        {
+            try
+            {
+                var item = db.UploadFiles.FirstOrDefault(x => x.Id == id);
+
+                FileInfo file = new(_appEnvironment.WebRootPath + "/uploads/" + item.FileGuid);
+                if (file.Exists)
+                {
+                    file.Delete();
+                }
+
+                db.UploadFiles.Remove(item);
+                db.SaveChanges();
+                return new ObjectResult(new { status = "success" });
+            }
+            catch { return new ObjectResult(new { status = "fail" }); }
+
+        }
+
+        //public async Task<IActionResult> SchoolProfile(int? id)
+        //{
+        //    if (id != null)
+        //    {
+        //        Response.Cookies.Append("school_id", id.ToString());
+        //        School school = await db.Schools.Include(x => x.Region).Include(x => x.District).FirstOrDefaultAsync(x => x.Id == (int)id);
+        //        return View(school);
+        //    }
+        //    else
+        //    {
+        //        int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
+        //        School school = await db.Schools.Include(x => x.Region).Include(x => x.District).FirstOrDefaultAsync(x => x.Id == school_id);
+        //        return View(school);
+        //    }
+        //}
+        //public async Task<IActionResult> Questionnaire(int menu_id)
+        //{
+        //    int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
+        //    PageData pageData = new()
+        //    {
+        //        Rates = await db.Rates.Where(x => x.SchoolId == school_id).ToListAsync(),
+        //        Criterias = await db.Criterias.ToListAsync(),
+        //        SchoolMenus = await db.SchoolMenus.Include(x => x.Criteria.Index).Include(x => x.Menu).Where(x => x.menu_id == menu_id).ToListAsync()
+        //    };
+        //    return View(pageData);
+        //}
+        //public async Task<IActionResult> MainInfo()
+        //{
+        //    int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
+        //    return View(await db.Schools.Include(x => x.Region).Include(x => x.District).Include(x => x.SchoolType).Include(x => x.SchoolInfo).FirstOrDefaultAsync(x => x.Id == school_id));
+        //}
         //public async Task<IActionResult> TeachersInfo()
         //{
         //    int school_id = Convert.ToInt32(Request.Cookies["school_id"]);

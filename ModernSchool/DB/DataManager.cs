@@ -16,7 +16,7 @@ namespace ModernSchool.DB
             db = context;
         }
 
-		public async Task<IEnumerable<IndexesDataStatusViewModel>> IndexesStatus(int school_id)
+		public async Task<List<IndexesDataStatusViewModel>> IndexesStatus(int school_id)
         {
             return await db.IndexesDataStatuses.FromSqlRaw(@"
                 with 

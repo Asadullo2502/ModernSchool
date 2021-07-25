@@ -102,7 +102,7 @@ namespace ModernSchool.Controllers
 
             try
             {
-                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId).ToListAsync();
+                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueSchool != null).ToListAsync();
                 if (rates != null)
                 {
                     db.Rates.RemoveRange(rates);
@@ -310,16 +310,16 @@ namespace ModernSchool.Controllers
         //    return RedirectToAction("PupilsInfo");
         //}
 
-        public IActionResult Questionnaire(int menu_id)
-        {
-            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
-            PageData pageData = new PageData();
-            pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
-            pageData.Criterias = db.Criterias;
-            pageData.SchoolMenus = db.SchoolMenus.Include(x => x.Criteria.Index).Include(x => x.Menu).Where(x => x.menu_id == menu_id);
+        //public IActionResult Questionnaire(int menu_id)
+        //{
+        //    int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+        //    PageData pageData = new PageData();
+        //    pageData.Rates = db.Rates.Where(x => x.SchoolId == school_id);
+        //    pageData.Criterias = db.Criterias;
+        //    pageData.SchoolMenus = db.SchoolMenus.Include(x => x.Criteria.Index).Include(x => x.Menu).Where(x => x.menu_id == menu_id);
 
-            return View(pageData);
-        }
+        //    return View(pageData);
+        //}
         [HttpPost]
         public async Task<JsonResult> SaveQuestionnaire(string[] criteriaValues)
         {

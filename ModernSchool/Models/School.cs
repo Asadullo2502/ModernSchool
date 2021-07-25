@@ -41,6 +41,10 @@ namespace ModernSchool.Models
         //public List<Subject> Subjects { get; set; }
         [NotMapped]
         public double ball { get; set; }
+        [NotMapped]
+        public string RegionName { get; set; }
+        [NotMapped]
+        public string DistrictName { get; set; }
     }
 
     public class SchoolApiModel

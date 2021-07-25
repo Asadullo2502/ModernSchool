@@ -20,16 +20,26 @@ namespace ModernSchool.DB
         public DbSet<Region> Regions { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<SchoolInfo> SchoolInfos { get; set; }
-        public DbSet<TeacherInfo> TeacherInfos { get; set; }
-        public DbSet<PupilInfo> PupilInfos { get; set; }
-        public DbSet<Subject> Subjects { get; set; }
-        public DbSet<RepublicOlympiadWinner> RepublicOlympiadWinners { get; set; }
-        public DbSet<InternationOlympiadWinner> InternationOlympiadWinners { get; set; }
-        public DbSet<Menu> Menus { get; set; }
-        public DbSet<SchoolMenu> SchoolMenus { get; set; }
+        //public DbSet<TeacherInfo> TeacherInfos { get; set; }
+        //public DbSet<PupilInfo> PupilInfos { get; set; }
+        //public DbSet<Subject> Subjects { get; set; }
+        //public DbSet<RepublicOlympiadWinner> RepublicOlympiadWinners { get; set; }
+        //public DbSet<InternationOlympiadWinner> InternationOlympiadWinners { get; set; }
+        //public DbSet<Menu> Menus { get; set; }
+        //public DbSet<SchoolMenu> SchoolMenus { get; set; }
         public DbSet<Resource> Resources { get; set; }
-        public DbSet<IndexesDataStatusViewModel> IndexesDataStatuses { get; set; }
         public DbSet<UploadFile> UploadFiles { get; set; }
+
+
+
+
+
+        public DbSet<IndexesDataStatusViewModel> IndexesDataStatuses { get; set; }
+        public DbSet<SchoolViewModel> SchoolViewModel { get; set; }
+
+
+
+
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
