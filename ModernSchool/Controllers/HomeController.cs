@@ -18,17 +18,24 @@ namespace ModernSchool.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private DataContext db;
+        private DataManager data;
 
         public HomeController(ILogger<HomeController> logger, DataContext context)
         {
             _logger = logger;
             db = context;
+            data = new DataManager(db);
         }
 
         public async Task<IActionResult> Index()
         {
-            var data = await db.Indexes.Include(x=>x.Criterias).ToListAsync();
-            return View(data);
+            PageData pageData = new();
+            pageData.Rates = await db.Rates.Where(x => x.SchoolId == 5663).ToListAsync();
+            pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == 5663).ToListAsync();
+            pageData.Criterias = await db.Criterias.ToListAsync();
+            pageData.Indexes = await db.Indexes.Include(x => x.Criterias).ToListAsync();
+            pageData.IndexesDataStatuses = await data.IndexesStatus(5663);
+            return View(pageData);
         }
 
         [HttpPost]

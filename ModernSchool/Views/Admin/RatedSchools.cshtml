@@ -1,9 +1,9 @@
-﻿@model IEnumerable<SchoolViewModel>
-
+﻿@model IList<SchoolViewModel>
 @{
     ViewData["Title"] = "Schools";
     Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
     string lang = Context.Request.Cookies["lang"];
+    int i = 1;
 
     int page = 1;
 
@@ -31,16 +31,9 @@
     }
 }
 
-<div class="row">
-    <div class="col-12 mb-2">
-        <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("add",lang).ToUpper()" onclick="window.location.href='/Admin/CreateSchool'" />
-    </div>
-</div>
-
 <form>
     <div class="card card-body mb-4">
         <div class="row">
-            
             <div class="col-md-5">
                 <div class="form-group">
                     <label>@Localization.GetTranslate("region", lang)</label>
@@ -72,44 +65,55 @@
     </div>
 </form>
 
-<div class="row mb-2">
-    
+<div class="row mb-3">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h4 class="card-title ">@Localization.GetTranslate("schools", lang).ToUpper()</h4>
+                <h4 class="card-title ">MAKTABLAR</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table" id="myTable">
                         <thead class="text-primary">
                             <tr>
-                                <th width="5%">
+                                <th style="text-align:center">
                                     #
                                 </th>
-                                <th width="15%">
-                                    @Localization.GetTranslate("region", lang).ToUpper()
+                                <th style="text-align:center">
+                                    Hudud
                                 </th>
-                                <th width="15%">
-                                    @Localization.GetTranslate("district", lang).ToUpper()
+                                <th style="text-align:center">
+                                    Tuman
                                 </th>
-                                <th width="20%">
-                                    @Localization.GetTranslate("name", lang).ToUpper()
+                                <th style="text-align:center">
+                                    Nomi
                                 </th>
-                                <th width="15%">
-                                    @Localization.GetTranslate("director", lang).ToUpper()
+                                <th style="text-align:center">
+                                    I
                                 </th>
-                                <th width="15%">
-                                    @Localization.GetTranslate("phone_number", lang).ToUpper()
+                                <th style="text-align:center">
+                                    II
                                 </th>
-                                <th></th>
-                                <th></th>
+                                <th style="text-align:center">
+                                    III
+                                </th>
+                                <th style="text-align:center">
+                                    IV
+                                </th>
+                                <th style="text-align:center">
+                                    Jami Ball
+                                </th>
+                                <th style="text-align:center">
+                                    Baholangan sanasi
+                                </th>
+                                <th>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
+                                <tr style="text-align:center">
                                     <td>
                                         @item.PageNumber
                                     </td>
@@ -123,22 +127,28 @@
                                         @item.NameUz
                                     </td>
                                     <td>
-                                        @item.Director
+                                        @item.ball
                                     </td>
                                     <td>
-                                        @item.Phone
+                                        @item.ball
                                     </td>
+                                    <td>
+                                        @item.ball
+                                    </td>
+                                    <td>
+                                        @item.ball
+                                    </td>
+                                    <td>
+                                        @item.ball
+                                    </td>
+                                    <td></td>
                                     <td style="text-align:right">
-                                        <button type="button" class="btn btn-warning" onclick="window.location.href = '/Admin/EditSchool/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="EDIT">
-                                            <i class="fa fa-edit" aria-hidden="true"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger open-exampleModal" value="@item.Id" onclick="deleteSchool(@item.Id)" data-target="#exampleModal" data-toggle="modal" data-placement="bottom">
-                                            <i class="fa fa-trash" data-toggle="tooltip" data-placement="bottom" title="DELETE" aria-hidden="true"></i>
+                                        <button type="button" class="btn btn-info" onclick="window.location.href = '/Admin/CheckIndexes/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </tr>
+                                i++;
                             }
                         </tbody>
                     </table>
@@ -147,20 +157,19 @@
         </div>
     </div>
 </div>
-
 <ul class="pagination">
     <li class="paginate_button previous">
-        <a href="/Admin/Schools/?page=1&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">&laquo;</a>
+        <a href="/Admin/RatedSchools/?page=1&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">&laquo;</a>
     </li>
 
     @for (int j = startPage; j <= endPage; j++)
     {
         <li class="paginate_button @(j == ViewBag.CurrentPage ? "active" : null) ">
-            <a href="/Admin/Schools/?page=@j&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">@j</a>
+            <a href="/Admin/RatedSchools/?page=@j&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">@j</a>
         </li>
     }
     <li class="paginate_button next)">
-        <a href="/Admin/Schools/?page=@ViewBag.PageCount&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">&raquo;</a>
+        <a href="/Admin/RatedSchools/?page=@ViewBag.PageCount&RegionId=@ViewBag.RegionId&DistrictId=@ViewBag.DistrictId">&raquo;</a>
     </li>
 </ul>
 <script>
@@ -214,34 +223,3 @@
 
 </script>
 
-<script>
-    function deleteSchool(id) {
-        $('#schoolID').val(id);
-        //$('#exampleModal').modal('show');
-        $('#exampleModal').appendTo("body");
-    }
-</script>
-
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="post" action="/Admin/DeleteSchool/">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">@Localization.GetTranslate("delete", lang).ToUpper()</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>@Localization.GetTranslate("delete_warning_text", lang).ToUpper()</p>
-                    <input type="hidden" id="schoolID" name="id" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">@Localization.GetTranslate("back", lang).ToUpper()</button>
-                    <button type="submit" class="btn btn-danger">@Localization.GetTranslate("delete", lang).ToUpper()</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>

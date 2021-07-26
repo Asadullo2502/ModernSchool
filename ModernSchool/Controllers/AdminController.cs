@@ -146,9 +146,50 @@ namespace ModernSchool.Controllers
         #endregion
 
         #region Schools
-        public async Task<IActionResult> Schools()
+        public async Task<IActionResult> Schools(int page = 1, int RegionId = 0, int DistrictId = 0)
         {
-            return View(await db.Schools.Include(x => x.District).Include(x => x.Region).ToListAsync());
+            string filter = "1=1";
+            filter += (RegionId > 0) ? "and r.id = " + RegionId : "";
+            filter += (DistrictId > 0) ? "and d.id = " + DistrictId : "";
+
+            var schools = await db.SchoolViewModel.FromSqlRaw(@"
+                with db as (
+                    select s.*,
+                    r.short_name RegionName,
+                    d.short_name DistrictName,
+                    ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber,
+                    (
+                        select sum(c.MaxBall)
+                        from Rates r
+                        left join Criterias c on c.Id = r.CriteriaId
+                        where r.SchoolId = s.Id
+                    ) ball
+                    from Schools s
+                    left join Regions r on r.id = s.RegionId
+                    left join Districts d on d.id = s.DistrictId
+                    where " + filter + @" 
+                )
+                select top 10 *
+                from db
+                WHERE PageNumber > 10 * " + (page - 1) + @"
+            ").ToListAsync();
+
+            var ss = await db.Schools.FromSqlRaw(@"
+                select s.*,
+                ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
+                from Schools s
+                left join Regions r on r.id = s.RegionId
+                left join Districts d on d.id = s.DistrictId
+                where " + filter + @" 
+            ").ToListAsync();
+
+            int count = ss.Count();
+            ViewBag.CurrentPage = page;
+            ViewBag.RegionId = RegionId;
+            ViewBag.DistrictId = DistrictId;
+            ViewBag.PageCount = count / 10 + (count % 10 == 0 ? 0 : 1);
+
+            return View(schools);
         }
 
         public IActionResult CreateSchool()
@@ -198,9 +239,49 @@ namespace ModernSchool.Controllers
         #endregion
 
         #region Users
-        public async Task<IActionResult> Users()
+        public async Task<IActionResult> Users(int page = 1, int RegionId = 0, int DistrictId = 0)
         {
-            return View(await db.Users.Include(x => x.Role).Include(x => x.Region).Include(x => x.District).Include(x => x.School).ToListAsync());
+            string filter = "1=1";
+            filter += (RegionId > 0) ? "and r.id = " + RegionId : "";
+            filter += (DistrictId > 0) ? "and d.id = " + DistrictId : "";
+
+            var users = await db.UserViewModel.FromSqlRaw(@"
+                with db as (
+                    select u.*,
+                    r.short_name RegionName,
+                    d.short_name DistrictName,
+                    s.ShortName SchoolName,
+                    ro.Name RoleName,
+                    ROW_NUMBER() OVER(ORDER BY u.RegionId, u.DistrictId, u.Id) AS PageNumber
+                    
+                    from Users u
+                    left join Regions r on r.id = u.RegionId
+                    left join Districts d on d.id = u.DistrictId
+                    left join Schools s on s.id = u.SchoolId
+                    left join Roles ro on ro.id = u.RoleId
+                    where " + filter + @" 
+                )
+                select top 10 *
+                from db
+                WHERE PageNumber > 10 * " + (page - 1) + @"
+            ").ToListAsync();
+
+            var ss = await db.Users.FromSqlRaw(@"
+                select u.*,
+                ROW_NUMBER() OVER(ORDER BY u.RegionId, u.DistrictId, u.Id) AS PageNumber
+                from Users u
+                left join Regions r on r.id = u.RegionId
+                left join Districts d on d.id = u.DistrictId
+                where " + filter + @" 
+            ").ToListAsync();
+
+            int count = ss.Count();
+            ViewBag.CurrentPage = page;
+            ViewBag.RegionId = RegionId;
+            ViewBag.DistrictId = DistrictId;
+            ViewBag.PageCount = count / 10 + (count % 10 == 0 ? 0 : 1);
+
+            return View(users);
         }
 
         public IActionResult CreateUser()
@@ -412,7 +493,111 @@ namespace ModernSchool.Controllers
             ViewBag.PageCount = count / 10 + (count % 10 == 0 ? 0 : 1);
             return View(schools);
         }
-        
+
+        public async Task<IActionResult> RateSchools(int page = 1, int RegionId = 0, int DistrictId = 0)
+        {
+
+            string filter = "1=1";
+            filter += (RegionId > 0) ? "and r.id = " + RegionId : "";
+            filter += (DistrictId > 0) ? "and d.id = " + DistrictId : "";
+
+            var schools = await db.SchoolViewModel.FromSqlRaw(@"
+                with db as (
+                    select s.*,
+                    r.short_name RegionName,
+                    d.short_name DistrictName,
+                    (
+                        select sum(c.MaxBall)
+                        from Rates r
+                        left join Criterias c on c.Id = r.CriteriaId
+                        where r.SchoolId = s.Id
+                    ) ball,
+                    ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
+                    from Schools s
+                    left join Regions r on r.id = s.RegionId
+                    left join Districts d on d.id = s.DistrictId
+                    where " + filter + @" 
+                )
+                select top 10 *
+                from db
+                WHERE PageNumber > 10 * " + (page - 1) + @"
+            ").ToListAsync();
+
+            var ss = await db.Schools.FromSqlRaw(@"
+                select s.*,
+                (
+                    select sum(c.MaxBall)
+                    from Rates r
+                    left join Criterias c on c.Id = r.CriteriaId
+                    where r.SchoolId = s.Id
+                ) ball,
+                ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
+                from Schools s
+                left join Regions r on r.id = s.RegionId
+                left join Districts d on d.id = s.DistrictId
+                where " + filter + @" 
+            ").ToListAsync();
+
+            int count = ss.Count();
+            ViewBag.CurrentPage = page;
+            ViewBag.RegionId = RegionId;
+            ViewBag.DistrictId = DistrictId;
+            ViewBag.PageCount = count / 10 + (count % 10 == 0 ? 0 : 1);
+            return View(schools);
+        }
+
+        public async Task<IActionResult> RatedSchools(int page = 1, int RegionId = 0, int DistrictId = 0)
+        {
+
+            string filter = "1=1";
+            filter += (RegionId > 0) ? "and r.id = " + RegionId : "";
+            filter += (DistrictId > 0) ? "and d.id = " + DistrictId : "";
+
+            var schools = await db.SchoolViewModel.FromSqlRaw(@"
+                with db as (
+                    select s.*,
+                    r.short_name RegionName,
+                    d.short_name DistrictName,
+                    (
+                        select sum(c.MaxBall)
+                        from Rates r
+                        left join Criterias c on c.Id = r.CriteriaId
+                        where r.SchoolId = s.Id
+                    ) ball,
+                    ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
+                    from Schools s
+                    left join Regions r on r.id = s.RegionId
+                    left join Districts d on d.id = s.DistrictId
+                    where " + filter + @" 
+                )
+                select top 10 *
+                from db
+                WHERE PageNumber > 10 * " + (page - 1) + @"
+            ").ToListAsync();
+
+            var ss = await db.Schools.FromSqlRaw(@"
+                select s.*,
+                (
+                    select sum(c.MaxBall)
+                    from Rates r
+                    left join Criterias c on c.Id = r.CriteriaId
+                    where r.SchoolId = s.Id
+                ) ball,
+                ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
+                from Schools s
+                left join Regions r on r.id = s.RegionId
+                left join Districts d on d.id = s.DistrictId
+                where " + filter + @" 
+            ").ToListAsync();
+
+            int count = ss.Count();
+            ViewBag.CurrentPage = page;
+            ViewBag.RegionId = RegionId;
+            ViewBag.DistrictId = DistrictId;
+            ViewBag.PageCount = count / 10 + (count % 10 == 0 ? 0 : 1);
+            return View(schools.Take(0).ToList());
+        }
+
 
         public async Task<IActionResult> CheckIndexes(int? id)
         {
