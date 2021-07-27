@@ -11,6 +11,7 @@ using ModernSchool.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ModernSchool
@@ -32,6 +33,10 @@ namespace ModernSchool
 
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
             services.AddControllersWithViews();
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

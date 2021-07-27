@@ -8,7 +8,7 @@
 <style>
     .bo {
         width: 100%;
-        height: 75px;
+        height: 30px;
         overflow: hidden;
         text-overflow: ellipsis;
         content: "";
@@ -23,30 +23,30 @@
             position: absolute;
             left: 0;
             top: 0;
-            background: linear-gradient(transparent 30px, white);
+            background: linear-gradient(transparent 10px, white);
         }
 
     .card:hover {
         border-color: #3f6ad8;
-        background-image: url('../img/book.svg');
-        background-repeat: no-repeat;
-        background-size: 200px;
-        background-position: right bottom;
     }
 
-    #card {
+    .card.active {
+        border-color: #3f6ad8;
+    }
+
+    .card-body {
+        padding: 1.0rem;
+    }
+
+    .card {
         background-image: url('../img/book.svg');
         background-repeat: no-repeat;
-        background-size: 100px;
+        background-size: 90px;
         background-position: right 5% bottom;
     }
 
-    #card:hover {
-        width: 600px !important;
-    }
-
     b {
-        border: green solid 1px;
+        border: #3f6ad8 solid 1px;
         border-radius: 15px;
         padding-left: 7px;
         padding-right: 7px;
@@ -59,10 +59,10 @@
     @foreach (var item in Model.Indexes.Where(x => x.Level == 1))
     {
         <div class="col">
-            <div id="card" class="card card-body mb-3" style="border-width:2px; cursor:pointer">
+            <div class="card card-body mb-1" style="border-width:2px; cursor:pointer" onclick="second_level(@item.Id);activeByClick(this)">
                 <div class="row">
                     <div class="col-9">
-                        <b class="text-success">@(lang == "ru" ? item.ShortName : item.ShortName)</b>
+                        <b class="text-primary">@(lang == "ru" ? item.ShortName : item.ShortName)</b>
                         <hr />
                         <div class="bo">@(lang == "ru" ? item.NameRu : item.NameUz)</div>
                     </div>
@@ -74,3 +74,207 @@
         </div>
     }
 </div>
+
+<div class="row" id="secondLevel"></div>
+<div class="row" id="thirdLevel"></div>
+<div class="row" id="fourthLevel"></div>
+<div class="row" id="fifthLevel"></div>
+<div class="row mb-5" id="criterias"></div>
+
+<script>
+
+    function activeByClick(div) {
+        $(div).addClass("active");
+    }
+
+    function second_level(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetIndexesByParent", "GetApi")',
+            contentType: "application/json",
+            dataType: "json",
+            data: { "id": id },
+            success: function (data) {
+                var SetData = $("#secondLevel");
+                $("#secondLevel").empty();
+                $("#thirdLevel").empty();
+                $("#fourthLevel").empty();
+                $("#fifthLevel").empty();
+                var Data = "";
+
+                for (var i = 0; i < data.length; i++) {
+                    Data = '<div class="col">' +
+                                '<div class="card card-body mb-1" style="border-width:2px; cursor:pointer" onclick="third_level(' + data[i].id + ');activeByClick(this); get_criterias('+data[i].id+')">' +
+                                    '<div class="row">' +
+                                        '<div class="col-9">' +
+                                            '<b class="text-primary">' + data[i].shortName + '</b>' +
+                                            '<hr />' +
+                                            '<div class="bo">' + data[i].nameUz + '</div>' +
+                                        '</div>' +
+                                        '<div class="col-3" style="text-align:right">' +
+                                            '<h5 class="text-primary">9/9</h5>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>';
+                    SetData.append(Data);
+                };
+            }
+        });
+    }
+
+    function third_level(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetIndexesByParent", "GetApi")',
+            contentType: "application/json",
+            dataType: "json",
+            data: { "id": id },
+            success: function (data) {
+                var SetData = $("#thirdLevel");
+                $("#thirdLevel").empty();
+                $("#fourthLevel").empty();
+                $("#fifthLevel").empty();
+                var Data = "";
+
+                for (var i = 0; i < data.length; i++) {
+                    Data = '<div class="col">' +
+                                '<div class="card card-body mb-1" style="border-width:2px; cursor:pointer" onclick="fourth_level(' + data[i].id + ');activeByClick(this); get_criterias('+data[i].id+')">' +
+                                    '<div class="row">' +
+                                        '<div class="col-9">' +
+                                            '<b class="text-primary">' + data[i].shortName + '</b>' +
+                                            '<hr />' +
+                                            '<div class="bo">' + data[i].nameUz + '</div>' +
+                                        '</div>' +
+                                        '<div class="col-3" style="text-align:right">' +
+                                            '<h5 class="text-primary">9/9</h5>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>';
+                    SetData.append(Data);
+                };
+            }
+        });
+    }
+
+    function fourth_level(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetIndexesByParent", "GetApi")',
+            contentType: "application/json",
+            dataType: "json",
+            data: { "id": id },
+            success: function (data) {
+                var SetData = $("#fourthLevel");
+                $("#fourthLevel").empty();
+                $("#fifthLevel").empty();
+                var Data = "";
+
+                for (var i = 0; i < data.length; i++) {
+                    Data = '<div class="col">' +
+                                '<div class="card card-body mb-1" style="border-width:2px; cursor:pointer" onclick="fifth_level(' + data[i].id + ');activeByClick(this); get_criterias('+data[i].id+')">' +
+                                    '<div class="row">' +
+                                        '<div class="col-9">' +
+                                            '<b class="text-primary">' + data[i].shortName + '</b>' +
+                                            '<hr />' +
+                                            '<div class="bo">' + data[i].nameUz + '</div>' +
+                                        '</div>' +
+                                        '<div class="col-3" style="text-align:right">' +
+                                            '<h5 class="text-primary">9/9</h5>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>';
+                    SetData.append(Data);
+                };
+            }
+        });
+    }
+
+    function fifth_level(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetIndexesByParent", "GetApi")',
+            contentType: "application/json",
+            dataType: "json",
+            data: { "id": id },
+            success: function (data) {
+                var SetData = $("#fifthLevel");
+                $("#fifthLevel").empty();
+                var Data = "";
+
+                for (var i = 0; i < data.length; i++) {
+                    Data = '<div class="col">' +
+                                '<div class="card card-body mb-1" style="border-width:2px; cursor:pointer" onclick="activeByClick(this); get_criterias('+data[i].id+')">' +
+                                    '<div class="row">' +
+                                        '<div class="col-9">' +
+                                            '<b class="text-primary">' + data[i].shortName + '</b>' +
+                                            '<hr />' +
+                                            '<div class="bo">' + data[i].nameUz + '</div>' +
+                                        '</div>' +
+                                        '<div class="col-3" style="text-align:right">' +
+                                            '<h5 class="text-primary">9/9</h5>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>';
+                    SetData.append(Data);
+                };
+            }
+        });
+    }
+
+    function get_criterias(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetCriteriasByIndexId", "GetApi")',
+            contentType: "application/json",
+            dataType: "json",
+            data: { "id": id },
+            success: function (data) {
+                if (data.length > 0 && data[0].criterias.length > 0) {
+                    var SetData = $("#criterias");
+                    $("#criterias").empty();
+                    var Data = '<div class="col-12">'+
+                                    '<div class="card">'+
+                                        '<div class="card-header" style="font-weight:700">'+data[0].nameUz+'</div>'+
+                                        '<div class="card-body" id="cardbody">'+
+                                        '</div>' +
+                                        '<div class="card-footer">'+
+                                            '<input type="button" class="btn btn-primary" value="@Localization.GetTranslate("save", lang).ToUpper()" onclick="SaveData()" />'+
+                                            '<input type="button" class="btn btn-light" value="@Localization.GetTranslate("reset", lang).ToUpper()" onclick="Reset()" />'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>';
+                        SetData.append(Data);
+
+                    var SetData2 = $("#cardbody");
+                    var Data2 = "";
+                    $("#cardbody").empty();
+                    for (var i = 0; i < data[0].criterias.length; i++) {
+                        if (data[0].criterias[i].type != "number") {
+                            Data2 = '<div class="form-check mt-3">' +
+                                        '<label class="form-check-label">' +
+                                            '<input class="form-check-input" type="' + data[0].criterias[i].type + '" name="criteriaIndex" />' +
+                                            data[0].criterias[i].nameUz +
+                                            '<span class="(cr.Type == "checkbox" ? "form-check-sign" : "circle")">' +
+                                                '<span class="check"></span>' +
+                                            '</span>' +
+                                        '</label>' +
+                                    '</div>'
+                        }
+                        else {
+                            Data2 = '<div class="form-group mt-3">' +
+                                '<label>' + data[0].criterias[i].nameUz + '</label>' +
+                                        '<input type="cr.Type" class="form-control" id="criteriaId_cr.Id" criteriaId="cr.Id" qw="cr.MaxBall" name="criteriaIndexId_cr.IndexId" min="0">' +
+                                    '</div>'
+                        }
+                        SetData2.append(Data2);
+                    }
+                }
+            }
+        });
+    }
+
+</script>

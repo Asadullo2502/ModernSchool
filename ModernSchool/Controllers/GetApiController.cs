@@ -44,5 +44,14 @@ namespace ModernSchool.Controllers
         {
             return Json(await db.Indexes.Where(x => x.Level < id).OrderBy(x => x.Level).ThenBy(x => x.Id).ToListAsync());
         }
+
+        public async Task<JsonResult> GetIndexesByParent(int id)
+        {
+            return Json(await db.Indexes.Where(x => x.ParentId == id).ToListAsync());
+        }
+        public async Task<JsonResult> GetCriteriasByIndexId(int id)
+        {
+            return Json(await db.Indexes.Include(x=>x.Criterias).Where(x => x.Id == id).ToListAsync());
+        }
     }
 }

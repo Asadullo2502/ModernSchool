@@ -622,6 +622,14 @@ namespace ModernSchool.Controllers
 
             try
             {
+                foreach (var item in criteriaValues)
+                {
+                    var temp = item.Split(';');
+
+                    int CriteriaId = Convert.ToInt32(temp[0]);
+                    double ValueInspektor = Convert.ToDouble(temp[1]);
+                }
+
                 List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueInspektor != null).ToListAsync();
                 if (rates != null)
                 {
@@ -634,7 +642,7 @@ namespace ModernSchool.Controllers
 
                     var rate = new Rate
                     {
-                        UpdateDateSchool = DateTime.Now,
+                        UpdateDateInspektor = DateTime.Now,
                         IndexId = indexId,
                         CriteriaId = Convert.ToInt32(temp[0]),
                         ValueInspektor = Convert.ToDouble(temp[1]),
