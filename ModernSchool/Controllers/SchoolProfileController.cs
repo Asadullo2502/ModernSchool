@@ -102,6 +102,14 @@ namespace ModernSchool.Controllers
 
             try
             {
+                foreach (var item in criteriaValues)
+                {
+                    var temp = item.Split(';');
+
+                    int CriteriaId = Convert.ToInt32(temp[0]);
+                    double ValueInspektor = Convert.ToDouble(temp[1]);
+                }
+
                 List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueSchool != null).ToListAsync();
                 if (rates != null)
                 {

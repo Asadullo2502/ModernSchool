@@ -17,7 +17,7 @@
             <div class="card-body">
                 <form method="post">
 
-                    <div class="row mb-3">
+                    <!--<div class="row mb-3">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="bmd-label-floating">@Localization.GetTranslate("region", lang).ToUpper()</label>
@@ -101,7 +101,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <div class="row mb-3">-->
                         @*<div class="col-12">
                                 @if (Model.Latitude != null && Model.Latitude != "")
                                 {
@@ -110,7 +110,7 @@
                                     </div>
                                 }
                             </div>*@
-                        <div class="col-12">
+                        <!--<div class="col-12">
                             <div class="form-group">
                                 <label class="bmd-label-floating">@Localization.GetTranslate("address", lang).ToUpper()</label>
                                 <input type="text" class="form-control" name="Address" id="address" value="@Model.Address" readonly />
@@ -124,7 +124,18 @@
                         <input type="hidden" class="form-control" name="Latitude" id="Latitude" value="@Model.Latitude" />
                         <input type="hidden" class="form-control" name="Longtitude" id="Longtitude" value="@Model.Longtitude" />
 
-                    </div>
+                    </div>-->
+
+                    <p>@Localization.GetTranslate("region", lang).ToUpper(): <b class="h5">@Model.Region.name_uz</b></p>
+                    <p>@Localization.GetTranslate("district", lang).ToUpper(): <b class="h5">@Model.District.name_uz</b></p>
+                    <p>@Localization.GetTranslate("school_type", lang).ToUpper(): <b class="h5">@Model.SchoolType.NameUz</b></p>
+                    <p>@Localization.GetTranslate("name_uz", lang).ToUpper(): <b class="h5">@Model.NameUz</b></p>
+                    <p>@Localization.GetTranslate("school_number", lang).ToUpper(): <b class="h5">@Model.Number</b></p>
+                    <p>@Localization.GetTranslate("school_builded_year", lang).ToUpper(): <b class="h5">@Model.BuildedYear</b></p>
+                    <p>@Localization.GetTranslate("director", lang).ToUpper(): <b class="h5">@Model.Director</b></p>
+                    <p>@Localization.GetTranslate("phone_number", lang).ToUpper(): <b class="h5">@Model.Phone</b></p>
+                    <p>@Localization.GetTranslate("address", lang).ToUpper(): <b class="h5">@Model.Address</b></p>
+                    <p>@Localization.GetTranslate("last_updated_date", lang).ToUpper(): <b class="h5"><mark> @Model.UpdateDate </mark></b></p>
 
                     <div class="clearfix"></div>
                 </form>
