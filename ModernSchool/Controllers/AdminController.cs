@@ -630,6 +630,64 @@ namespace ModernSchool.Controllers
                     double ValueInspektor = Convert.ToDouble(temp[1]);
                 }
 
+                foreach (var item in criteriaValues)
+                {
+                    var temp = item.Split(';');
+
+                    int CriteriaId = Convert.ToInt32(temp[0]);
+                    double ValueInspektor = Convert.ToDouble(temp[1]);
+
+                    if (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190)
+                    {
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190) && x.ValueInspektor != null).ToListAsync();
+                        if (_rates != null)
+                        {
+                            db.Rates.RemoveRange(_rates);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+
+                    if (CriteriaId == 181 || CriteriaId == 209)
+                    {
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 181 || CriteriaId == 209) && x.ValueInspektor != null).ToListAsync();
+                        if (_rates != null)
+                        {
+                            db.Rates.RemoveRange(_rates);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+
+                    if (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167)
+                    {
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167) && x.ValueInspektor != null).ToListAsync();
+                        if (_rates != null)
+                        {
+                            db.Rates.RemoveRange(_rates);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+
+                    if (CriteriaId == 149 || CriteriaId == 179)
+                    {
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 149 || CriteriaId == 179) && x.ValueInspektor != null).ToListAsync();
+                        if (_rates != null)
+                        {
+                            db.Rates.RemoveRange(_rates);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+
+                    if (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271)
+                    {
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271) && x.ValueInspektor != null).ToListAsync();
+                        if (_rates != null)
+                        {
+                            db.Rates.RemoveRange(_rates);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                }
+
                 List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueInspektor != null).ToListAsync();
                 if (rates != null)
                 {
@@ -640,19 +698,242 @@ namespace ModernSchool.Controllers
                 {
                     var temp = item.Split(';');
 
-                    var rate = new Rate
+                    int CriteriaId = Convert.ToInt32(temp[0]);
+                    double ValueInspektor = Convert.ToDouble(temp[1]);
+
+                    if (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190)
                     {
-                        UpdateDateInspektor = DateTime.Now,
-                        IndexId = indexId,
-                        CriteriaId = Convert.ToInt32(temp[0]),
-                        ValueInspektor = Convert.ToDouble(temp[1]),
-                        SchoolId = Convert.ToInt32(Request.Cookies["school_id"]),
-                        Year = 2021,
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 140,
+                            CriteriaId = 186,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
 
-                    };
+                        });
+                        await db.SaveChangesAsync();
 
-                    await db.Rates.AddAsync(rate);
-                    await db.SaveChangesAsync();
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 141,
+                            CriteriaId = 188,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 142,
+                            CriteriaId = 190,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+                    }
+
+                    else if (CriteriaId == 181 || CriteriaId == 209)
+                    {
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 101,
+                            CriteriaId = 181,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 117,
+                            CriteriaId = 209,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+                    }
+
+                    else if (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167)
+                    {
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 103,
+                            CriteriaId = 154,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 105,
+                            CriteriaId = 160,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 107,
+                            CriteriaId = 167,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+                    }
+
+                    else if (CriteriaId == 149 || CriteriaId == 179)
+                    {
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 100,
+                            CriteriaId = 149,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 101,
+                            CriteriaId = 179,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+                    }
+
+                    else if (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271)
+                    {
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 88,
+                            CriteriaId = 106,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 89,
+                            CriteriaId = 110,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 99,
+                            CriteriaId = 148,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 107,
+                            CriteriaId = 168,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 108,
+                            CriteriaId = 170,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 110,
+                            CriteriaId = 177,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 94,
+                            CriteriaId = 271,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+                    }
+
+                    else
+                    {
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateInspektor = DateTime.Now,
+                            IndexId = indexId,
+                            CriteriaId = Convert.ToInt32(temp[0]),
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(Request.Cookies["school_id"]),
+                            Year = 2021,
+
+                        });
+                        await db.SaveChangesAsync();
+                    }
                 }
                 result = 1;
             }
