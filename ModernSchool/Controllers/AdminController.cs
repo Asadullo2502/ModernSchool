@@ -42,6 +42,7 @@ namespace ModernSchool.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         public async Task<IActionResult> CreateRegion(Region region)
         {
@@ -58,6 +59,7 @@ namespace ModernSchool.Controllers
         {
             return View(await db.Regions.FirstOrDefaultAsync(x => x.id == id));
         }
+        
         [HttpPost]
         public async Task<IActionResult> EditRegion(Region region)
         {
@@ -103,6 +105,7 @@ namespace ModernSchool.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         public async Task<IActionResult> CreateDistrict(District district)
         {
@@ -119,6 +122,7 @@ namespace ModernSchool.Controllers
         {
             return View(await db.Districts.FirstOrDefaultAsync(x => x.id == id));
         }
+        
         [HttpPost]
         public async Task<IActionResult> EditDistrict(District district)
         {
@@ -196,6 +200,7 @@ namespace ModernSchool.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         public async Task<IActionResult> CreateSchool(School school)
         {
@@ -212,6 +217,7 @@ namespace ModernSchool.Controllers
         {
             return View(await db.Schools.Include(x => x.District).FirstOrDefaultAsync(x => x.Id == id));
         }
+        
         [HttpPost]
         public async Task<IActionResult> EditSchool(School school)
         {
@@ -288,6 +294,7 @@ namespace ModernSchool.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
@@ -304,6 +311,7 @@ namespace ModernSchool.Controllers
         {
             return View(await db.Users.FirstOrDefaultAsync(x => x.Id == id));
         }
+        
         [HttpPost]
         public async Task<IActionResult> EditUser(User user)
         {
@@ -333,19 +341,14 @@ namespace ModernSchool.Controllers
         #region Indexes
         public async Task<IActionResult> Indexes(int? id = 0)
         {
-            //if (id != null && id != 0)
-            //{
-            //    return View(await db.Indexes.Include(x => x.Parent).Where(x => x.ParentId == id).ToListAsync());
-            //}
-            {
-                return View(await db.Indexes.ToListAsync());
-            }
+            return View(await db.Indexes.ToListAsync());
         }
 
         public IActionResult CreateIndex()
         {
             return View();
         }
+        
         [HttpPost]
         public async Task<IActionResult> CreateIndex(Models.Index index)
         {
@@ -363,6 +366,7 @@ namespace ModernSchool.Controllers
         {
             return View(await db.Indexes.FirstOrDefaultAsync(x => x.Id == id));
         }
+        
         [HttpPost]
         public async Task<IActionResult> EditIndex(Models.Index index)
         {
@@ -400,6 +404,7 @@ namespace ModernSchool.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         public async Task<IActionResult> CreateCriteria(Criteria criteria)
         {
@@ -416,6 +421,7 @@ namespace ModernSchool.Controllers
         {
             return View(await db.Criterias.FirstOrDefaultAsync(x => x.Id == id));
         }
+        
         [HttpPost]
         public async Task<IActionResult> EditCriteria(Criteria criteria)
         {
@@ -597,7 +603,6 @@ namespace ModernSchool.Controllers
             ViewBag.PageCount = count / 10 + (count % 10 == 0 ? 0 : 1);
             return View(schools.Take(0).ToList());
         }
-
 
         public async Task<IActionResult> CheckIndexes(int? id)
         {
@@ -945,7 +950,7 @@ namespace ModernSchool.Controllers
             return Json(result);
         }
 
-        public IActionResult OnPostMyUploader(IFormFile MyUploader, int IndexId)
+        public async Task<IActionResult> OnPostMyUploader(IFormFile MyUploader, int IndexId)
         {
             if (MyUploader != null)
             {
@@ -967,8 +972,8 @@ namespace ModernSchool.Controllers
                 uploadFile.IndexId = IndexId;
                 uploadFile.SchoolId = Convert.ToInt32(Request.Cookies["school_id"]);
 
-                db.UploadFiles.Add(uploadFile);
-                db.SaveChanges();
+                await db.UploadFiles.AddAsync(uploadFile);
+                await db.SaveChangesAsync();
 
                 return new ObjectResult(new { status = "success" });
             }
@@ -977,11 +982,11 @@ namespace ModernSchool.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteUploadFile(int id)
+        public async Task<IActionResult> DeleteUploadFile(int id)
         {
             try
             {
-                var item = db.UploadFiles.FirstOrDefault(x => x.Id == id);
+                var item = await db.UploadFiles.FirstOrDefaultAsync(x => x.Id == id);
 
                 FileInfo file = new(_appEnvironment.WebRootPath + "/uploads/" + item.FileGuid);
                 if (file.Exists)
@@ -990,106 +995,14 @@ namespace ModernSchool.Controllers
                 }
 
                 db.UploadFiles.Remove(item);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return new ObjectResult(new { status = "success" });
             }
             catch { return new ObjectResult(new { status = "fail" }); }
 
         }
 
-        //public async Task<IActionResult> SchoolProfile(int? id)
-        //{
-        //    if (id != null)
-        //    {
-        //        Response.Cookies.Append("school_id", id.ToString());
-        //        School school = await db.Schools.Include(x => x.Region).Include(x => x.District).FirstOrDefaultAsync(x => x.Id == (int)id);
-        //        return View(school);
-        //    }
-        //    else
-        //    {
-        //        int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
-        //        School school = await db.Schools.Include(x => x.Region).Include(x => x.District).FirstOrDefaultAsync(x => x.Id == school_id);
-        //        return View(school);
-        //    }
-        //}
-        //public async Task<IActionResult> Questionnaire(int menu_id)
-        //{
-        //    int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
-        //    PageData pageData = new()
-        //    {
-        //        Rates = await db.Rates.Where(x => x.SchoolId == school_id).ToListAsync(),
-        //        Criterias = await db.Criterias.ToListAsync(),
-        //        SchoolMenus = await db.SchoolMenus.Include(x => x.Criteria.Index).Include(x => x.Menu).Where(x => x.menu_id == menu_id).ToListAsync()
-        //    };
-        //    return View(pageData);
-        //}
-        //public async Task<IActionResult> MainInfo()
-        //{
-        //    int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
-        //    return View(await db.Schools.Include(x => x.Region).Include(x => x.District).Include(x => x.SchoolType).Include(x => x.SchoolInfo).FirstOrDefaultAsync(x => x.Id == school_id));
-        //}
-        //public async Task<IActionResult> TeachersInfo()
-        //{
-        //    int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
-        //    return View(await db.Schools.Include(x => x.SchoolInfo).Include(x => x.TeacherInfo).FirstOrDefaultAsync(x => x.Id == school_id));
-        //}
-        //public async Task<IActionResult> PupilsInfo()
-        //{
-        //    int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
-        //    var model = await db.Schools.Include(x => x.SchoolInfo).Include(x => x.PupilInfo).Include(x => x.InternationOlympiadWinners).Include(x => x.RepublicOlympiadWinners).FirstOrDefaultAsync(x => x.Id == school_id);
-        //    model.Subjects = await db.Subjects.ToListAsync();
-        //    return View(model);
-        //}
-        //#region Menu
-        //public async Task<IActionResult> Menu()
-        //{
-        //    return View(await db.Menus.ToListAsync());
-        //}
 
-        //public IActionResult CreateMenu()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> CreateMenu(Menu menu)
-        //{
-        //    try
-        //    {
-        //        await db.Menus.AddAsync(menu);
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch { }
-        //    return RedirectToAction("Menu");
-        //}
 
-        //public async Task<IActionResult> EditMenu(int id = 0)
-        //{
-        //    return View(await db.Menus.FirstOrDefaultAsync(x => x.id == id));
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> EditMenu(Menu menu)
-        //{
-        //    try
-        //    {
-        //        db.Entry(menu).State = EntityState.Modified;
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch { }
-        //    return RedirectToAction("Menu");
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> DeleteMenu(int id)
-        //{
-        //    try
-        //    {
-        //        var menu = await db.Menus.FirstOrDefaultAsync(x => x.id == id);
-        //        db.Menus.Remove(menu);
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch { }
-        //    return RedirectToAction("Menu");
-        //}
-        //#endregion
     }
 }

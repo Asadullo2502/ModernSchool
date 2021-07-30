@@ -12,7 +12,6 @@ namespace ModernSchool.Models
         public IEnumerable<Index> Indexes { get; set; }
         public IEnumerable<Rate> Rates { get; set; }
         public IEnumerable<UploadFile> UploadFiles { get; set; }
-        public IEnumerable<SchoolMenu> SchoolMenus { get; set; }
         public IEnumerable<IndexesDataStatusViewModel> IndexesDataStatuses { get; set; }
     }
 }
