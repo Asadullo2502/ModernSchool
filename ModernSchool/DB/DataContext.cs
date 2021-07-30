@@ -22,6 +22,7 @@ namespace ModernSchool.DB
         public DbSet<SchoolInfo> SchoolInfos { get; set; }
         public DbSet<Resource> Resources { get; set; }
         public DbSet<UploadFile> UploadFiles { get; set; }
+        public DbSet<IndexBall> IndexBalls { get; set; }
 
 
 

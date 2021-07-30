@@ -716,7 +716,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -728,7 +728,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -740,7 +740,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
                     }
@@ -755,7 +755,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -767,7 +767,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
                     }
@@ -782,7 +782,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -794,7 +794,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -806,7 +806,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
                     }
@@ -821,7 +821,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -833,7 +833,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
                     }
@@ -848,7 +848,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -860,7 +860,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -872,7 +872,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -884,7 +884,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -896,7 +896,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -908,7 +908,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -920,7 +920,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
                     }
@@ -935,7 +935,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(Request.Cookies["school_id"]),
                             Year = 2021,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
                     }
