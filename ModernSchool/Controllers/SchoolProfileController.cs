@@ -477,7 +477,31 @@ namespace ModernSchool.Controllers
             
         }
 
+        public async Task<int> SolveIndexBall()
+        {
+            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+            var rates = db.Rates.Where(x => x.SchoolId == school_id && x.ValueSchool != null);
+            try
+            {
+                double? i = ((10 * rates.FirstOrDefault(x => x.CriteriaId == 79).ValueSchool + 5 * rates.FirstOrDefault(x => x.CriteriaId == 80).ValueSchool + 3 * rates.FirstOrDefault(x => x.CriteriaId == 81).ValueSchool) 
+                    + (15 * rates.FirstOrDefault(x => x.CriteriaId == 82).ValueSchool + 13 * rates.FirstOrDefault(x => x.CriteriaId == 83).ValueSchool + 10 * rates.FirstOrDefault(x => x.CriteriaId == 84).ValueSchool)
+                    + (20 * rates.FirstOrDefault(x => x.CriteriaId == 85).ValueSchool + 18 * rates.FirstOrDefault(x => x.CriteriaId == 86).ValueSchool + 15 * rates.FirstOrDefault(x => x.CriteriaId == 87).ValueSchool))
+                    / (rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 630 ? 9 : rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 945 ? 18 : 27);
 
+                if (db.IndexMaxBalls.FirstOrDefault(x=>x.IndexId == 84).MaxBall != null && db.IndexMaxBalls.FirstOrDefault(x => x.IndexId == 84).MaxBall < i)
+                {
+                    await db.AddAsync(new IndexMaxBall { IndexId = 84, MaxBall = i});
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+
+                }
+            }
+            catch { }
+
+            return 1;
+        }
 
         #region comment 
         public async Task<IActionResult> MainInfo()
