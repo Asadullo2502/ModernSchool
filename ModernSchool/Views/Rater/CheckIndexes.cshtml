@@ -1,0 +1,538 @@
+﻿@model PageData
+@{
+    ViewData["Title"] = "Indexes";
+    Layout = "~/Views/Shared/_LayoutRater.cshtml";
+    string lang = Context.Request.Cookies["lang"];
+    int j = 1;
+}
+
+
+<ul class="nav nav-pills nav-justified">
+    @foreach (var item in Model.Indexes.Where(x => x.Level == 1))
+    {
+        <li class="nav-item">
+            <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "background:#5cd85c59" : "")"> @(lang == "ru" ? item.NameRu : item.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)</span></a>
+        </li>
+    }
+</ul>
+<ul class="nav nav-pills nav-justified mt-2">
+    @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2))
+    {
+        <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
+            <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item2.NameRu : item2.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count)</span></a>
+        </li>
+    }
+</ul>
+<ul class="nav nav-pills nav-justified mt-2">
+    @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3))
+    {
+        <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
+            <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item3.NameRu : item3.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count)</span></a>
+        </li>
+    }
+</ul>
+<ul class="nav nav-pills nav-justified mt-2">
+    @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4))
+    {
+        <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
+            <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item4.NameRu : item4.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count)</span></a>
+        </li>
+    }
+</ul>
+<ul class="nav nav-pills nav-justified mt-2">
+    @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5))
+    {
+        <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
+            <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item5.NameRu : item5.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count)</span></a>
+        </li>
+    }
+</ul>
+
+@foreach (var item in Model.Indexes.Where(x => x.Level > 2))
+{
+    if (item.Criterias.Count > 0)
+    {
+
+        <div class="row indexTitle_@item.Id indexTitles mt-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="font-weight:700">@(lang == "ru" ? item.NameRu : item.NameUz)</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4 class="text-center">Maktab</h4>
+                                <hr />
+                                @foreach (var cr in item.Criterias)
+                                {
+                                    if (cr.Type != "number")
+                                    {
+                                        try
+                                        {
+                                            if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueSchool != null).ValueSchool != null)
+                                            {
+                                                <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueSchool != null).ValueSchool == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                        @(lang == "ru" ? cr.NameRu : cr.NameUz)
+                                                        <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                        @(lang == "ru" ? cr.NameRu : cr.NameUz)
+                                                        <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
+                                                <label class="form-check-label">
+                                                    <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                    @(lang == "ru" ? cr.NameRu : cr.NameUz)
+                                                    <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
+                                                        <span class="check"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueSchool != null).ValueSchool != null)
+                                            {
+                                                <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                    <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
+                                                    <input type="@cr.Type" class="form-control readonly" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" value="@Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueSchool != null).ValueSchool" min="0">
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                    <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
+                                                    <input type="@cr.Type" class="form-control readonly" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" min="0">
+                                                </div>
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
+                                                <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
+                                                <input type="@cr.Type" class="form-control readonly" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" min="0">
+                                            </div>
+                                        }
+
+                                    }
+                                }
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-center">Nazoratchi</h4>
+                                <hr />
+                                @foreach (var cr in item.Criterias)
+                                {
+                                    if (cr.Type != "number")
+                                    {
+                                        try
+                                        {
+                                            if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueInspektor != null).ValueInspektor != null)
+                                            {
+                                                <div class="form-check mt-3 criterias indexCriteriasInsp_@cr.IndexId" id="">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueInspektor != null).ValueInspektor == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                        @(lang == "ru" ? cr.NameRu : cr.NameUz)
+                                                        <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-check mt-3 criterias indexCriteriasInsp_@cr.IndexId" id="">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                        @(lang == "ru" ? cr.NameRu : cr.NameUz)
+                                                        <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            <div class="form-check mt-3 criterias indexCriteriasInsp_@cr.IndexId" id="">
+                                                <label class="form-check-label">
+                                                    <input class="form-check-input" type="@cr.Type" name="criteriaIndexId_@cr.IndexId" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                    @(lang == "ru" ? cr.NameRu : cr.NameUz)
+                                                    <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
+                                                        <span class="check"></span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            if (Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueInspektor != null).ValueInspektor != null)
+                                            {
+                                                <div class="form-group mt-3 criterias indexCriteriasInsp_@cr.IndexId">
+                                                    <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
+                                                    <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" value="@Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueInspektor != null).ValueInspektor" min="0">
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group mt-3 criterias indexCriteriasInsp_@cr.IndexId">
+                                                    <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
+                                                    <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0">
+                                                </div>
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            <div class="form-group mt-3 criterias indexCriteriasInsp_@cr.IndexId">
+                                                <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
+                                                <input type="@cr.Type" class="form-control" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" name="criteriaIndexId_@cr.IndexId" min="0">
+                                            </div>
+                                        }
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="footer mt-5" style="text-align:right">
+                            <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("save", lang).ToUpper()" onclick="SaveData(@item.Id)" />
+                            <input type="button" class="btn btn-light" value="@Localization.GetTranslate("reset", lang).ToUpper()" onclick="Reset(@item.Id)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-3 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        Yuklangan fayllar
+                    </div>
+                    <div class="card-body">
+                        <div id="refDiv_@item.Id">
+                            <div class="row">
+                                @{ j = 1; }
+                                @foreach (var files in Model.UploadFiles.Where(x => x.IndexId == item.Id))
+                                {
+                                    <div class="col-12 mb-1">
+                                        <a target="_blank" href="~/uploads/@files.FileGuid">@j.  @files.FileName</a>
+                                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="deleteUploadFile(@files.Id,@item.Id)"><span class="fa fa-trash-alt"></span></button>
+                                    </div>
+                                    j++;
+                                }
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="btn btn-light" for="fileUpload_@item.Id" style="margin-bottom:0px">
+                                    <input id="fileUpload_@item.Id" type="file" style="display:none"
+                                           onchange="$('#upload-file-info_@item.Id').text(this.files[0].name)">
+                                    Faylni tanlang
+                                </label>
+                                <span class='label label-info' id="upload-file-info_@item.Id"></span>
+                                <button class="btn btn-primary" id="btnUpload" type="button" onclick="uploadFile(@item.Id)">
+                                    Faylni saqlash
+                                </button>
+                                <button class="btn btn-primary" id="btnUpload2" type="button" disabled style="display:none">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Faylni saqlash
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Faylni o`chirish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                O`chirilgan fayllar tiklanmaydi
+                <input type="hidden" id="deletedFileId" />
+                <input type="hidden" id="refDivId" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ortga</button>
+                <button type="button" class="btn btn-primary" onclick="confirmDeleteUploadFile()">O`chirish</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#exampleModal').appendTo("body");
+    function deleteUploadFile(id,id2) {
+        $('#deletedFileId').val(id);
+        $('#refDivId').val(id2);
+    };
+    function confirmDeleteUploadFile() {
+        var refDivId = $('#refDivId').val();
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteUploadFile", "Rater")',
+            data: { "id": $('#deletedFileId').val() },
+		    success: function (repo) {
+			    if (repo.status == "success") {
+                    toastr.success("Fayl o`chirildi!", "", {
+                        "timeOut": "2500",
+                        "extendedTImeout": "0"
+                    });
+                }
+                $('#refDiv_' + refDivId).load('@Url.Action("CheckIndexes", "Rater")' + ' #refDiv_' + refDivId);
+                $("#exampleModal .close").click();
+		    },
+		    error: function() {
+			    alert("Error occurs");
+		    }
+	    });
+    };
+
+
+    var $loading = $('#btnUpload');
+    var $loading2 = $('#btnUpload2').hide();
+
+    $(document)
+        .ajaxStart(function () {
+            $loading2.show();
+            $loading.hide();
+        })
+        .ajaxStop(function () {
+            $loading.show();
+            $loading2.hide();
+        });
+
+
+    function uploadFile(id) {
+        var files = $('#fileUpload_' + id).prop("files");
+	    var url = '@Url.Action("OnPostMyUploader", "Rater")';
+	    formData = new FormData();
+	    formData.append("MyUploader", files[0]);
+        formData.append("IndexId", id);
+
+	    jQuery.ajax({
+		    type: 'POST',
+		    url: url,
+		    data: formData,
+		    cache: false,
+		    contentType: false,
+		    processData: false,
+		    beforeSend: function (xhr) {
+			    xhr.setRequestHeader("XSRF-TOKEN",
+				    $('input:hidden[name="__RequestVerificationToken"]').val());
+		    },
+		    success: function (repo) {
+			    if (repo.status == "success") {
+                    toastr.success("Maʼlumotlar saqlandi!", "", {
+                        "timeOut": "2500",
+                        "extendedTImeout": "0"
+                    });
+                }
+                $('#refDiv_' + id).load('@Url.Action("CheckIndexes", "Rater")' + ' #refDiv_' + id);
+                $('#fileUpload_' + id).val('');
+                $('#upload-file-info_' + id).text('');
+		    },
+		    error: function() {
+			    alert("Error occurs");
+		    }
+	    });
+    };
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".level2btn").css('display', 'none');
+        $(".level3btn").css('display', 'none');
+        $(".level4btn").css('display', 'none');
+        $(".level5btn").css('display', 'none');
+        $(".criterias").css('display', 'none');
+        $(".indexTitles").css('display', 'none');
+    });
+    function level1click(id) {
+        $(".level1btn").removeClass('active');
+        $(".level2btn").removeClass('active');
+        $(".level3btn").removeClass('active');
+        $(".level4btn").removeClass('active');
+        $(".level5btn").removeClass('active');
+
+        $("#index_" + id).addClass('active');
+
+        $(".navlvl2").css('display', 'none');
+        $(".navlvl3").css('display', 'none');
+        $(".navlvl4").css('display', 'none');
+        $(".navlvl5").css('display', 'none');
+        $(".criterias").css('display', 'none');
+        $(".indexTitles").css('display', 'none');
+
+        $(".level1Child_" + id).css('display', 'block');
+        $(".navlvl1child_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
+    }
+    function level2click(id) {
+        $(".level2btn").removeClass('active');
+        $(".level3btn").removeClass('active');
+        $(".level4btn").removeClass('active');
+        $(".level5btn").removeClass('active');
+
+        $("#index_" + id).addClass('active');
+
+        $(".navlvl3").css('display', 'none');
+        $(".navlvl4").css('display', 'none')
+        $(".navlvl5").css('display', 'none')
+        $(".criterias").css('display', 'none');;
+        $(".indexTitles").css('display', 'none');
+
+        $(".level2Child_" + id).css('display', 'block');
+        $(".navlvl2child_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
+    }
+    function level3click(id) {
+        $(".level3btn").removeClass('active');
+        $(".level4btn").removeClass('active');
+        $(".level5btn").removeClass('active');
+
+        $("#index_" + id).addClass('active');
+
+        $(".navlvl4").css('display', 'none');
+        $(".navlvl5").css('display', 'none');
+        $(".criterias").css('display', 'none');
+
+        $(".level3Child_" + id).css('display', 'block');
+        $(".navlvl3child_" + id).css('display', 'block');
+
+        $(".criterias").css('display', 'none');
+        $(".indexTitles").css('display', 'none');
+        $(".indexCriterias_" + id).css('display', 'block');
+        $(".indexCriteriasInsp_" + id).css('display', 'block');
+        $(".indexTitle_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
+    }
+    function level4click(id) {
+        $(".level4btn").removeClass('active');
+        $(".level5btn").removeClass('active');
+
+        $("#index_" + id).addClass('active');
+
+        $(".navlvl5").css('display', 'none');
+        $(".criterias").css('display', 'none');
+
+        $(".level4Child_" + id).css('display', 'block');
+        $(".navlvl4child_" + id).css('display', 'block');
+
+        $(".criterias").css('display', 'none');
+        $(".indexTitles").css('display', 'none');
+        $(".indexCriterias_" + id).css('display', 'block');
+        $(".indexCriteriasInsp_" + id).css('display', 'block');
+        $(".indexTitle_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
+    }
+    function level5click(id) {
+        $(".level5btn").removeClass('active');
+
+        $("#index_" + id).addClass('active');
+
+        $(".level5Child_" + id).css('display', 'block');
+        $(".navlvl5child_" + id).css('display', 'block');
+
+        $(".criterias").css('display', 'none');
+        $(".indexTitles").css('display', 'none');
+        $(".indexCriterias_" + id).css('display', 'block');
+        $(".indexCriteriasInsp_" + id).css('display', 'block');
+        $(".indexTitle_" + id).css('display', 'block');
+        $('#btnUpload2').hide();
+    }
+
+    function clickRadio(criteriaId, indexId, ball) {
+        if (ball == 0) {
+            $("input[name = 'criteriaIndexId_" + indexId + "'][type='checkbox']").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+        else {
+            $("input[name = 'criteriaIndexId_" + indexId + "'][type='radio']").each(function () {
+                if ($(this).attr('qw') == 0) {
+                    $(this).prop('checked', false);
+                }
+            });
+        }
+    }
+
+    function SaveData(indexId) {
+        var selected = [];
+        $('.indexCriteriasInsp_' + indexId + ' :input[type="number"]').each(function () {
+            selected.push($(this).attr('criteriaId') + ';' + $(this).prop("value"));
+        });
+        $("input[name='criteriaIndexId_" + indexId + "']:checked").each(function () {
+            selected.push($(this).attr('criteriaId') + ';' + $(this).prop("value"));
+        });
+        $.ajax({
+            type: "POST",
+            url: "/Rater/SaveIndex/",
+            data: { indexId: indexId, criteriaValues: selected },
+            success: function (result) {
+                if (result == true) {
+                    toastr.success("Maʼlumotlar saqlandi!", "", {
+                        "timeOut": "2500",
+                        "extendedTImeout": "0"
+                    });
+                }
+                else {
+                    toastr.warning("Maʼlumotlar saqlanmadi!", "Yana bir bor urinib ko'ring", {
+                        "timeOut": "2500",
+                        "extendedTImeout": "0"
+                    });
+                }
+            }
+        })
+    }
+
+    function Reset(indexId) {
+
+        var r = confirm("@Html.Raw(Localization.GetTranslate("delete_warning_text", lang))");
+        if (r == true) {
+            $('.indexCriteriasInsp_' + indexId + ' :input').each(function () {
+                $(this).prop("checked", false);
+                $(this).prop("value", "");
+            });
+        } else {
+
+        }
+    }
+
+    $(".readonly").on('keydown paste focus mousedown', function (e) {
+        if (e.keyCode != 9) // ignore tab
+            e.preventDefault();
+    });
+</script>
+

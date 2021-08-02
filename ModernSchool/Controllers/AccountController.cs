@@ -33,6 +33,9 @@ namespace ModernSchool.Controllers
 
                 if (role == 5)
                     return RedirectToAction("Profile", "SchoolProfile");
+
+                if (role == 6)
+                    return RedirectToAction("Orders", "Rater");
             }
             catch { }
 
@@ -59,6 +62,9 @@ namespace ModernSchool.Controllers
 
                     if (user.RoleId == 5)
                         return RedirectToAction("Profile", "SchoolProfile");
+
+                    if (user.RoleId == 6)
+                        return RedirectToAction("Orders", "Rater");
                 }
                 ViewBag.error = "Login yoki parol noto'gri";
             }
