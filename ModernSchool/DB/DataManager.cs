@@ -64,5 +64,38 @@ namespace ModernSchool.DB
             ").ToListAsync();
 		}
 
+		public async Task<MaxBallViewModel> MaxBallInOlympiads()
+		{
+			return await db.MaxBallViewModel.FromSqlRaw(@"
+                with 
+				db as (select *
+				from Rates r
+				where r.IndexId in (150,151,152)),
+				db2 as (select *
+				from Rates r
+				where r.CriteriaId = 106
+				),
+				db3 as (select 
+					distinct s.Id,
+					s.NameUz,
+					(10 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 79) +
+					5 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 80) +
+					3 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 81) +
+	
+					15 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 82) +
+					13 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 83) +
+					10 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 84) +
+	
+					20 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 85) +
+					18 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 86) +
+					15 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 87))/(select case when db2.ValueSchool <= 630 then 9 when db2.ValueSchool <= 945 then 18 else 27 end from db2 where db2.SchoolId = s.Id) MaxBall 
+
+				from Schools s
+				inner join db on db.SchoolId = s.Id)
+
+				select MAX(db3.MaxBall) MaxBall
+				from db3
+            ").FirstAsync();
+		}
 	}
 }

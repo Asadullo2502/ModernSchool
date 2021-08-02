@@ -488,10 +488,11 @@ namespace ModernSchool.Controllers
                     + (20 * rates.FirstOrDefault(x => x.CriteriaId == 85).ValueSchool + 18 * rates.FirstOrDefault(x => x.CriteriaId == 86).ValueSchool + 15 * rates.FirstOrDefault(x => x.CriteriaId == 87).ValueSchool))
                     / (rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 630 ? 9 : rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 945 ? 18 : 27);
 
-                if (db.IndexMaxBalls.FirstOrDefault(x=>x.IndexId == 84).MaxBall != null && db.IndexMaxBalls.FirstOrDefault(x => x.IndexId == 84).MaxBall < i)
+                var maxball = Convert.ToDouble(data.MaxBallInOlympiads());
+
+                if (i >= maxball)
                 {
-                    await db.AddAsync(new IndexMaxBall { IndexId = 84, MaxBall = i});
-                    await db.SaveChangesAsync();
+                    
                 }
                 else
                 {

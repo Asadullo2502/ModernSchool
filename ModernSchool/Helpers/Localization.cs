@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ModernSchool.DB;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,12 +11,25 @@ namespace ModernSchool
 {
     public class Localization
     {
+        static class ConfigurationManager
+        {
+            public static IConfiguration AppSetting { get; }
+            static ConfigurationManager()
+            {
+                AppSetting = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json")
+                        .Build();
+            }
+        }
+
         public static string GetTranslate(string key, string lang)
         {
+            string db_string = ConfigurationManager.AppSetting["ConnectionStrings:DefaultConnection"];
             var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
 
             var options = optionsBuilder
-                    .UseSqlServer(@"data source=83.69.136.11,10002;initial catalog=ModernSchool;persist security info=True;user id=sa;password=web@1234;MultipleActiveResultSets=true")
+                    .UseSqlServer(db_string)
                     .Options;
             using DataContext db = new DataContext(options);
             try
