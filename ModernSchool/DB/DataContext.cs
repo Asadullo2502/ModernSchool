@@ -24,6 +24,7 @@ namespace ModernSchool.DB
         public DbSet<UploadFile> UploadFiles { get; set; }
         public DbSet<IndexBall> IndexBalls { get; set; }
         public DbSet<CurrentYear> CurrentYear { get; set; }
+        public DbSet<BXM> BXM { get; set; }
 
 
 

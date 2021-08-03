@@ -825,19 +825,19 @@ namespace ModernSchool.Controllers
                 {
                     itogBall = 1;
                 }
-                if (i >= 0.21 && i <= 0.40)
+                else if (i >= 0.21 && i <= 0.40)
                 {
                     itogBall = 2;
                 }
-                if (i >= 0.41 && i <= 0.80)
+                else if (i >= 0.41 && i <= 0.80)
                 {
                     itogBall = 3;
                 }
-                if (i >= 0.81 && i <= 1.2)
+                else if (i >= 0.81 && i <= 1.2)
                 {
                     itogBall = 4;
                 }
-                if (i >= 1.21)
+                else if (i >= 1.21)
                 {
                     itogBall = 5;
                 }
@@ -901,6 +901,123 @@ namespace ModernSchool.Controllers
                         await db.IndexBalls.AddAsync(new IndexBall
                         {
                             IndexId = 96,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //ByudjetdanTashqariMablag
+            try
+            {
+                double bxm = db.BXM.FirstOrDefault(x => x.Year == _year).Price;
+                double itogBall = 0;
+
+                double? i = rates.FirstOrDefault(x => x.CriteriaId == 147).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 148).ValueSchool;
+                if (i < 0.3 * bxm)
+                {
+                    itogBall = 0;
+                }
+                else if (i >= 0.3 * bxm && i < 1 * bxm)
+                {
+                    itogBall = 5;
+                }
+                else if (i >= 1 * bxm && i < 2 * bxm)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 2 * bxm && i < 3 * bxm)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 3 * bxm)
+                {
+                    itogBall = 30;
+                }
+
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 99 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 99,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //MikroHudud
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (rates.FirstOrDefault(x => x.CriteriaId == 149).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 150).ValueSchool) * 100;
+                
+                if (i >= 86)
+                {
+                    itogBall = 25;
+                }
+                else if (i >= 76 && i < 86)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 65 && i < 76)
+                {
+                    itogBall = 15;
+                }
+                else if (i >= 55 && i < 65)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 51 && i < 55)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 51)
+                {
+                    itogBall = 0;
+                }
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 100 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 100,
                             SchoolId = school_id,
                             Year = _year,
                             SchoolBall = itogBall
