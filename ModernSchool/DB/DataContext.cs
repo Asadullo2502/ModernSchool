@@ -23,7 +23,7 @@ namespace ModernSchool.DB
         public DbSet<Resource> Resources { get; set; }
         public DbSet<UploadFile> UploadFiles { get; set; }
         public DbSet<IndexBall> IndexBalls { get; set; }
-        public DbSet<IndexMaxBall> IndexMaxBalls { get; set; }
+        public DbSet<CurrentYear> CurrentYear { get; set; }
 
 
 

@@ -7,7 +7,7 @@ namespace ModernSchool.Models
 {
     public class MaxBallViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public double? MaxBall { get; set; }
     }
 }

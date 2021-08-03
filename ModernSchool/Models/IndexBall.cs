@@ -10,8 +10,8 @@ namespace ModernSchool.Models
         public int Id { get; set; }
         public int? SchoolId { get; set; }
         public int? IndexId { get; set; }
-        public float? SchoolBall { get; set; }
-        public float? InspektorBall { get; set; }
+        public double? SchoolBall { get; set; }
+        public double? InspektorBall { get; set; }
         public int? Year { get; set; }
     }
 }

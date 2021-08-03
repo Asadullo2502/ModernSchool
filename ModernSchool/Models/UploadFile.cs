@@ -14,6 +14,7 @@ namespace ModernSchool.Models
         public string FileName { get; set; }
         public string FileGuid { get; set; }
         public string FileExtension { get; set; }
+        public int? Year { get; set; }
         public int CreatedBy { get; set; } // 1 - School    2 - Inspektor
         public DateTime CreateDate { get; set; }
         

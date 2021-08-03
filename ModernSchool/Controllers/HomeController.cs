@@ -16,6 +16,8 @@ namespace ModernSchool.Controllers
     [Authorize(Roles = "1")]
     public class HomeController : Controller
     {
+        public static int _year;
+
         private DataContext db;
         private DataManager data;
 
@@ -23,16 +25,17 @@ namespace ModernSchool.Controllers
         {
             db = context;
             data = new DataManager(db);
+            _year = db.CurrentYear.First().Year;
         }
 
         public async Task<IActionResult> Index()
         {
             PageData pageData = new();
-            pageData.Rates = await db.Rates.Where(x => x.SchoolId == 5663).ToListAsync();
-            pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == 5663).ToListAsync();
+            pageData.Rates = await db.Rates.Where(x => x.SchoolId == 5663 && x.Year == _year).ToListAsync();
+            pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == 5663 && x.Year == _year).ToListAsync();
             pageData.Criterias = await db.Criterias.ToListAsync();
             pageData.Indexes = await db.Indexes.Include(x => x.Criterias).ToListAsync();
-            pageData.IndexesDataStatuses = await data.IndexesStatus(5663);
+            pageData.IndexesDataStatuses = await data.IndexesStatus(5663,_year);
             return View(pageData);
         }
 

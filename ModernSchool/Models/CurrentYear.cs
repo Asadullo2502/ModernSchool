@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace ModernSchool.Models
 {
-    public class IndexMaxBall
+    public class CurrentYear
     {
         public int Id { get; set; }
-        public int? SchoolId { get; set; }
-        public int? IndexId { get; set; }
-        public double? MaxBall { get; set; }
+        public int Year { get; set; }
     }
 }

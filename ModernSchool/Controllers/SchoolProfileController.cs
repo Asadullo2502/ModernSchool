@@ -17,6 +17,8 @@ namespace ModernSchool.Controllers
     [Authorize(Roles = "5")]
     public class SchoolProfileController : Controller
     {
+        public static int _year;
+
         private DataContext db;
         private DataManager data;
         readonly IWebHostEnvironment _appEnvironment;
@@ -26,6 +28,7 @@ namespace ModernSchool.Controllers
             db = context;
             data = new DataManager(db);
             _appEnvironment = hostEnvironment;
+            _year = db.CurrentYear.First().Year;
         }
         
         public async Task<IActionResult> Profile()
@@ -87,11 +90,11 @@ namespace ModernSchool.Controllers
         {
             int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
             PageData pageData = new();
-            pageData.Rates = await db.Rates.Where(x => x.SchoolId == school_id).ToListAsync();
-            pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == school_id).ToListAsync();
+            pageData.Rates = await db.Rates.Where(x => x.SchoolId == school_id && x.Year == _year).ToListAsync();
+            pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == school_id && x.Year == _year).ToListAsync();
             pageData.Criterias = await db.Criterias.ToListAsync();
             pageData.Indexes = await db.Indexes.Include(x=>x.Criterias).ToListAsync();
-            pageData.IndexesDataStatuses = await data.IndexesStatus(school_id);
+            pageData.IndexesDataStatuses = await data.IndexesStatus(school_id, _year);
             return View(pageData);
         }
 
@@ -119,7 +122,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190) && x.ValueSchool != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190) && x.ValueSchool != null && x.Year != _year).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -129,7 +132,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 181 || CriteriaId == 209)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 181 || CriteriaId == 209) && x.ValueSchool != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 181 || CriteriaId == 209) && x.ValueSchool != null && x.Year != _year).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -139,7 +142,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167) && x.ValueSchool != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167) && x.ValueSchool != null && x.Year != _year).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -149,7 +152,17 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 149 || CriteriaId == 179)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 149 || CriteriaId == 179) && x.ValueSchool != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 149 || CriteriaId == 179) && x.ValueSchool != null && x.Year != _year).ToListAsync();
+                        if (_rates != null)
+                        {
+                            db.Rates.RemoveRange(_rates);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+
+                    if (CriteriaId == 94 || CriteriaId == 102)
+                    {
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 94 || CriteriaId == 102) && x.ValueSchool != null && x.Year != _year).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -159,7 +172,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271) && x.ValueSchool != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271) && x.ValueSchool != null && x.Year != _year).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -169,7 +182,7 @@ namespace ModernSchool.Controllers
                 }
 
 
-                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueSchool != null).ToListAsync();
+                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueSchool != null && x.Year != _year).ToListAsync();
                 if (rates != null)
                 {
                     db.Rates.RemoveRange(rates);
@@ -191,7 +204,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 186,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -203,7 +216,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 188,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -215,7 +228,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 190,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -230,7 +243,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 181,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -242,7 +255,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 209,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -257,7 +270,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 154,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -269,7 +282,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 160,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -281,7 +294,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 167,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -296,7 +309,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 149,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -308,7 +321,34 @@ namespace ModernSchool.Controllers
                             CriteriaId = 179,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
+
+                        });
+                        await db.SaveChangesAsync();
+                    }
+
+                    else if (CriteriaId == 94 || CriteriaId == 102)
+                    {
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 86,
+                            CriteriaId = 94,
+                            ValueSchool = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = _year,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateSchool = DateTime.Now,
+                            IndexId = 87,
+                            CriteriaId = 102,
+                            ValueSchool = Convert.ToDouble(temp[1]),
+                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -323,7 +363,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 106,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -335,7 +375,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 110,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -347,7 +387,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 148,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -359,7 +399,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 168,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -371,7 +411,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 170,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -383,7 +423,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 177,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -395,7 +435,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = 271,
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
 
                         });
                         await db.SaveChangesAsync();
@@ -410,7 +450,7 @@ namespace ModernSchool.Controllers
                             CriteriaId = Convert.ToInt32(temp[0]),
                             ValueSchool = Convert.ToDouble(temp[1]),
                             SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
-                            Year = 2021,
+                            Year = _year,
                         });
                         await db.SaveChangesAsync();
                     }
@@ -441,6 +481,7 @@ namespace ModernSchool.Controllers
 
                 uploadFile.CreateDate = DateTime.Now;
                 uploadFile.CreatedBy = 1;
+                uploadFile.Year = _year;
                 uploadFile.FileExtension = extension;
                 uploadFile.FileGuid = fileGuidName;
                 uploadFile.FileName = MyUploader.FileName;
@@ -480,7 +521,9 @@ namespace ModernSchool.Controllers
         public async Task<int> SolveIndexBall()
         {
             int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
-            var rates = db.Rates.Where(x => x.SchoolId == school_id && x.ValueSchool != null);
+            var rates = await db.Rates.Where(x => x.SchoolId == school_id && x.ValueSchool != null && x.Year == _year).ToListAsync();
+            
+            //Respublika Olimpiada
             try
             {
                 double? i = ((10 * rates.FirstOrDefault(x => x.CriteriaId == 79).ValueSchool + 5 * rates.FirstOrDefault(x => x.CriteriaId == 80).ValueSchool + 3 * rates.FirstOrDefault(x => x.CriteriaId == 81).ValueSchool) 
@@ -488,21 +531,391 @@ namespace ModernSchool.Controllers
                     + (20 * rates.FirstOrDefault(x => x.CriteriaId == 85).ValueSchool + 18 * rates.FirstOrDefault(x => x.CriteriaId == 86).ValueSchool + 15 * rates.FirstOrDefault(x => x.CriteriaId == 87).ValueSchool))
                     / (rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 630 ? 9 : rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 945 ? 18 : 27);
 
-                var maxball = Convert.ToDouble(data.MaxBallInOlympiads());
+                var maxball = await data.MaxBallInRepublicOlympiads(_year);
 
+                double itogBall = 0;
                 if (i >= maxball)
                 {
-                    
+                    itogBall = 20;
                 }
                 else
                 {
-
+                    itogBall = (double)((20 * i) / maxball);
                 }
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 84 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall { 
+                            IndexId = 84,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
             }
-            catch { }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Xalqaro Olimpiada
+            try
+            {
+                double? i = 5 * rates.FirstOrDefault(x => x.CriteriaId == 89).ValueSchool + 10 * rates.FirstOrDefault(x => x.CriteriaId == 90).ValueSchool + 20 * rates.FirstOrDefault(x => x.CriteriaId == 91).ValueSchool + 25 * rates.FirstOrDefault(x => x.CriteriaId == 92).ValueSchool;
+
+                var maxball = await data.MaxBallInInternationalOlympiads(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    itogBall = 25;
+                }
+                else
+                {
+                    itogBall = (double)((25 * i) / maxball);
+                }
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 85 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 85,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Oqishga kirish
+            try
+            {
+                double? i = rates.FirstOrDefault(x => x.CriteriaId == 93).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 94).ValueSchool;
+
+                var maxball = await data.MaxBallInAbitur(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    itogBall = 25;
+                }
+                else
+                {
+                    itogBall = (double)((25 * i) / maxball);
+                }
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 86 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 86,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Bandlik
+            try
+            {
+                double? i = (
+                    25 * rates.FirstOrDefault(x => x.CriteriaId == 95).ValueSchool + 
+                    20 * rates.FirstOrDefault(x => x.CriteriaId == 96).ValueSchool + 
+                    5 * rates.FirstOrDefault(x => x.CriteriaId == 97).ValueSchool +
+                    30 * rates.FirstOrDefault(x => x.CriteriaId == 98).ValueSchool +
+                    10 * rates.FirstOrDefault(x => x.CriteriaId == 99).ValueSchool +
+                    5 * rates.FirstOrDefault(x => x.CriteriaId == 100).ValueSchool +
+                    5 * rates.FirstOrDefault(x => x.CriteriaId == 101).ValueSchool
+                    ) / rates.FirstOrDefault(x => x.CriteriaId == 102).ValueSchool;
+
+                var maxball = await data.MaxBallInBandlik(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    itogBall = 100;
+                }
+                else
+                {
+                    itogBall = (double)((100 * i) / maxball);
+                }
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 87 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 87,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //RespublikaTanlov
+            try
+            {
+                double? i = (
+                    5 * rates.FirstOrDefault(x => x.CriteriaId == 103).ValueSchool +
+                    10 * rates.FirstOrDefault(x => x.CriteriaId == 104).ValueSchool +
+                    15 * rates.FirstOrDefault(x => x.CriteriaId == 105).ValueSchool 
+                    ) / rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool;
+
+                var maxball = await data.MaxBallInRespublikaTanlov(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    itogBall = 15;
+                }
+                else
+                {
+                    itogBall = (double)((15 * i) / maxball);
+                }
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 88 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 88,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //XalqaroTanlov
+            try
+            {
+                double? i = (
+                    10 * rates.FirstOrDefault(x => x.CriteriaId == 107).ValueSchool +
+                    20 * rates.FirstOrDefault(x => x.CriteriaId == 108).ValueSchool +
+                    25 * rates.FirstOrDefault(x => x.CriteriaId == 109).ValueSchool
+                    ) / rates.FirstOrDefault(x => x.CriteriaId == 110).ValueSchool;
+
+                var maxball = await data.MaxBallInXalqaroTanlov(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    itogBall = 25;
+                }
+                else
+                {
+                    itogBall = (double)((25 * i) / maxball);
+                }
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 89 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 89,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //InklyuzivTalim
+            try
+            {
+                double? i = ((
+                    rates.FirstOrDefault(x => x.CriteriaId == 131).ValueSchool +
+                    rates.FirstOrDefault(x => x.CriteriaId == 132).ValueSchool +
+                    rates.FirstOrDefault(x => x.CriteriaId == 270).ValueSchool
+                    ) / rates.FirstOrDefault(x => x.CriteriaId == 271).ValueSchool) * 100;
+
+                double itogBall = 0;
+                if (i >= 0.01 && i <= 0.20)
+                {
+                    itogBall = 1;
+                }
+                if (i >= 0.21 && i <= 0.40)
+                {
+                    itogBall = 2;
+                }
+                if (i >= 0.41 && i <= 0.80)
+                {
+                    itogBall = 3;
+                }
+                if (i >= 0.81 && i <= 1.2)
+                {
+                    itogBall = 4;
+                }
+                if (i >= 1.21)
+                {
+                    itogBall = 5;
+                }
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 94 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 94,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //TarbiyaviyIshlar
+            try
+            {
+                double itogBall = 0;
+                if (rates.FirstOrDefault(x => x.CriteriaId == 139).ValueSchool == 0 && rates.FirstOrDefault(x => x.CriteriaId == 140).ValueSchool == 0)
+                {
+                    itogBall = 15;
+                }
+                else
+                {
+                    itogBall = -1 * (double)rates.FirstOrDefault(x => x.CriteriaId == 139).ValueSchool + -10 * (double)rates.FirstOrDefault(x => x.CriteriaId == 140).ValueSchool;
+                }
+                
+
+                try
+                {
+                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 96 && x.SchoolId == school_id && x.Year == _year);
+                    if (res != null)
+                    {
+                        if (res.SchoolBall != itogBall)
+                        {
+                            res.SchoolBall = itogBall;
+                            db.Entry(res).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        await db.IndexBalls.AddAsync(new IndexBall
+                        {
+                            IndexId = 96,
+                            SchoolId = school_id,
+                            Year = _year,
+                            SchoolBall = itogBall
+                        });
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch { }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
 
             return 1;
         }
+
+
 
         #region comment 
         public async Task<IActionResult> MainInfo()
