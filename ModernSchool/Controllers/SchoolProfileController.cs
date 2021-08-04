@@ -518,10 +518,10 @@ namespace ModernSchool.Controllers
             
         }
 
-        public async Task<int> SolveIndexBall()
+        public int SolveIndexBall()
         {
             int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
-            var rates = await db.Rates.Where(x => x.SchoolId == school_id && x.ValueSchool != null && x.Year == _year).ToListAsync();
+            var rates = db.Rates.Where(x => x.SchoolId == school_id && x.ValueSchool != null && x.Year == _year).ToList();
             
             //Respublika Olimpiada
             try
@@ -531,42 +531,26 @@ namespace ModernSchool.Controllers
                     + (20 * rates.FirstOrDefault(x => x.CriteriaId == 85).ValueSchool + 18 * rates.FirstOrDefault(x => x.CriteriaId == 86).ValueSchool + 15 * rates.FirstOrDefault(x => x.CriteriaId == 87).ValueSchool))
                     / (rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 630 ? 9 : rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 945 ? 18 : 27);
 
-                var maxball = await data.MaxBallInRepublicOlympiads(_year);
+                var maxball = data.MaxBallInRepublicOlympiads(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
                 {
-                    itogBall = 20;
+                    if (i != 0)
+                    {
+                        itogBall = 20;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
                 }
                 else
                 {
                     itogBall = (double)((20 * i) / maxball);
                 }
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 84 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall { 
-                            IndexId = 84,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+                TrySaveMaxBall(84, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -575,43 +559,26 @@ namespace ModernSchool.Controllers
             {
                 double? i = 5 * rates.FirstOrDefault(x => x.CriteriaId == 89).ValueSchool + 10 * rates.FirstOrDefault(x => x.CriteriaId == 90).ValueSchool + 20 * rates.FirstOrDefault(x => x.CriteriaId == 91).ValueSchool + 25 * rates.FirstOrDefault(x => x.CriteriaId == 92).ValueSchool;
 
-                var maxball = await data.MaxBallInInternationalOlympiads(_year);
+                var maxball = data.MaxBallInInternationalOlympiads(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
                 {
-                    itogBall = 25;
+                    if (i != 0)
+                    {
+                        itogBall = 25;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
                 }
                 else
                 {
                     itogBall = (double)((25 * i) / maxball);
                 }
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 85 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 85,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+                TrySaveMaxBall(85, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -620,43 +587,26 @@ namespace ModernSchool.Controllers
             {
                 double? i = rates.FirstOrDefault(x => x.CriteriaId == 93).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 94).ValueSchool;
 
-                var maxball = await data.MaxBallInAbitur(_year);
+                var maxball = data.MaxBallInAbitur(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
                 {
-                    itogBall = 25;
+                    if (i != 0)
+                    {
+                        itogBall = 25;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
                 }
                 else
                 {
                     itogBall = (double)((25 * i) / maxball);
                 }
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 86 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 86,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+                TrySaveMaxBall(86, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -673,43 +623,26 @@ namespace ModernSchool.Controllers
                     5 * rates.FirstOrDefault(x => x.CriteriaId == 101).ValueSchool
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 102).ValueSchool;
 
-                var maxball = await data.MaxBallInBandlik(_year);
+                var maxball = data.MaxBallInBandlik(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
                 {
-                    itogBall = 100;
+                    if (i != 0)
+                    {
+                        itogBall = 100;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
                 }
                 else
                 {
                     itogBall = (double)((100 * i) / maxball);
                 }
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 87 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 87,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+                TrySaveMaxBall(87, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -722,43 +655,26 @@ namespace ModernSchool.Controllers
                     15 * rates.FirstOrDefault(x => x.CriteriaId == 105).ValueSchool 
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool;
 
-                var maxball = await data.MaxBallInRespublikaTanlov(_year);
+                var maxball = data.MaxBallInRespublikaTanlov(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
                 {
-                    itogBall = 15;
+                    if (i != 0)
+                    {
+                        itogBall = 15;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
                 }
                 else
                 {
                     itogBall = (double)((15 * i) / maxball);
                 }
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 88 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 88,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+                TrySaveMaxBall(88, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -771,43 +687,26 @@ namespace ModernSchool.Controllers
                     25 * rates.FirstOrDefault(x => x.CriteriaId == 109).ValueSchool
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 110).ValueSchool;
 
-                var maxball = await data.MaxBallInXalqaroTanlov(_year);
+                var maxball = data.MaxBallInXalqaroTanlov(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
                 {
-                    itogBall = 25;
+                    if (i != 0)
+                    {
+                        itogBall = 25;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
                 }
                 else
                 {
                     itogBall = (double)((25 * i) / maxball);
                 }
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 89 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 89,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+                TrySaveMaxBall(89, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -842,31 +741,7 @@ namespace ModernSchool.Controllers
                     itogBall = 5;
                 }
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 94 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 94,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+                TrySaveMaxBall(94, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -882,33 +757,9 @@ namespace ModernSchool.Controllers
                 {
                     itogBall = -1 * (double)rates.FirstOrDefault(x => x.CriteriaId == 139).ValueSchool + -10 * (double)rates.FirstOrDefault(x => x.CriteriaId == 140).ValueSchool;
                 }
-                
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 96 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 96,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+
+                TrySaveMaxBall(96, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -941,31 +792,7 @@ namespace ModernSchool.Controllers
                 }
 
 
-                try
-                {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 99 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
-                    {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
-                    }
-                    else
-                    {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 99,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
-                    }
-                }
-                catch { }
+                TrySaveMaxBall(99, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
@@ -1001,38 +828,411 @@ namespace ModernSchool.Controllers
                     itogBall = 0;
                 }
 
-                try
+                TrySaveMaxBall(100, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //KompyuterTaminnot
+            try
+            {
+                double itogBall = 0;
+
+                double? i = 20 * rates.FirstOrDefault(x => x.CriteriaId == 178).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 179).ValueSchool +
+                            5 * rates.FirstOrDefault(x => x.CriteriaId == 180).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 181).ValueSchool +
+                            5 * rates.FirstOrDefault(x => x.CriteriaId == 182).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 183).ValueSchool;
+
+                var maxball = data.MaxBallInKompTaminnot(_year);
+                if (i >= maxball)
                 {
-                    var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == 100 && x.SchoolId == school_id && x.Year == _year);
-                    if (res != null)
+                    if (i != 0)
                     {
-                        if (res.SchoolBall != itogBall)
-                        {
-                            res.SchoolBall = itogBall;
-                            db.Entry(res).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                        }
+                        itogBall = 30;
                     }
                     else
                     {
-                        await db.IndexBalls.AddAsync(new IndexBall
-                        {
-                            IndexId = 100,
-                            SchoolId = school_id,
-                            Year = _year,
-                            SchoolBall = itogBall
-                        });
-                        await db.SaveChangesAsync();
+                        itogBall = 0;
                     }
                 }
-                catch { }
+                else
+                {
+                    itogBall = (double)((30 * i) / maxball);
+                }
+
+                TrySaveMaxBall(101, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //OliyMalumot
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (rates.FirstOrDefault(x => x.CriteriaId == 153).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 154).ValueSchool) * 100;
+
+                if (i >= 97)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 91 && i < 97)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 86 && i < 91)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 86)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBall(103, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Toifa
+            try
+            {
+                double itogBall = 0;
+
+                double? i = ((rates.FirstOrDefault(x => x.CriteriaId == 158).ValueSchool + rates.FirstOrDefault(x => x.CriteriaId == 159).ValueSchool) / rates.FirstOrDefault(x => x.CriteriaId == 160).ValueSchool) * 100;
+
+                if (i >= 25)
+                {
+                    itogBall = 100;
+                }
+                else if (i >= 24 && i < 25)
+                {
+                    itogBall = 80;
+                }
+                else if (i >= 23 && i < 24)
+                {
+                    itogBall = 75;
+                }
+                else if (i >= 22 && i < 23)
+                {
+                    itogBall = 70;
+                }
+                else if (i >= 21 && i < 22)
+                {
+                    itogBall = 65;
+                }
+                else if (i >= 20 && i < 21)
+                {
+                    itogBall = 60;
+                }
+                else if (i >= 19 && i < 20)
+                {
+                    itogBall = 55;
+                }
+                else if (i >= 18 && i < 19)
+                {
+                    itogBall = 50;
+                }
+                else if (i >= 17 && i < 18)
+                {
+                    itogBall = 45;
+                }
+                else if (i >= 16 && i < 17)
+                {
+                    itogBall = 40;
+                }
+                else if (i >= 15 && i < 16)
+                {
+                    itogBall = 35;
+                }
+                else if (i >= 14 && i < 15)
+                {
+                    itogBall = 30;
+                }
+                else if (i >= 13 && i < 14)
+                {
+                    itogBall = 25;
+                }
+                else if (i >= 12 && i < 13)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 11 && i < 12)
+                {
+                    itogBall = 15;
+                }
+                else if (i >= 10 && i < 11)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 9 && i < 10)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 9)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBall(105, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //ChetTili
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (
+                                30 * rates.FirstOrDefault(x => x.CriteriaId == 161).ValueSchool + 
+                                20 * rates.FirstOrDefault(x => x.CriteriaId == 162).ValueSchool +
+                                10 * rates.FirstOrDefault(x => x.CriteriaId == 163).ValueSchool
+                             ) / 
+                             rates.FirstOrDefault(x => x.CriteriaId == 164).ValueSchool;
+
+                var maxball = data.MaxBallInChetTili(_year);
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 30;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((30 * i) / maxball);
+                }
+
+                TrySaveMaxBall(106, school_id, itogBall);
+                
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Kitob.uz
+            try
+            {
+                double itogBall = 0;
+
+                double? i = ((rates.FirstOrDefault(x => x.CriteriaId == 165).ValueSchool + rates.FirstOrDefault(x => x.CriteriaId == 166).ValueSchool) / (rates.FirstOrDefault(x => x.CriteriaId == 167).ValueSchool + rates.FirstOrDefault(x => x.CriteriaId == 168).ValueSchool)) * 100;
+
+                if (i >= 86)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 61 && i < 86)
+                {
+                    itogBall = 8;
+                }
+                else if (i >= 31 && i < 61)
+                {
+                    itogBall = 4;
+                }
+                else if (i >= 11 && i < 31)
+                {
+                    itogBall = 2;
+                }
+                else if (i < 11)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBall(107, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Kitobxonlik
+            try
+            {
+                double itogBall = 0;
+
+                double? i = rates.FirstOrDefault(x => x.CriteriaId == 169).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 170).ValueSchool;
+
+                if (i >= 10)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 6 && i < 10)
+                {
+                    itogBall = 8;
+                }
+                else if (i >= 4 && i < 6)
+                {
+                    itogBall = 4;
+                }
+                else if (i >= 2 && i < 4)
+                {
+                    itogBall = 2;
+                }
+                else if (i < 2)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBall(108, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //KitobTaminot
+            try
+            {
+                double itogBall = 0;
+
+                double? i = rates.FirstOrDefault(x => x.CriteriaId == 176).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 177).ValueSchool;
+
+                if (i >= 5)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 4 && i < 5)
+                {
+                    itogBall = 8;
+                }
+                else if (i >= 3 && i < 4)
+                {
+                    itogBall = 4;
+                }
+                else if (i >= 2 && i < 3)
+                {
+                    itogBall = 2;
+                }
+                else if (i < 2)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBall(110, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //MebelJihoz
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (rates.FirstOrDefault(x => x.CriteriaId == 208).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 209).ValueSchool) * 100;
+
+                if (i >= 100)
+                {
+                    itogBall = 30;
+                }
+                else if (i >= 81 && i < 100)
+                {
+                    itogBall = 25;
+                }
+                else if (i >= 51 && i < 81)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 21 && i < 51)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 11 && i < 21)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 11)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBall(117, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //LokalTarmoq
+            try
+            {
+                double itogBall = 0;
+
+                itogBall =(double)(10 * (rates.FirstOrDefault(x => x.CriteriaId == 185).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 186).ValueSchool));
+
+                TrySaveMaxBall(140, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //InternetTarmoq
+            try
+            {
+                double itogBall = 0;
+
+                itogBall = (double)(10 * (rates.FirstOrDefault(x => x.CriteriaId == 187).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 188).ValueSchool));
+
+                TrySaveMaxBall(141, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //KompYengiligi
+            try
+            {
+                double itogBall = 0;
+
+                itogBall = (double)(5 * (rates.FirstOrDefault(x => x.CriteriaId == 189).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 190).ValueSchool));
+
+                TrySaveMaxBall(142, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //BirMillionDasturchi
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (rates.FirstOrDefault(x => x.CriteriaId == 283).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 284).ValueSchool) * 100;
+
+                if (i >= 10)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 5 && i < 10)
+                {
+                    itogBall = 8;
+                }
+                else if (i >= 1 && i < 5)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 1)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBall(148, school_id, itogBall);
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
             return 1;
         }
 
-
+        ////////////////////////////////////////////////////////////////////////////
+        public void TrySaveMaxBall(int indexId, int schoolId, double itogBall)
+        {
+            try
+            {
+                var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == indexId && x.SchoolId == schoolId && x.Year == _year);
+                if (res != null)
+                {
+                    if (res.SchoolBall != itogBall)
+                    {
+                        res.SchoolBall = itogBall;
+                        db.Entry(res).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    db.IndexBalls.Add(new IndexBall
+                    {
+                        IndexId = indexId,
+                        SchoolId = schoolId,
+                        Year = _year,
+                        SchoolBall = itogBall
+                    });
+                    db.SaveChanges();
+                }
+            }
+            catch { }
+        }
 
         #region comment 
         public async Task<IActionResult> MainInfo()

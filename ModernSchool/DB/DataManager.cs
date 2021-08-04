@@ -64,10 +64,10 @@ namespace ModernSchool.DB
             ").ToListAsync();
 		}
 
-		public async Task<double> MaxBallInRepublicOlympiads(int year)
+		public double MaxBallInRepublicOlympiads(int year)
 		{
 			double result = 0;
-			var data = await db.MaxBallViewModel.FromSqlRaw(@"
+			var data = db.MaxBallViewModel.FromSqlRaw(@"
                 with 
 				db as (
 					select *
@@ -101,15 +101,15 @@ namespace ModernSchool.DB
 					NEWID() Id,
 					MAX(db3.MaxBall) MaxBall
 				from db3
-            ").ToListAsync();
+            ").ToList();
 			result = (double)data.FirstOrDefault().MaxBall;
 			return result;
 		}
 
-		public async Task<double> MaxBallInInternationalOlympiads(int year)
+		public double MaxBallInInternationalOlympiads(int year)
 		{
 			double result = 0;
-			var data = await db.MaxBallViewModel.FromSqlRaw(@"
+			var data = db.MaxBallViewModel.FromSqlRaw(@"
                 with 
 				db as (
 					select *
@@ -132,15 +132,15 @@ namespace ModernSchool.DB
 					NEWID() Id,
 					MAX(db3.MaxBall) MaxBall
 				from db3
-            ").ToListAsync();
+            ").ToList();
 			result = (double)data.FirstOrDefault().MaxBall;
 			return result;
 		}
 
-		public async Task<double> MaxBallInAbitur(int year)
+		public double MaxBallInAbitur(int year)
 		{
 			double result = 0;
-			var data = await db.MaxBallViewModel.FromSqlRaw(@"
+			var data = db.MaxBallViewModel.FromSqlRaw(@"
                 with 
 				db as (
 					select *
@@ -161,15 +161,15 @@ namespace ModernSchool.DB
 					NEWID() Id,
 					MAX(db3.MaxBall) MaxBall
 				from db3
-            ").ToListAsync();
+            ").ToList();
 			result = (double)data.FirstOrDefault().MaxBall;
 			return result;
 		}
 
-		public async Task<double> MaxBallInBandlik(int year)
+		public double MaxBallInBandlik(int year)
 		{
 			double result = 0;
-			var data = await db.MaxBallViewModel.FromSqlRaw(@"
+			var data = db.MaxBallViewModel.FromSqlRaw(@"
                 with 
 				db as (
 					select *
@@ -196,15 +196,15 @@ namespace ModernSchool.DB
 					NEWID() Id,
 					MAX(db3.MaxBall) MaxBall
 				from db3
-            ").ToListAsync();
+            ").ToList();
 			result = (double)data.FirstOrDefault().MaxBall;
 			return result;
 		}
 
-		public async Task<double> MaxBallInRespublikaTanlov(int year)
+		public double MaxBallInRespublikaTanlov(int year)
 		{
 			double result = 0;
-			var data = await db.MaxBallViewModel.FromSqlRaw(@"
+			var data = db.MaxBallViewModel.FromSqlRaw(@"
                 with 
 				db as (
 					select *
@@ -227,15 +227,15 @@ namespace ModernSchool.DB
 					NEWID() Id,
 					MAX(db3.MaxBall) MaxBall
 				from db3
-            ").ToListAsync();
+            ").ToList();
 			result = (double)data.FirstOrDefault().MaxBall;
 			return result;
 		}
 
-		public async Task<double> MaxBallInXalqaroTanlov(int year)
+		public double MaxBallInXalqaroTanlov(int year)
 		{
 			double result = 0;
-			var data = await db.MaxBallViewModel.FromSqlRaw(@"
+			var data = db.MaxBallViewModel.FromSqlRaw(@"
                 with 
 				db as (
 					select *
@@ -258,7 +258,67 @@ namespace ModernSchool.DB
 					NEWID() Id,
 					MAX(db3.MaxBall) MaxBall
 				from db3
-            ").ToListAsync();
+            ").ToList();
+			result = (double)data.FirstOrDefault().MaxBall;
+			return result;
+		}
+
+		public double MaxBallInKompTaminnot(int year)
+		{
+			double result = 0;
+			var data = db.MaxBallViewModel.FromSqlRaw(@"
+                with 
+				db as (
+					select *
+					from Rates r
+					where r.IndexId = 101 and r.Year = " + year + @"
+				),
+				db3 as (
+					select 
+						distinct s.Id,
+						s.NameUz,
+						20 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 178) / (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 179) +
+						5 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 180) / (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 181) +
+						5 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 182) / (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 183) MaxBall 
+					from Schools s
+					inner join db on db.SchoolId = s.Id
+				)
+
+				select
+					NEWID() Id,
+					MAX(db3.MaxBall) MaxBall
+				from db3
+            ").ToList();
+			result = (double)data.FirstOrDefault().MaxBall;
+			return result;
+		}
+
+		public double MaxBallInChetTili(int year)
+		{
+			double result = 0;
+			var data = db.MaxBallViewModel.FromSqlRaw(@"
+                with 
+				db as (
+					select *
+					from Rates r
+					where r.IndexId = 106 and r.Year = " + year + @"
+				),
+				db3 as (
+					select 
+						distinct s.Id,
+						s.NameUz,
+						(30 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 161) +
+						20 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 162) +
+						10 * (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 163)) / (select db.ValueSchool from db where db.SchoolId = s.Id and db.CriteriaId = 164) MaxBall 
+					from Schools s
+					inner join db on db.SchoolId = s.Id
+				)
+
+				select
+					NEWID() Id,
+					MAX(db3.MaxBall) MaxBall
+				from db3
+            ").ToList();
 			result = (double)data.FirstOrDefault().MaxBall;
 			return result;
 		}

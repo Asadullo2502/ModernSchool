@@ -44,7 +44,12 @@ namespace ModernSchool.Controllers
                         select sum(c.MaxBall)
                         from Rates r
                         left join Criterias c on c.Id = r.CriteriaId
-                        where r.SchoolId = s.Id
+                        where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
+                    ) + 
+                    (
+                        select sum(i.SchoolBall)
+                        from IndexBalls i
+                        where i.SchoolId = s.Id and i.Year = " + _year + @"
                     ) ball,
                     ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                     from Schools s
@@ -96,7 +101,12 @@ namespace ModernSchool.Controllers
                         select sum(c.MaxBall)
                         from Rates r
                         left join Criterias c on c.Id = r.CriteriaId
-                        where r.SchoolId = s.Id
+                        where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
+                    ) + 
+                    (
+                        select sum(i.SchoolBall)
+                        from IndexBalls i
+                        where i.SchoolId = s.Id and i.Year = " + _year + @"
                     ) ball,
                     ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                     from Schools s
@@ -112,11 +122,16 @@ namespace ModernSchool.Controllers
             var ss = await db.Schools.FromSqlRaw(@"
                 select s.*,
                 (
-                    select sum(c.MaxBall)
-                    from Rates r
-                    left join Criterias c on c.Id = r.CriteriaId
-                    where r.SchoolId = s.Id
-                ) ball,
+                        select sum(c.MaxBall)
+                        from Rates r
+                        left join Criterias c on c.Id = r.CriteriaId
+                        where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
+                    ) + 
+                    (
+                        select sum(i.SchoolBall)
+                        from IndexBalls i
+                        where i.SchoolId = s.Id and i.Year = " + _year + @"
+                    ) ball,
                 ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                 from Schools s
                 left join Regions r on r.id = s.RegionId
@@ -148,7 +163,12 @@ namespace ModernSchool.Controllers
                         select sum(c.MaxBall)
                         from Rates r
                         left join Criterias c on c.Id = r.CriteriaId
-                        where r.SchoolId = s.Id
+                        where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
+                    ) + 
+                    (
+                        select sum(i.SchoolBall)
+                        from IndexBalls i
+                        where i.SchoolId = s.Id and i.Year = " + _year + @"
                     ) ball,
                     ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                     from Schools s
@@ -164,11 +184,16 @@ namespace ModernSchool.Controllers
             var ss = await db.Schools.FromSqlRaw(@"
                 select s.*,
                 (
-                    select sum(c.MaxBall)
-                    from Rates r
-                    left join Criterias c on c.Id = r.CriteriaId
-                    where r.SchoolId = s.Id
-                ) ball,
+                        select sum(c.MaxBall)
+                        from Rates r
+                        left join Criterias c on c.Id = r.CriteriaId
+                        where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
+                    ) + 
+                    (
+                        select sum(i.SchoolBall)
+                        from IndexBalls i
+                        where i.SchoolId = s.Id and i.Year = " + _year + @"
+                    ) ball,
                 ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                 from Schools s
                 left join Regions r on r.id = s.RegionId

@@ -29,7 +29,8 @@ namespace ModernSchool
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(connection));
+                options.UseSqlServer(connection),
+                ServiceLifetime.Transient);
 
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
             services.AddControllersWithViews();
