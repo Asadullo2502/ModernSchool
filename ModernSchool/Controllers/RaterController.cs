@@ -229,6 +229,7 @@ namespace ModernSchool.Controllers
         public async Task<JsonResult> SaveIndex(int indexId, string[] criteriaValues)
         {
             var result = 0;
+            int school_id = Convert.ToInt32(Request.Cookies["school_id"]);
 
             try
             {
@@ -249,7 +250,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190) && x.ValueInspektor != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 186 || x.CriteriaId == 188 || x.CriteriaId == 190) && x.ValueInspektor != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -259,7 +260,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 181 || CriteriaId == 209)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 181 || CriteriaId == 209) && x.ValueInspektor != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 181 || x.CriteriaId == 209) && x.ValueInspektor != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -269,7 +270,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167) && x.ValueInspektor != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 154 || x.CriteriaId == 160 || x.CriteriaId == 167) && x.ValueInspektor != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -279,7 +280,17 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 149 || CriteriaId == 179)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 149 || CriteriaId == 179) && x.ValueInspektor != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 149 || x.CriteriaId == 179) && x.ValueInspektor != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
+                        if (_rates != null)
+                        {
+                            db.Rates.RemoveRange(_rates);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+
+                    if (CriteriaId == 94 || CriteriaId == 102)
+                    {
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 94 || x.CriteriaId == 102) && x.ValueInspektor != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -289,7 +300,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271) && x.ValueInspektor != null).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 106 || x.CriteriaId == 110 || x.CriteriaId == 148 || x.CriteriaId == 168 || x.CriteriaId == 170 || x.CriteriaId == 177 || x.CriteriaId == 271) && x.ValueInspektor != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -298,12 +309,13 @@ namespace ModernSchool.Controllers
                     }
                 }
 
-                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueInspektor != null).ToListAsync();
+                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueInspektor != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                 if (rates != null)
                 {
                     db.Rates.RemoveRange(rates);
                     await db.SaveChangesAsync();
                 }
+
                 foreach (var item in criteriaValues)
                 {
                     var temp = item.Split(';');
@@ -315,11 +327,11 @@ namespace ModernSchool.Controllers
                     {
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 140,
                             CriteriaId = 186,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -327,11 +339,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 141,
                             CriteriaId = 188,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -339,11 +351,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 142,
                             CriteriaId = 190,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -354,11 +366,11 @@ namespace ModernSchool.Controllers
                     {
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 101,
                             CriteriaId = 181,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -366,11 +378,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 117,
                             CriteriaId = 209,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -381,11 +393,11 @@ namespace ModernSchool.Controllers
                     {
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 103,
                             CriteriaId = 154,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -393,11 +405,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 105,
                             CriteriaId = 160,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -405,11 +417,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 107,
                             CriteriaId = 167,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -420,11 +432,11 @@ namespace ModernSchool.Controllers
                     {
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 100,
                             CriteriaId = 149,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -432,13 +444,40 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 101,
                             CriteriaId = 179,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
+                        });
+                        await db.SaveChangesAsync();
+                    }
+
+                    else if (CriteriaId == 94 || CriteriaId == 102)
+                    {
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateInspektor = DateTime.Now,
+                            IndexId = 86,
+                            CriteriaId = 94,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = school_id,
+                            Year = _year,
+
+                        });
+                        await db.SaveChangesAsync();
+
+                        await db.Rates.AddAsync(new Rate
+                        {
+                            UpdateDateInspektor = DateTime.Now,
+                            IndexId = 87,
+                            CriteriaId = 102,
+                            ValueInspektor = Convert.ToDouble(temp[1]),
+                            SchoolId = school_id,
+                            Year = _year,
+
                         });
                         await db.SaveChangesAsync();
                     }
@@ -447,11 +486,11 @@ namespace ModernSchool.Controllers
                     {
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 88,
                             CriteriaId = 106,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -459,11 +498,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 89,
                             CriteriaId = 110,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -471,11 +510,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 99,
                             CriteriaId = 148,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -483,11 +522,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 107,
                             CriteriaId = 168,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -495,11 +534,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 108,
                             CriteriaId = 170,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -507,11 +546,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 110,
                             CriteriaId = 177,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -519,11 +558,11 @@ namespace ModernSchool.Controllers
 
                         await db.Rates.AddAsync(new Rate
                         {
-                            UpdateDateSchool = DateTime.Now,
+                            UpdateDateInspektor = DateTime.Now,
                             IndexId = 94,
                             CriteriaId = 271,
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });
@@ -538,7 +577,7 @@ namespace ModernSchool.Controllers
                             IndexId = indexId,
                             CriteriaId = Convert.ToInt32(temp[0]),
                             ValueInspektor = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(Request.Cookies["school_id"]),
+                            SchoolId = school_id,
                             Year = _year,
                             InspektorId = 1
                         });

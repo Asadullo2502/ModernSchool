@@ -102,6 +102,7 @@ namespace ModernSchool.Controllers
         public async Task<JsonResult> SaveIndex(int indexId, string[] criteriaValues)
         {
             var result = 0;
+            int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
 
             try
             {
@@ -122,7 +123,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 186 || CriteriaId == 188 || CriteriaId == 190) && x.ValueSchool != null && x.Year != _year).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 186 || x.CriteriaId == 188 || x.CriteriaId == 190) && x.ValueSchool != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -132,7 +133,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 181 || CriteriaId == 209)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 181 || CriteriaId == 209) && x.ValueSchool != null && x.Year != _year).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 181 || x.CriteriaId == 209) && x.ValueSchool != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -142,7 +143,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 154 || CriteriaId == 160 || CriteriaId == 167) && x.ValueSchool != null && x.Year != _year).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 154 || x.CriteriaId == 160 || x.CriteriaId == 167) && x.ValueSchool != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -152,7 +153,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 149 || CriteriaId == 179)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 149 || CriteriaId == 179) && x.ValueSchool != null && x.Year != _year).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 149 || x.CriteriaId == 179) && x.ValueSchool != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -162,7 +163,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 94 || CriteriaId == 102)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 94 || CriteriaId == 102) && x.ValueSchool != null && x.Year != _year).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 94 || x.CriteriaId == 102) && x.ValueSchool != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -172,7 +173,7 @@ namespace ModernSchool.Controllers
 
                     if (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271)
                     {
-                        List<Rate> _rates = await db.Rates.Where(x => (CriteriaId == 106 || CriteriaId == 110 || CriteriaId == 148 || CriteriaId == 168 || CriteriaId == 170 || CriteriaId == 177 || CriteriaId == 271) && x.ValueSchool != null && x.Year != _year).ToListAsync();
+                        List<Rate> _rates = await db.Rates.Where(x => (x.CriteriaId == 106 || x.CriteriaId == 110 || x.CriteriaId == 148 || x.CriteriaId == 168 || x.CriteriaId == 170 || x.CriteriaId == 177 || x.CriteriaId == 271) && x.ValueSchool != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                         if (_rates != null)
                         {
                             db.Rates.RemoveRange(_rates);
@@ -181,13 +182,13 @@ namespace ModernSchool.Controllers
                     }
                 }
 
-
-                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueSchool != null && x.Year != _year).ToListAsync();
+                List<Rate> rates = await db.Rates.Where(x => x.IndexId == indexId && x.ValueSchool != null && x.Year == _year && x.SchoolId == school_id).ToListAsync();
                 if (rates != null)
                 {
                     db.Rates.RemoveRange(rates);
                     await db.SaveChangesAsync();
                 }
+
                 foreach (var item in criteriaValues)
                 {
                     var temp = item.Split(';');
@@ -203,7 +204,7 @@ namespace ModernSchool.Controllers
                             IndexId = 140,
                             CriteriaId = 186,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -215,7 +216,7 @@ namespace ModernSchool.Controllers
                             IndexId = 141,
                             CriteriaId = 188,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -227,7 +228,7 @@ namespace ModernSchool.Controllers
                             IndexId = 142,
                             CriteriaId = 190,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -242,7 +243,7 @@ namespace ModernSchool.Controllers
                             IndexId = 101,
                             CriteriaId = 181,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -254,7 +255,7 @@ namespace ModernSchool.Controllers
                             IndexId = 117,
                             CriteriaId = 209,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -269,7 +270,7 @@ namespace ModernSchool.Controllers
                             IndexId = 103,
                             CriteriaId = 154,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -281,7 +282,7 @@ namespace ModernSchool.Controllers
                             IndexId = 105,
                             CriteriaId = 160,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -293,7 +294,7 @@ namespace ModernSchool.Controllers
                             IndexId = 107,
                             CriteriaId = 167,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -308,7 +309,7 @@ namespace ModernSchool.Controllers
                             IndexId = 100,
                             CriteriaId = 149,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -320,7 +321,7 @@ namespace ModernSchool.Controllers
                             IndexId = 101,
                             CriteriaId = 179,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -335,7 +336,7 @@ namespace ModernSchool.Controllers
                             IndexId = 86,
                             CriteriaId = 94,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -347,7 +348,7 @@ namespace ModernSchool.Controllers
                             IndexId = 87,
                             CriteriaId = 102,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -362,7 +363,7 @@ namespace ModernSchool.Controllers
                             IndexId = 88,
                             CriteriaId = 106,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -374,7 +375,7 @@ namespace ModernSchool.Controllers
                             IndexId = 89,
                             CriteriaId = 110,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -386,7 +387,7 @@ namespace ModernSchool.Controllers
                             IndexId = 99,
                             CriteriaId = 148,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -398,7 +399,7 @@ namespace ModernSchool.Controllers
                             IndexId = 107,
                             CriteriaId = 168,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -410,7 +411,7 @@ namespace ModernSchool.Controllers
                             IndexId = 108,
                             CriteriaId = 170,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -422,7 +423,7 @@ namespace ModernSchool.Controllers
                             IndexId = 110,
                             CriteriaId = 177,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -434,7 +435,7 @@ namespace ModernSchool.Controllers
                             IndexId = 94,
                             CriteriaId = 271,
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
 
                         });
@@ -449,7 +450,7 @@ namespace ModernSchool.Controllers
                             IndexId = indexId,
                             CriteriaId = Convert.ToInt32(temp[0]),
                             ValueSchool = Convert.ToDouble(temp[1]),
-                            SchoolId = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value),
+                            SchoolId = school_id,
                             Year = _year,
                         });
                         await db.SaveChangesAsync();

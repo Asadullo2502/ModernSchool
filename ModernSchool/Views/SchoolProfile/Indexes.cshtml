@@ -398,6 +398,10 @@
                     $(this).prop('checked', false);
                 }
             });
+            if (criteriaId == 137) {
+                $("#criteriaId_139").val(0);
+                $("#criteriaId_140").val(0);
+            }
         }
     }
 
@@ -418,6 +422,39 @@
                     toastr.success("Maʼlumotlar saqlandi!", "", {
                         "timeOut": "2500",
                         "extendedTImeout": "0"
+                    });
+                    $('.indexCriterias_' + indexId + ' :input[type="number"]').each(function () {
+                        if ($(this).attr('criteriaId') == 186 || $(this).attr('criteriaId') == 188 || $(this).attr('criteriaId') == 190) {
+                            $("#criteriaId_186").val($(this).prop("value"));
+                            $("#criteriaId_188").val($(this).prop("value"));
+                            $("#criteriaId_190").val($(this).prop("value"));
+                        }
+                        if ($(this).attr('criteriaId') == 154 || $(this).attr('criteriaId') == 160 || $(this).attr('criteriaId') == 167) {
+                            $("#criteriaId_154").val($(this).prop("value"));
+                            $("#criteriaId_160").val($(this).prop("value"));
+                            $("#criteriaId_167").val($(this).prop("value"));
+                        }
+                        if ($(this).attr('criteriaId') == 181 || $(this).attr('criteriaId') == 209) {
+                            $("#criteriaId_181").val($(this).prop("value"));
+                            $("#criteriaId_209").val($(this).prop("value"));
+                        }
+                        if ($(this).attr('criteriaId') == 149 || $(this).attr('criteriaId') == 179) {
+                            $("#criteriaId_149").val($(this).prop("value"));
+                            $("#criteriaId_179").val($(this).prop("value"));
+                        }
+                        if ($(this).attr('criteriaId') == 94 || $(this).attr('criteriaId') == 102) {
+                            $("#criteriaId_94").val($(this).prop("value"));
+                            $("#criteriaId_102").val($(this).prop("value"));
+                        }
+                        if ($(this).attr('criteriaId') == 106 || $(this).attr('criteriaId') == 110 || $(this).attr('criteriaId') == 148 || $(this).attr('criteriaId') == 168 || $(this).attr('criteriaId') == 170 || $(this).attr('criteriaId') == 177 || $(this).attr('criteriaId') == 271) {
+                            $("#criteriaId_106").val($(this).prop("value"));
+                            $("#criteriaId_110").val($(this).prop("value"));
+                            $("#criteriaId_148").val($(this).prop("value"));
+                            $("#criteriaId_168").val($(this).prop("value"));
+                            $("#criteriaId_170").val($(this).prop("value"));
+                            $("#criteriaId_177").val($(this).prop("value"));
+                            $("#criteriaId_271").val($(this).prop("value"));
+                        }
                     });
                 }
                 else {
