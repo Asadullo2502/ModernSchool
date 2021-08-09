@@ -24,6 +24,10 @@ namespace ModernSchool.Models
         public int? BuildedYear { get; set; }
         public DateTime? UpdateDate { get; set; }
         public double? ball { get; set; }
+        public double? ball1 { get; set; }
+        public double? ball2 { get; set; }
+        public double? ball3 { get; set; }
+        public double? ball4 { get; set; }
         public string RegionName { get; set; }
         public string DistrictName { get; set; }
         public Int64? PageNumber { get; set; }
