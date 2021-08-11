@@ -32,6 +32,7 @@ namespace ModernSchool.DB
 
         public DbSet<IndexesDataStatusViewModel> IndexesDataStatuses { get; set; }
         public DbSet<SchoolViewModel> SchoolViewModel { get; set; }
+        public DbSet<RatedViewModel> RatedViewModel { get; set; }
         public DbSet<UserViewModel> UserViewModel { get; set; }
         public DbSet<MaxBallViewModel> MaxBallViewModel { get; set; }
 

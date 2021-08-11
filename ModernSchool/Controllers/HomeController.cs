@@ -35,7 +35,7 @@ namespace ModernSchool.Controllers
             pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == 5663 && x.Year == _year).ToListAsync();
             pageData.Criterias = await db.Criterias.ToListAsync();
             pageData.Indexes = await db.Indexes.Include(x => x.Criterias).ToListAsync();
-            pageData.IndexesDataStatuses = await data.IndexesStatus(5663,_year);
+            pageData.IndexesDataStatuses = await data.IndexesStatusValueSchool(5663,_year);
             return View(pageData);
         }
 

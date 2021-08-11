@@ -1,4 +1,4 @@
-﻿@model IList<SchoolViewModel>
+﻿@model IList<RatedViewModel>
 @{
     ViewData["Title"] = "Schools";
     Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
@@ -34,7 +34,7 @@
 <form>
     <div class="card card-body mb-4">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label>@Localization.GetTranslate("region", lang)</label>
                     <select class="custom-select" name="RegionId" id="Regions">
@@ -42,7 +42,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label>@Localization.GetTranslate("district", lang)</label>
                     <select class="custom-select" name="DistrictId" id="Districts">
@@ -65,10 +65,16 @@
                 <div class="form-group">
                     <label>&ensp;</label>
                     <button class="btn btn-primary form-control" type="button" onclick="window.location.href='/Admin/Solve'">
-                        <span class="btn-icon-wrapper pr-2 opacity-9">
-                            <i class="fa fa-address-card fa-w-20"></i>
-                        </span>
-                        @Localization.GetTranslate("xisoblash", lang)
+                        @Localization.GetTranslate("xisoblash (Maktab)", lang)
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>&ensp;</label>
+                    <button class="btn btn-primary form-control" type="button" onclick="window.location.href='/Admin/Solve2'">
+                        
+                        @Localization.GetTranslate("xisoblash (Tekshiruvchi)", lang)
                     </button>
                 </div>
             </div>
@@ -84,7 +90,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table" id="myTable">
+                    <table class="table table-bordered" id="myTable">
                         <thead class="text-primary">
                             <tr>
                                 <th style="text-align:center">
@@ -99,20 +105,23 @@
                                 <th style="text-align:center">
                                     Nomi
                                 </th>
-                                <th style="text-align:center">
+                                <th style="text-align:center" colspan="2">
                                     I
                                 </th>
-                                <th style="text-align:center">
+                                <th style="text-align:center" colspan="2">
                                     II
                                 </th>
-                                <th style="text-align:center">
+                                <th style="text-align:center" colspan="2">
                                     III
                                 </th>
-                                <th style="text-align:center">
+                                <th style="text-align:center" colspan="2">
                                     IV
                                 </th>
                                 <th style="text-align:center">
-                                    Jami Ball
+                                    Maktab Ball
+                                </th>
+                                <th style="text-align:center">
+                                    Inspektor Ball
                                 </th>
                                 <th style="text-align:center">
                                     Baholangan sanasi
@@ -124,41 +133,56 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr style="text-align:center">
-                                    <td>
-                                        @item.PageNumber
-                                    </td>
-                                    <td>
-                                        @item.RegionName
-                                    </td>
-                                    <td>
-                                        @item.DistrictName
-                                    </td>
-                                    <td>
-                                        @item.NameUz
-                                    </td>
-                                    <td>
-                                        @item.ball1
-                                    </td>
-                                    <td>
-                                        @item.ball2
-                                    </td>
-                                    <td>
-                                        @item.ball3
-                                    </td>
-                                    <td>
-                                        @item.ball4
-                                    </td>
-                                    <td>
-                                        @item.ball
-                                    </td>
-                                    <td></td>
-                                    <td style="text-align:right">
-                                        <button type="button" class="btn btn-info" onclick="window.location.href = '/Admin/CheckIndexes/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
-                                            <i class="fa fa-eye" aria-hidden="true"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                            <tr style="text-align:center">
+                                <td>
+                                    @item.PageNumber
+                                </td>
+                                <td>
+                                    @item.RegionName
+                                </td>
+                                <td>
+                                    @item.DistrictName
+                                </td>
+                                <td>
+                                    @item.NameUz
+                                </td>
+                                <td>
+                                    @item.ball1School
+                                </td>
+                                <td class="text-success">
+                                    @item.ball1Inspektor
+                                </td>
+                                <td>
+                                    @item.ball2School
+                                </td>
+                                <td class="text-success">
+                                    @item.ball2Inspektor
+                                </td>
+                                <td>
+                                    @item.ball3School
+                                </td>
+                                <td class="text-success">
+                                    @item.ball3Inspektor
+                                </td>
+                                <td>
+                                    @item.ball4School
+                                </td>
+                                <td class="text-success">
+                                    @item.ball4Inspektor
+                                </td>
+                                <td>
+                                    @item.ballSchool
+                                </td>
+                                <td class="text-success">
+                                    @item.ballInspektor
+                                </td>
+                                <td>@item.UpdateDate.ToString("dd.MM.yyyy | hh:mm")</td>
+                                <td style="text-align:right">
+                                    <button type="button" class="btn btn-info" onclick="window.location.href = '/Admin/CheckIndexes/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
                                 i++;
                             }
                         </tbody>

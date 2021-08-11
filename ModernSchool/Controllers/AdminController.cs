@@ -582,34 +582,117 @@ namespace ModernSchool.Controllers
         {
 
             string filter = "1=1";
-            filter += (RegionId > 0) ? "and r.id = " + RegionId : "";
-            filter += (DistrictId > 0) ? "and d.id = " + DistrictId : "";
+            filter += (RegionId > 0) ? "and v.Id = " + RegionId : "";
+            filter += (DistrictId > 0) ? "and d.Id = " + DistrictId : "";
 
-            var schools = await db.SchoolViewModel.FromSqlRaw(@"
+            var schools = await db.RatedViewModel.FromSqlRaw(@"
                 with db as (
-                    select s.*,
-                    r.short_name RegionName,
-                    d.short_name DistrictName,
-                    ROUND((
-                        select sum(c.MaxBall)
-                        from Rates r
-                        left join Criterias c on c.Id = r.CriteriaId
-                        where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
-                    ) + 
-                    isnull((
-                        select sum(i.SchoolBall)
-                        from IndexBalls i
-                        where i.SchoolId = s.Id and i.Year = " + _year + @"
-                    ),0),2) ball,
-                    null ball1,
-                    null ball2,
-                    null ball3,
-                    null ball4,
-                    ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
-                    from Schools s
-                    left join Regions r on r.id = s.RegionId
+                    select 
+                        r.SchoolId Id, 
+	                    v.name_uz RegionName,
+	                    d.name_uz DistrictName, 
+	                    s.NameUz, 
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null and i.RootIndex = 1) + 
+		                       isnull((select sum(i.SchoolBall)
+				               from IndexBalls i
+				               left join Indexes ind on ind.Id = i.IndexId
+				               where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 1),0),2) ball1School,
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null and i.RootIndex = 2
+		                      ) + isnull((select sum(i.SchoolBall)
+				                  from IndexBalls i
+				                  left join Indexes ind on ind.Id = i.IndexId
+				                  where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 2),0),2) ball2School,
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null and i.RootIndex = 3
+		                       ) + isnull((
+				                    select sum(i.SchoolBall)
+				                    from IndexBalls i
+				                    left join Indexes ind on ind.Id = i.IndexId
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 3),0),2) ball3School,
+	                    ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null and i.RootIndex = 4
+		                       ) + isnull((
+				                    select sum(i.SchoolBall)
+				                    from IndexBalls i
+				                    left join Indexes ind on ind.Id = i.IndexId
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 4),0),2) ball4School,
+                        ROUND((select sum(c.MaxBall)
+			                    from Rates r
+			                    left join Criterias c on c.Id = r.CriteriaId
+			                    where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null
+		                        ) + isnull((
+				                    select sum(i.SchoolBall)
+				                    from IndexBalls i
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null),0),2) ballSchool,
+
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and i.RootIndex = 1) + 
+		                       isnull((select sum(i.InspektorBall)
+				               from IndexBalls i
+				               left join Indexes ind on ind.Id = i.IndexId
+				               where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null and ind.RootIndex = 1),0),2) ball1Inspektor,
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and i.RootIndex = 2
+		                      ) + isnull((select sum(i.InspektorBall)
+				                  from IndexBalls i
+				                  left join Indexes ind on ind.Id = i.IndexId
+				                  where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null and ind.RootIndex = 2),0),2) ball2Inspektor,
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and i.RootIndex = 3
+		                       ) + isnull((
+				                    select sum(i.InspektorBall)
+				                    from IndexBalls i
+				                    left join Indexes ind on ind.Id = i.IndexId
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null and ind.RootIndex = 3),0),2) ball3Inspektor,
+	                    ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and i.RootIndex = 4
+		                       ) + isnull((
+				                    select sum(i.InspektorBall)
+				                    from IndexBalls i
+				                    left join Indexes ind on ind.Id = i.IndexId
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null and ind.RootIndex = 4),0),2) ball4Inspektor,
+                        ROUND((select sum(c.MaxBall)
+			                    from Rates r
+			                    left join Criterias c on c.Id = r.CriteriaId
+			                    where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null
+		                        ) + isnull((
+				                    select sum(i.InspektorBall)
+				                    from IndexBalls i
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null),0),2) ballInspektor,
+
+	                    max(r.UpdateDateSchool) UpdateDate,
+                        ROW_NUMBER() OVER(ORDER BY max(r.UpdateDateSchool) desc) AS PageNumber
+                    from Rates r
+                    left join Schools s on s.Id = r.SchoolId
                     left join Districts d on d.id = s.DistrictId
-                    where " + filter + @" and (
+                    left join Regions v on v.Id = s.RegionId
+                    where " + filter + @" and r.ValueSchool is not null and (
                         select sum(c.MaxBall)
                         from Rates r
                         left join Criterias c on c.Id = r.CriteriaId
@@ -620,6 +703,8 @@ namespace ModernSchool.Controllers
                         from IndexBalls i
                         where i.SchoolId = s.Id and i.Year = " + _year + @"
                     ),0) > 0
+                    group by r.SchoolId, s.NameUz, d.name_uz, v.name_uz, s.Id
+                    --order by max(r.UpdateDateSchool) desc
                 )
                 select top 10 *
                 from db
@@ -641,7 +726,7 @@ namespace ModernSchool.Controllers
                     ) ball,
                 ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                 from Schools s
-                left join Regions r on r.id = s.RegionId
+                left join Regions v on v.id = s.RegionId
                 left join Districts d on d.id = s.DistrictId
                 where " + filter + @" and (
                         select sum(c.MaxBall)
@@ -676,7 +761,7 @@ namespace ModernSchool.Controllers
             pageData.UploadFiles = await db.UploadFiles.Where(x => x.SchoolId == id && x.Year == _year).ToListAsync();
             pageData.Criterias = await db.Criterias.ToListAsync();
             pageData.Indexes = await db.Indexes.Include(x => x.Criterias).ToListAsync();
-            pageData.IndexesDataStatuses = await data.IndexesStatus((int)id, _year);
+            pageData.IndexesDataStatuses = await data.IndexesStatusValueInspektor((int)id, _year);
             return View(pageData);
         }
 
@@ -920,7 +1005,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = school_id,
                             Year = _year,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
 
@@ -932,7 +1017,7 @@ namespace ModernSchool.Controllers
                             ValueInspektor = Convert.ToDouble(temp[1]),
                             SchoolId = school_id,
                             Year = _year,
-
+                            InspektorId = 1
                         });
                         await db.SaveChangesAsync();
                     }
@@ -1107,12 +1192,21 @@ namespace ModernSchool.Controllers
             var r = await db.Rates.Where(x=>x.ValueSchool != null && x.Year == _year).Select(x=>x.SchoolId).Distinct().ToListAsync();
             foreach (var item in r)
             {
-                SolveIndexBall((int)item);
+                SolveIndexBallSchool((int)item);
+            }
+            return RedirectToAction("RatedSchools");
+        }
+        public async Task<IActionResult> solve2()
+        {
+            var r = await db.Rates.Where(x => x.ValueSchool != null && x.Year == _year).Select(x => x.SchoolId).Distinct().ToListAsync();
+            foreach (var item in r)
+            {
+                SolveIndexBallInspektor((int)item);
             }
             return RedirectToAction("RatedSchools");
         }
 
-        public int SolveIndexBall(int school_id)
+        public int SolveIndexBallSchool(int school_id)
         {
             //int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
             var rates = db.Rates.Where(x => x.SchoolId == school_id && x.ValueSchool != null && x.Year == _year).ToList();
@@ -1125,7 +1219,7 @@ namespace ModernSchool.Controllers
                     + (20 * rates.FirstOrDefault(x => x.CriteriaId == 85).ValueSchool + 18 * rates.FirstOrDefault(x => x.CriteriaId == 86).ValueSchool + 15 * rates.FirstOrDefault(x => x.CriteriaId == 87).ValueSchool))
                     / (rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 630 ? 9 : rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool <= 945 ? 18 : 27);
 
-                var maxball = data.MaxBallInRepublicOlympiads(_year);
+                var maxball = data.MaxBallInRepublicOlympiadsSchool(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1153,7 +1247,7 @@ namespace ModernSchool.Controllers
             {
                 double? i = 5 * rates.FirstOrDefault(x => x.CriteriaId == 89).ValueSchool + 10 * rates.FirstOrDefault(x => x.CriteriaId == 90).ValueSchool + 20 * rates.FirstOrDefault(x => x.CriteriaId == 91).ValueSchool + 25 * rates.FirstOrDefault(x => x.CriteriaId == 92).ValueSchool;
 
-                var maxball = data.MaxBallInInternationalOlympiads(_year);
+                var maxball = data.MaxBallInInternationalOlympiadsSchool(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1181,7 +1275,7 @@ namespace ModernSchool.Controllers
             {
                 double? i = rates.FirstOrDefault(x => x.CriteriaId == 93).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 94).ValueSchool;
 
-                var maxball = data.MaxBallInAbitur(_year);
+                var maxball = data.MaxBallInAbiturSchool(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1217,7 +1311,7 @@ namespace ModernSchool.Controllers
                     5 * rates.FirstOrDefault(x => x.CriteriaId == 101).ValueSchool
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 102).ValueSchool;
 
-                var maxball = data.MaxBallInBandlik(_year);
+                var maxball = data.MaxBallInBandlikSchool(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1249,7 +1343,7 @@ namespace ModernSchool.Controllers
                     15 * rates.FirstOrDefault(x => x.CriteriaId == 105).ValueSchool
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 106).ValueSchool;
 
-                var maxball = data.MaxBallInRespublikaTanlov(_year);
+                var maxball = data.MaxBallInRespublikaTanlovSchool(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1281,7 +1375,7 @@ namespace ModernSchool.Controllers
                     25 * rates.FirstOrDefault(x => x.CriteriaId == 109).ValueSchool
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 110).ValueSchool;
 
-                var maxball = data.MaxBallInXalqaroTanlov(_year);
+                var maxball = data.MaxBallInXalqaroTanlovSchool(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1435,7 +1529,7 @@ namespace ModernSchool.Controllers
                             5 * rates.FirstOrDefault(x => x.CriteriaId == 180).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 181).ValueSchool +
                             5 * rates.FirstOrDefault(x => x.CriteriaId == 182).ValueSchool / rates.FirstOrDefault(x => x.CriteriaId == 183).ValueSchool;
 
-                var maxball = data.MaxBallInKompTaminnot(_year);
+                var maxball = data.MaxBallInKompTaminnotSchool(_year);
                 if (i >= maxball)
                 {
                     if (i != 0)
@@ -1580,7 +1674,7 @@ namespace ModernSchool.Controllers
                              ) /
                              rates.FirstOrDefault(x => x.CriteriaId == 164).ValueSchool;
 
-                var maxball = data.MaxBallInChetTili(_year);
+                var maxball = data.MaxBallInChetTiliSchool(_year);
                 if (i >= maxball)
                 {
                     if (i != 0)
@@ -1798,6 +1892,692 @@ namespace ModernSchool.Controllers
             return 1;
         }
 
+        public int SolveIndexBallInspektor(int school_id)
+        {
+            //int school_id = Convert.ToInt32(User.FindFirst(x => x.Type == "SchoolId").Value);
+            var rates = db.Rates.Where(x => x.SchoolId == school_id && x.ValueInspektor != null && x.Year == _year).ToList();
+
+            //Respublika Olimpiada
+            try
+            {
+                double? i = ((10 * rates.FirstOrDefault(x => x.CriteriaId == 79).ValueInspektor + 5 * rates.FirstOrDefault(x => x.CriteriaId == 80).ValueInspektor + 3 * rates.FirstOrDefault(x => x.CriteriaId == 81).ValueInspektor)
+                    + (15 * rates.FirstOrDefault(x => x.CriteriaId == 82).ValueInspektor + 13 * rates.FirstOrDefault(x => x.CriteriaId == 83).ValueInspektor + 10 * rates.FirstOrDefault(x => x.CriteriaId == 84).ValueInspektor)
+                    + (20 * rates.FirstOrDefault(x => x.CriteriaId == 85).ValueInspektor + 18 * rates.FirstOrDefault(x => x.CriteriaId == 86).ValueInspektor + 15 * rates.FirstOrDefault(x => x.CriteriaId == 87).ValueInspektor))
+                    / (rates.FirstOrDefault(x => x.CriteriaId == 106).ValueInspektor <= 630 ? 9 : rates.FirstOrDefault(x => x.CriteriaId == 106).ValueInspektor <= 945 ? 18 : 27);
+
+                var maxball = data.MaxBallInRepublicOlympiadsSchool(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 20;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((20 * i) / maxball);
+                }
+
+                TrySaveMaxBallInspektor(84, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Xalqaro Olimpiada
+            try
+            {
+                double? i = 5 * rates.FirstOrDefault(x => x.CriteriaId == 89).ValueInspektor + 10 * rates.FirstOrDefault(x => x.CriteriaId == 90).ValueInspektor + 20 * rates.FirstOrDefault(x => x.CriteriaId == 91).ValueInspektor + 25 * rates.FirstOrDefault(x => x.CriteriaId == 92).ValueInspektor;
+
+                var maxball = data.MaxBallInInternationalOlympiadsSchool(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 25;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((25 * i) / maxball);
+                }
+
+                TrySaveMaxBallInspektor(85, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Oqishga kirish
+            try
+            {
+                double? i = rates.FirstOrDefault(x => x.CriteriaId == 93).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 94).ValueInspektor;
+
+                var maxball = data.MaxBallInAbiturSchool(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 25;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((25 * i) / maxball);
+                }
+
+                TrySaveMaxBallInspektor(86, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Bandlik
+            try
+            {
+                double? i = (
+                    25 * rates.FirstOrDefault(x => x.CriteriaId == 95).ValueInspektor +
+                    20 * rates.FirstOrDefault(x => x.CriteriaId == 96).ValueInspektor +
+                    5 * rates.FirstOrDefault(x => x.CriteriaId == 97).ValueInspektor +
+                    30 * rates.FirstOrDefault(x => x.CriteriaId == 98).ValueInspektor +
+                    10 * rates.FirstOrDefault(x => x.CriteriaId == 99).ValueInspektor +
+                    5 * rates.FirstOrDefault(x => x.CriteriaId == 100).ValueInspektor +
+                    5 * rates.FirstOrDefault(x => x.CriteriaId == 101).ValueInspektor
+                    ) / rates.FirstOrDefault(x => x.CriteriaId == 102).ValueInspektor;
+
+                var maxball = data.MaxBallInBandlikSchool(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 100;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((100 * i) / maxball);
+                }
+
+                TrySaveMaxBallInspektor(87, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //RespublikaTanlov
+            try
+            {
+                double? i = (
+                    5 * rates.FirstOrDefault(x => x.CriteriaId == 103).ValueInspektor +
+                    10 * rates.FirstOrDefault(x => x.CriteriaId == 104).ValueInspektor +
+                    15 * rates.FirstOrDefault(x => x.CriteriaId == 105).ValueInspektor
+                    ) / rates.FirstOrDefault(x => x.CriteriaId == 106).ValueInspektor;
+
+                var maxball = data.MaxBallInRespublikaTanlovSchool(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 15;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((15 * i) / maxball);
+                }
+
+                TrySaveMaxBallInspektor(88, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //XalqaroTanlov
+            try
+            {
+                double? i = (
+                    10 * rates.FirstOrDefault(x => x.CriteriaId == 107).ValueInspektor +
+                    20 * rates.FirstOrDefault(x => x.CriteriaId == 108).ValueInspektor +
+                    25 * rates.FirstOrDefault(x => x.CriteriaId == 109).ValueInspektor
+                    ) / rates.FirstOrDefault(x => x.CriteriaId == 110).ValueInspektor;
+
+                var maxball = data.MaxBallInXalqaroTanlovSchool(_year);
+
+                double itogBall = 0;
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 25;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((25 * i) / maxball);
+                }
+
+                TrySaveMaxBallInspektor(89, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //InklyuzivTalim
+            try
+            {
+                double? i = ((
+                    rates.FirstOrDefault(x => x.CriteriaId == 131).ValueInspektor +
+                    rates.FirstOrDefault(x => x.CriteriaId == 132).ValueInspektor +
+                    rates.FirstOrDefault(x => x.CriteriaId == 270).ValueInspektor
+                    ) / rates.FirstOrDefault(x => x.CriteriaId == 271).ValueInspektor) * 100;
+
+                double itogBall = 0;
+                if (i >= 0.01 && i <= 0.20)
+                {
+                    itogBall = 1;
+                }
+                else if (i >= 0.21 && i <= 0.40)
+                {
+                    itogBall = 2;
+                }
+                else if (i >= 0.41 && i <= 0.80)
+                {
+                    itogBall = 3;
+                }
+                else if (i >= 0.81 && i <= 1.2)
+                {
+                    itogBall = 4;
+                }
+                else if (i >= 1.21)
+                {
+                    itogBall = 5;
+                }
+
+                TrySaveMaxBallInspektor(94, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //TarbiyaviyIshlar
+            try
+            {
+                double itogBall = 0;
+                if (rates.FirstOrDefault(x => x.CriteriaId == 139).ValueInspektor == 0 && rates.FirstOrDefault(x => x.CriteriaId == 140).ValueInspektor == 0)
+                {
+                    itogBall = 15;
+                }
+                else
+                {
+                    itogBall = -1 * (double)rates.FirstOrDefault(x => x.CriteriaId == 139).ValueInspektor + -10 * (double)rates.FirstOrDefault(x => x.CriteriaId == 140).ValueInspektor;
+                }
+
+
+                TrySaveMaxBallInspektor(96, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //ByudjetdanTashqariMablag
+            try
+            {
+                double bxm = db.BXM.FirstOrDefault(x => x.Year == _year).Price;
+                double itogBall = 0;
+
+                double? i = rates.FirstOrDefault(x => x.CriteriaId == 147).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 148).ValueInspektor;
+                if (i < 0.3 * bxm)
+                {
+                    itogBall = 0;
+                }
+                else if (i >= 0.3 * bxm && i < 1 * bxm)
+                {
+                    itogBall = 5;
+                }
+                else if (i >= 1 * bxm && i < 2 * bxm)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 2 * bxm && i < 3 * bxm)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 3 * bxm)
+                {
+                    itogBall = 30;
+                }
+
+
+                TrySaveMaxBallInspektor(99, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //MikroHudud
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (rates.FirstOrDefault(x => x.CriteriaId == 149).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 150).ValueInspektor) * 100;
+
+                if (i >= 86)
+                {
+                    itogBall = 25;
+                }
+                else if (i >= 76 && i < 86)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 65 && i < 76)
+                {
+                    itogBall = 15;
+                }
+                else if (i >= 55 && i < 65)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 51 && i < 55)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 51)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBallInspektor(100, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //KompyuterTaminnot
+            try
+            {
+                double itogBall = 0;
+
+                double? i = 20 * rates.FirstOrDefault(x => x.CriteriaId == 178).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 179).ValueInspektor +
+                            5 * rates.FirstOrDefault(x => x.CriteriaId == 180).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 181).ValueInspektor +
+                            5 * rates.FirstOrDefault(x => x.CriteriaId == 182).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 183).ValueInspektor;
+
+                var maxball = data.MaxBallInKompTaminnotSchool(_year);
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 30;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((30 * i) / maxball);
+                }
+
+                TrySaveMaxBallInspektor(101, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //OliyMalumot
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (rates.FirstOrDefault(x => x.CriteriaId == 153).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 154).ValueInspektor) * 100;
+
+                if (i >= 97)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 91 && i < 97)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 86 && i < 91)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 86)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBallInspektor(103, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Toifa
+            try
+            {
+                double itogBall = 0;
+
+                double? i = ((rates.FirstOrDefault(x => x.CriteriaId == 158).ValueInspektor + rates.FirstOrDefault(x => x.CriteriaId == 159).ValueInspektor) / rates.FirstOrDefault(x => x.CriteriaId == 160).ValueInspektor) * 100;
+
+                if (i >= 25)
+                {
+                    itogBall = 100;
+                }
+                else if (i >= 24 && i < 25)
+                {
+                    itogBall = 80;
+                }
+                else if (i >= 23 && i < 24)
+                {
+                    itogBall = 75;
+                }
+                else if (i >= 22 && i < 23)
+                {
+                    itogBall = 70;
+                }
+                else if (i >= 21 && i < 22)
+                {
+                    itogBall = 65;
+                }
+                else if (i >= 20 && i < 21)
+                {
+                    itogBall = 60;
+                }
+                else if (i >= 19 && i < 20)
+                {
+                    itogBall = 55;
+                }
+                else if (i >= 18 && i < 19)
+                {
+                    itogBall = 50;
+                }
+                else if (i >= 17 && i < 18)
+                {
+                    itogBall = 45;
+                }
+                else if (i >= 16 && i < 17)
+                {
+                    itogBall = 40;
+                }
+                else if (i >= 15 && i < 16)
+                {
+                    itogBall = 35;
+                }
+                else if (i >= 14 && i < 15)
+                {
+                    itogBall = 30;
+                }
+                else if (i >= 13 && i < 14)
+                {
+                    itogBall = 25;
+                }
+                else if (i >= 12 && i < 13)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 11 && i < 12)
+                {
+                    itogBall = 15;
+                }
+                else if (i >= 10 && i < 11)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 9 && i < 10)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 9)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBallInspektor(105, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //ChetTili
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (
+                                30 * rates.FirstOrDefault(x => x.CriteriaId == 161).ValueInspektor +
+                                20 * rates.FirstOrDefault(x => x.CriteriaId == 162).ValueInspektor +
+                                10 * rates.FirstOrDefault(x => x.CriteriaId == 163).ValueInspektor
+                             ) /
+                             rates.FirstOrDefault(x => x.CriteriaId == 164).ValueInspektor;
+
+                var maxball = data.MaxBallInChetTiliSchool(_year);
+                if (i >= maxball)
+                {
+                    if (i != 0)
+                    {
+                        itogBall = 30;
+                    }
+                    else
+                    {
+                        itogBall = 0;
+                    }
+                }
+                else
+                {
+                    itogBall = (double)((30 * i) / maxball);
+                }
+
+                TrySaveMaxBallInspektor(106, school_id, itogBall);
+
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Kitob.uz
+            try
+            {
+                double itogBall = 0;
+
+                double? i = ((rates.FirstOrDefault(x => x.CriteriaId == 165).ValueInspektor + rates.FirstOrDefault(x => x.CriteriaId == 166).ValueInspektor) / (rates.FirstOrDefault(x => x.CriteriaId == 167).ValueInspektor + rates.FirstOrDefault(x => x.CriteriaId == 168).ValueInspektor)) * 100;
+
+                if (i >= 86)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 61 && i < 86)
+                {
+                    itogBall = 8;
+                }
+                else if (i >= 31 && i < 61)
+                {
+                    itogBall = 4;
+                }
+                else if (i >= 11 && i < 31)
+                {
+                    itogBall = 2;
+                }
+                else if (i < 11)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBallInspektor(107, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //Kitobxonlik
+            try
+            {
+                double itogBall = 0;
+
+                double? i = rates.FirstOrDefault(x => x.CriteriaId == 169).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 170).ValueInspektor;
+
+                if (i >= 10)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 6 && i < 10)
+                {
+                    itogBall = 8;
+                }
+                else if (i >= 4 && i < 6)
+                {
+                    itogBall = 4;
+                }
+                else if (i >= 2 && i < 4)
+                {
+                    itogBall = 2;
+                }
+                else if (i < 2)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBallInspektor(108, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //KitobTaminot
+            try
+            {
+                double itogBall = 0;
+
+                double? i = rates.FirstOrDefault(x => x.CriteriaId == 176).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 177).ValueInspektor;
+
+                if (i >= 5)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 4 && i < 5)
+                {
+                    itogBall = 8;
+                }
+                else if (i >= 3 && i < 4)
+                {
+                    itogBall = 4;
+                }
+                else if (i >= 2 && i < 3)
+                {
+                    itogBall = 2;
+                }
+                else if (i < 2)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBallInspektor(110, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //MebelJihoz
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (rates.FirstOrDefault(x => x.CriteriaId == 208).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 209).ValueInspektor) * 100;
+
+                if (i >= 100)
+                {
+                    itogBall = 30;
+                }
+                else if (i >= 81 && i < 100)
+                {
+                    itogBall = 25;
+                }
+                else if (i >= 51 && i < 81)
+                {
+                    itogBall = 20;
+                }
+                else if (i >= 21 && i < 51)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 11 && i < 21)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 11)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBallInspektor(117, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //LokalTarmoq
+            try
+            {
+                double itogBall = 0;
+
+                itogBall = (double)(10 * (rates.FirstOrDefault(x => x.CriteriaId == 185).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 186).ValueInspektor));
+
+                TrySaveMaxBallInspektor(140, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //InternetTarmoq
+            try
+            {
+                double itogBall = 0;
+
+                itogBall = (double)(10 * (rates.FirstOrDefault(x => x.CriteriaId == 187).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 188).ValueInspektor));
+
+                TrySaveMaxBallInspektor(141, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //KompYengiligi
+            try
+            {
+                double itogBall = 0;
+
+                itogBall = (double)(5 * (rates.FirstOrDefault(x => x.CriteriaId == 189).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 190).ValueInspektor));
+
+                TrySaveMaxBallInspektor(142, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            //BirMillionDasturchi
+            try
+            {
+                double itogBall = 0;
+
+                double? i = (rates.FirstOrDefault(x => x.CriteriaId == 283).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 284).ValueInspektor) * 100;
+
+                if (i >= 10)
+                {
+                    itogBall = 10;
+                }
+                else if (i >= 5 && i < 10)
+                {
+                    itogBall = 8;
+                }
+                else if (i >= 1 && i < 5)
+                {
+                    itogBall = 5;
+                }
+                else if (i < 1)
+                {
+                    itogBall = 0;
+                }
+
+                TrySaveMaxBallInspektor(148, school_id, itogBall);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            return 1;
+        }
+
         ////////////////////////////////////////////////////////////////////////////
         public void TrySaveMaxBall(int indexId, int schoolId, double itogBall)
         {
@@ -1821,6 +2601,35 @@ namespace ModernSchool.Controllers
                         SchoolId = schoolId,
                         Year = _year,
                         SchoolBall = itogBall
+                    });
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+        }
+
+        public void TrySaveMaxBallInspektor(int indexId, int schoolId, double itogBall)
+        {
+            try
+            {
+                var res = db.IndexBalls.FirstOrDefault(x => x.IndexId == indexId && x.SchoolId == schoolId && x.Year == _year);
+                if (res != null)
+                {
+                    if (res.InspektorBall != itogBall)
+                    {
+                        res.InspektorBall = itogBall;
+                        db.Entry(res).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    db.IndexBalls.Add(new IndexBall
+                    {
+                        IndexId = indexId,
+                        SchoolId = schoolId,
+                        Year = _year,
+                        InspektorBall = itogBall
                     });
                     db.SaveChanges();
                 }

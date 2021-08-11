@@ -1,4 +1,4 @@
-﻿@model IList<SchoolViewModel>
+﻿@model IList<RatedViewModel>
 @{
     ViewData["Title"] = "Schools";
     Layout = "~/Views/Shared/_LayoutRater.cshtml";
@@ -64,7 +64,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label>&ensp;</label>
-                    <button class="btn btn-primary form-control" type="button" onclick="window.location.href='/Admin/Solve'">
+                    <button class="btn btn-primary form-control" type="button" onclick="window.location.href='/Rater/Solve'">
                         <span class="btn-icon-wrapper pr-2 opacity-9">
                             <i class="fa fa-address-card fa-w-20"></i>
                         </span>
@@ -138,21 +138,21 @@
                                         @item.NameUz
                                     </td>
                                     <td>
-                                        @item.ball1
+                                        @item.ball1School | <p class="text-success">@item.ball1Inspektor</p>
                                     </td>
                                     <td>
-                                        @item.ball2
+                                        @item.ball2School | <p class="text-success">@item.ball2Inspektor</p>
                                     </td>
                                     <td>
-                                        @item.ball3
+                                        @item.ball3School | <p class="text-success">@item.ball3Inspektor</p>
                                     </td>
                                     <td>
-                                        @item.ball4
+                                        @item.ball4School | <p class="text-success">@item.ball4Inspektor</p>
                                     </td>
                                     <td>
-                                        @item.ball
+                                        @item.ballSchool | <p class="text-success">@item.ballInspektor</p>
                                     </td>
-                                    <td></td>
+                                    <td>@item.UpdateDate.ToString("dd.MM.yyyy | hh:mm")</td>
                                     <td style="text-align:right">
                                         <button type="button" class="btn btn-info" onclick="window.location.href = '/Rater/CheckIndexes/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
                                             <i class="fa fa-eye" aria-hidden="true"></i>

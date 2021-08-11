@@ -32,4 +32,24 @@ namespace ModernSchool.Models
         public string DistrictName { get; set; }
         public Int64? PageNumber { get; set; }
     }
+
+    public class RatedViewModel
+    {
+        public int? Id { get; set; }
+        public string NameUz { get; set; }
+        public DateTime UpdateDate { get; set; }
+        public double? ballSchool { get; set; }
+        public double? ball1School { get; set; }
+        public double? ball2School { get; set; }
+        public double? ball3School { get; set; }
+        public double? ball4School { get; set; }
+        public double? ballInspektor { get; set; }
+        public double? ball1Inspektor { get; set; }
+        public double? ball2Inspektor { get; set; }
+        public double? ball3Inspektor { get; set; }
+        public double? ball4Inspektor { get; set; }
+        public string RegionName { get; set; }
+        public string DistrictName { get; set; }
+        public Int64? PageNumber { get; set; }
+    }
 }
