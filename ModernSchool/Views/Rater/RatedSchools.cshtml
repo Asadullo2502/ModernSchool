@@ -34,7 +34,7 @@
 <form>
     <div class="card card-body mb-4">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label>@Localization.GetTranslate("region", lang)</label>
                     <select class="custom-select" name="RegionId" id="Regions">
@@ -42,7 +42,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label>@Localization.GetTranslate("district", lang)</label>
                     <select class="custom-select" name="DistrictId" id="Districts">
@@ -58,6 +58,17 @@
                             <i class="fa fa-search fa-w-20"></i>
                         </span>
                         @Localization.GetTranslate("search", lang)
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>&ensp;</label>
+                    <button class="btn btn-primary form-control" type="button" onclick="window.location.href='/Admin/Solve'">
+                        <span class="btn-icon-wrapper pr-2 opacity-9">
+                            <i class="fa fa-address-card fa-w-20"></i>
+                        </span>
+                        @Localization.GetTranslate("xisoblash", lang)
                     </button>
                 </div>
             </div>
@@ -127,16 +138,16 @@
                                         @item.NameUz
                                     </td>
                                     <td>
-                                        @item.ball
+                                        @item.ball1
                                     </td>
                                     <td>
-                                        @item.ball
+                                        @item.ball2
                                     </td>
                                     <td>
-                                        @item.ball
+                                        @item.ball3
                                     </td>
                                     <td>
-                                        @item.ball
+                                        @item.ball4
                                     </td>
                                     <td>
                                         @item.ball

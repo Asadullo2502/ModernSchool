@@ -40,17 +40,21 @@ namespace ModernSchool.Controllers
                     select s.*,
                     r.short_name RegionName,
                     d.short_name DistrictName,
-                    (
+                    ROUND((
                         select sum(c.MaxBall)
                         from Rates r
                         left join Criterias c on c.Id = r.CriteriaId
                         where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
                     ) + 
-                    (
+                    isnull((
                         select sum(i.SchoolBall)
                         from IndexBalls i
                         where i.SchoolId = s.Id and i.Year = " + _year + @"
-                    ) ball,
+                    ),0),2) ball,
+                    null ball1,
+                    null ball2,
+                    null ball3,
+                    null ball4,
                     ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                     from Schools s
                     left join Regions r on r.id = s.RegionId
@@ -97,17 +101,21 @@ namespace ModernSchool.Controllers
                     select s.*,
                     r.short_name RegionName,
                     d.short_name DistrictName,
-                    (
+                    ROUND((
                         select sum(c.MaxBall)
                         from Rates r
                         left join Criterias c on c.Id = r.CriteriaId
                         where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
                     ) + 
-                    (
+                    isnull((
                         select sum(i.SchoolBall)
                         from IndexBalls i
                         where i.SchoolId = s.Id and i.Year = " + _year + @"
-                    ) ball,
+                    ),0),2) ball,
+                    null ball1,
+                    null ball2,
+                    null ball3,
+                    null ball4,
                     ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                     from Schools s
                     left join Regions r on r.id = s.RegionId
@@ -159,22 +167,36 @@ namespace ModernSchool.Controllers
                     select s.*,
                     r.short_name RegionName,
                     d.short_name DistrictName,
-                    (
+                    ROUND((
                         select sum(c.MaxBall)
                         from Rates r
                         left join Criterias c on c.Id = r.CriteriaId
                         where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
                     ) + 
-                    (
+                    isnull((
                         select sum(i.SchoolBall)
                         from IndexBalls i
                         where i.SchoolId = s.Id and i.Year = " + _year + @"
-                    ) ball,
+                    ),0),2) ball,
+                    null ball1,
+                    null ball2,
+                    null ball3,
+                    null ball4,
                     ROW_NUMBER() OVER(ORDER BY s.RegionId, s.DistrictId, s.Id) AS PageNumber
                     from Schools s
                     left join Regions r on r.id = s.RegionId
                     left join Districts d on d.id = s.DistrictId
-                    where " + filter + @" 
+                    where " + filter + @" and (
+                        select sum(c.MaxBall)
+                        from Rates r
+                        left join Criterias c on c.Id = r.CriteriaId
+                        where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
+                    ) + 
+                    isnull((
+                        select sum(i.SchoolBall)
+                        from IndexBalls i
+                        where i.SchoolId = s.Id and i.Year = " + _year + @"
+                    ),0) > 0
                 )
                 select top 10 *
                 from db
@@ -198,7 +220,17 @@ namespace ModernSchool.Controllers
                 from Schools s
                 left join Regions r on r.id = s.RegionId
                 left join Districts d on d.id = s.DistrictId
-                where " + filter + @" 
+                where " + filter + @" and (
+                        select sum(c.MaxBall)
+                        from Rates r
+                        left join Criterias c on c.Id = r.CriteriaId
+                        where  c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @"
+                    ) + 
+                    isnull((
+                        select sum(i.SchoolBall)
+                        from IndexBalls i
+                        where i.SchoolId = s.Id and i.Year = " + _year + @"
+                    ),0) > 0
             ").ToListAsync();
 
             int count = ss.Count();
@@ -206,7 +238,7 @@ namespace ModernSchool.Controllers
             ViewBag.RegionId = RegionId;
             ViewBag.DistrictId = DistrictId;
             ViewBag.PageCount = count / 10 + (count % 10 == 0 ? 0 : 1);
-            return View(schools.Take(0).ToList());
+            return View(schools.ToList());
         }
 
         public async Task<IActionResult> CheckIndexes(int? id)

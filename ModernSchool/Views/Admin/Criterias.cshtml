@@ -100,7 +100,7 @@
     }
 </script>
 
-<form method="post" action="/Admin/DeleteCriteria/">
+
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -110,16 +110,18 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <p>@Localization.GetTranslate("delete_warning_text", lang).ToUpper()</p>
-                    <input type="hidden" id="criteriaID" name="id" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">@Localization.GetTranslate("back", lang).ToUpper()</button>
-                    <button type="submit" class="btn btn-danger">@Localization.GetTranslate("delete", lang).ToUpper()</button>
-                </div>
+                <form method="post" action="/Admin/DeleteCriteria/">
+                    <div class="modal-body">
+                        <p>@Localization.GetTranslate("delete_warning_text", lang).ToUpper()</p>
+                        <input type="hidden" id="criteriaID" name="id" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">@Localization.GetTranslate("back", lang).ToUpper()</button>
+                        <button type="submit" class="btn btn-danger">@Localization.GetTranslate("delete", lang).ToUpper()</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</form>
+
 
