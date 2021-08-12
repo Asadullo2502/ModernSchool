@@ -208,10 +208,7 @@
     </li>
 </ul>
 <script>
-    $('#myTable').DataTable({
-        dom: 'ltpr',
-        "paging": false,
-    });
+   
 
     $.getJSON("/GetApi/GetRegions/", function (result) {
         var $dropdown = $("#Regions");

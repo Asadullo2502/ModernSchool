@@ -170,7 +170,7 @@ namespace ModernSchool.Controllers
                         from Rates r
                         left join Criterias c on c.Id = r.CriteriaId
                         where r.SchoolId = s.Id
-                    ) ball
+                    ) ball, null ball1,null ball2,null ball3,null ball4
                     from Schools s
                     left join Regions r on r.id = s.RegionId
                     left join Districts d on d.id = s.DistrictId
@@ -1905,7 +1905,7 @@ namespace ModernSchool.Controllers
                     + (20 * rates.FirstOrDefault(x => x.CriteriaId == 85).ValueInspektor + 18 * rates.FirstOrDefault(x => x.CriteriaId == 86).ValueInspektor + 15 * rates.FirstOrDefault(x => x.CriteriaId == 87).ValueInspektor))
                     / (rates.FirstOrDefault(x => x.CriteriaId == 106).ValueInspektor <= 630 ? 9 : rates.FirstOrDefault(x => x.CriteriaId == 106).ValueInspektor <= 945 ? 18 : 27);
 
-                var maxball = data.MaxBallInRepublicOlympiadsSchool(_year);
+                var maxball = data.MaxBallInRepublicOlympiadsInspektor(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1933,7 +1933,7 @@ namespace ModernSchool.Controllers
             {
                 double? i = 5 * rates.FirstOrDefault(x => x.CriteriaId == 89).ValueInspektor + 10 * rates.FirstOrDefault(x => x.CriteriaId == 90).ValueInspektor + 20 * rates.FirstOrDefault(x => x.CriteriaId == 91).ValueInspektor + 25 * rates.FirstOrDefault(x => x.CriteriaId == 92).ValueInspektor;
 
-                var maxball = data.MaxBallInInternationalOlympiadsSchool(_year);
+                var maxball = data.MaxBallInInternationalOlympiadsInspektor(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1961,7 +1961,7 @@ namespace ModernSchool.Controllers
             {
                 double? i = rates.FirstOrDefault(x => x.CriteriaId == 93).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 94).ValueInspektor;
 
-                var maxball = data.MaxBallInAbiturSchool(_year);
+                var maxball = data.MaxBallInAbiturInspektor(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -1997,7 +1997,7 @@ namespace ModernSchool.Controllers
                     5 * rates.FirstOrDefault(x => x.CriteriaId == 101).ValueInspektor
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 102).ValueInspektor;
 
-                var maxball = data.MaxBallInBandlikSchool(_year);
+                var maxball = data.MaxBallInBandlikInspektor(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -2029,7 +2029,7 @@ namespace ModernSchool.Controllers
                     15 * rates.FirstOrDefault(x => x.CriteriaId == 105).ValueInspektor
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 106).ValueInspektor;
 
-                var maxball = data.MaxBallInRespublikaTanlovSchool(_year);
+                var maxball = data.MaxBallInRespublikaTanlovInspektor(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -2061,7 +2061,7 @@ namespace ModernSchool.Controllers
                     25 * rates.FirstOrDefault(x => x.CriteriaId == 109).ValueInspektor
                     ) / rates.FirstOrDefault(x => x.CriteriaId == 110).ValueInspektor;
 
-                var maxball = data.MaxBallInXalqaroTanlovSchool(_year);
+                var maxball = data.MaxBallInXalqaroTanlovInspektor(_year);
 
                 double itogBall = 0;
                 if (i >= maxball)
@@ -2215,7 +2215,7 @@ namespace ModernSchool.Controllers
                             5 * rates.FirstOrDefault(x => x.CriteriaId == 180).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 181).ValueInspektor +
                             5 * rates.FirstOrDefault(x => x.CriteriaId == 182).ValueInspektor / rates.FirstOrDefault(x => x.CriteriaId == 183).ValueInspektor;
 
-                var maxball = data.MaxBallInKompTaminnotSchool(_year);
+                var maxball = data.MaxBallInKompTaminnotInspektor(_year);
                 if (i >= maxball)
                 {
                     if (i != 0)
@@ -2360,7 +2360,7 @@ namespace ModernSchool.Controllers
                              ) /
                              rates.FirstOrDefault(x => x.CriteriaId == 164).ValueInspektor;
 
-                var maxball = data.MaxBallInChetTiliSchool(_year);
+                var maxball = data.MaxBallInChetTiliInspektor(_year);
                 if (i >= maxball)
                 {
                     if (i != 0)
