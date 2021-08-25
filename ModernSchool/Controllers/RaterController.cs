@@ -173,7 +173,7 @@ namespace ModernSchool.Controllers
 			                   from Rates r
 			                   left join Criterias c on c.Id = r.CriteriaId
 			                   left join Indexes i on i.Id = c.IndexId
-			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null and i.RootIndex = 1) + 
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null and i.RootIndex = 1 and i.Id != 96) + 
 		                       isnull((select sum(i.SchoolBall)
 				               from IndexBalls i
 				               left join Indexes ind on ind.Id = i.IndexId
@@ -210,7 +210,7 @@ namespace ModernSchool.Controllers
                         ROUND((select sum(c.MaxBall)
 			                    from Rates r
 			                    left join Criterias c on c.Id = r.CriteriaId
-			                    where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null
+			                    where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueSchool is not null and r.IndexId != 96
 		                        ) + isnull((
 				                    select sum(i.SchoolBall)
 				                    from IndexBalls i
