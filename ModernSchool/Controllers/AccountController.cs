@@ -26,7 +26,7 @@ namespace ModernSchool.Controllers
                 int role = Convert.ToInt32(User.FindFirst(x => x.Type == "RoleId").Value);
 
                 if (role == 1)
-                    return RedirectToAction("Indexes", "Admin");
+                    return RedirectToAction("RatedSchools", "Admin");
 
                 if (role == 2)
                     return RedirectToAction("Index", "Home");
@@ -55,7 +55,7 @@ namespace ModernSchool.Controllers
                     await Authenticate(user);
 
                     if (user.RoleId == 1)
-                        return RedirectToAction("Indexes", "Admin");
+                        return RedirectToAction("RatedSchools", "Admin");
 
                     if (user.RoleId == 2)
                         return RedirectToAction("Index", "Home");
