@@ -72,7 +72,7 @@
                                             {
                                                 <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                                     <label class="form-check-label">
-                                                        <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueSchool != null).ValueSchool == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                        <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" @(Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueSchool != null).ValueSchool == cr.Id ? "checked" : "") value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
                                                         @(lang == "ru" ? cr.NameRu : cr.NameUz)
                                                         <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
                                                             <span class="check"></span>
@@ -84,7 +84,7 @@
                                             {
                                                 <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                                     <label class="form-check-label">
-                                                        <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                        <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
                                                         @(lang == "ru" ? cr.NameRu : cr.NameUz)
                                                         <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
                                                             <span class="check"></span>
@@ -97,7 +97,7 @@
                                         {
                                             <div class="form-check mt-3 criterias indexCriterias_@cr.IndexId" id="">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" id="criteriaId_@cr.Id" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
+                                                    <input class="form-check-input readonly" type="@cr.Type" criteriaId="@cr.Id" qw="@cr.MaxBall" value="@cr.Id" onclick="clickRadio(@cr.Id, @cr.IndexId, @cr.MaxBall.ToString().Replace(',', '.'))" />
                                                     @(lang == "ru" ? cr.NameRu : cr.NameUz)
                                                     <span class="@(cr.Type == "checkbox" ? "form-check-sign" : "circle")">
                                                         <span class="check"></span>
@@ -115,14 +115,14 @@
                                             {
                                                 <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
                                                     <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
-                                                    <input type="@cr.Type" class="form-control readonly" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" value="@Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueSchool != null).ValueSchool" min="0">
+                                                    <input type="@cr.Type" class="form-control readonly" criteriaId="@cr.Id" qw="@cr.MaxBall" value="@Model.Rates.FirstOrDefault(x => x.CriteriaId == cr.Id && x.ValueSchool != null).ValueSchool" min="0">
                                                 </div>
                                             }
                                             else
                                             {
                                                 <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
                                                     <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
-                                                    <input type="@cr.Type" class="form-control readonly" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" min="0">
+                                                    <input type="@cr.Type" class="form-control readonly" criteriaId="@cr.Id" qw="@cr.MaxBall" min="0">
                                                 </div>
                                             }
                                         }
@@ -130,7 +130,7 @@
                                         {
                                             <div class="form-group mt-3 criterias indexCriterias_@cr.IndexId">
                                                 <label for="criteriaId_@cr.Id">@(lang == "ru" ? cr.NameRu : cr.NameUz)</label>
-                                                <input type="@cr.Type" class="form-control readonly" id="criteriaId_@cr.Id" criteriaId="@cr.Id" qw="@cr.MaxBall" min="0">
+                                                <input type="@cr.Type" class="form-control readonly" criteriaId="@cr.Id" qw="@cr.MaxBall" min="0">
                                             </div>
                                         }
 
