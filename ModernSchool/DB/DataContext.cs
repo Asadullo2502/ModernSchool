@@ -35,6 +35,7 @@ namespace ModernSchool.DB
         public DbSet<RatedViewModel> RatedViewModel { get; set; }
         public DbSet<UserViewModel> UserViewModel { get; set; }
         public DbSet<MaxBallViewModel> MaxBallViewModel { get; set; }
+        public DbSet<IndexBallsExcelViewModel> IndexBallsExcelViewModels { get; set; }
 
 
 

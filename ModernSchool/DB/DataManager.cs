@@ -112,6 +112,40 @@ namespace ModernSchool.DB
             ").ToListAsync();
 		}
 
+		public List<IndexBallsExcelViewModel> SchoolIndexBallsExcels(int school_id, int year)
+        {
+			return db.IndexBallsExcelViewModels.FromSqlRaw(@"
+                with d as (
+				select 
+				  r.SchoolId,
+				  r.IndexId,
+				  r.CriteriaId,
+				  c.MaxBall
+				from Rates r 
+				left join Criterias c on c.Id = r.CriteriaId
+				where r.SchoolId = " + school_id + @" and r.year = " + year + @" and r.ValueSchool is not null and c.Type != 'number'),
+
+				e as (
+				select distinct
+				  r.IndexId,
+				  b.SchoolBall
+				from Rates r 
+				left join Criterias c on c.Id = r.CriteriaId
+				left join IndexBalls b on b.IndexId = r.IndexId and b.SchoolId = r.SchoolId
+				where r.SchoolId =  " + school_id + @" and r.year = " + year + @" and r.ValueSchool is not null and c.Type = 'number')
+
+				select 
+				  i.Id Id,
+				  i.Id IndexId,
+				  i.NameUz IndexName,
+				  iif(i.Id=84,(select b.SchoolBall from IndexBalls b where b.IndexId = 84 and b.year = " + year + @" and  b.SchoolId =  " + school_id + @" ),isnull((select sum(d.MaxBall) from d where d.IndexId = i.Id), (select sum(e.SchoolBall) from e where e.IndexId = i.Id))) Ball,
+				  i.RootIndex
+				from Indexes i
+				where i.isballed is not null
+				order by RootIndex, i.Level, i.ParentId, i.OrderNumber
+            ").ToList();
+		}
+
 		public double MaxBallInRepublicOlympiadsSchool(int year)
 		{
 			double result = 0;

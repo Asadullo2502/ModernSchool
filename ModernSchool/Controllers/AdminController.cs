@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using ClosedXML.Excel;
 
 namespace ModernSchool.Controllers
 {
@@ -1196,6 +1197,7 @@ namespace ModernSchool.Controllers
             }
             return RedirectToAction("RatedSchools");
         }
+       
         public async Task<IActionResult> solve2()
         {
             var r = await db.Rates.Where(x => x.ValueSchool != null && x.Year == _year).Select(x => x.SchoolId).Distinct().ToListAsync();
@@ -2635,6 +2637,67 @@ namespace ModernSchool.Controllers
                 }
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
+        }
+
+        public IActionResult SchoolIndexBallsToExcel(int id = 0)
+        {
+            var _data = data.SchoolIndexBallsExcels(id, _year);
+
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = db.Schools.FirstOrDefault(x => x.Id == id).NameUz.ToUpper() + "(" + DateTime.Now.ToString("yyyy-MM-dd") + ").xlsx";
+
+            int i = 3;
+
+            try
+            {
+                using var workbook = new XLWorkbook();
+                IXLWorksheet worksheet = workbook.Worksheets.Add("List1");
+
+                worksheet.Range("A1:C1").Row(1).Merge();
+                worksheet.Cell(1, 1).Style.Font.Bold = true;
+                worksheet.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(1, 1).Value = db.Schools.FirstOrDefault(x=>x.Id == id).NameUz.ToUpper() + " BO`YICHA TAHLIL(" + DateTime.Now.ToString("yyyy - MM - dd") + ")";
+
+                worksheet.Column("A").Width = 5;
+                worksheet.Column("B").Width = 160;
+                worksheet.Column("C").Width = 10;
+
+                worksheet.Row(2).Style.Font.Bold = true;
+                worksheet.Row(2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Range("A" + 2, "C" + 2).Style.Fill.BackgroundColor = XLColor.LightGreen;
+                worksheet.Cell(2, 1).Value = "#";
+                worksheet.Cell(2, 2).Value = "Index";
+                worksheet.Cell(2, 3).Value = "Ball";
+
+                foreach (var item in _data)
+                {
+                    worksheet.Cell(i, 1).Value = i - 2;
+                    worksheet.Cell(i, 2).Value = item.IndexName;
+                    worksheet.Cell(i, 3).Value = item.Ball;
+
+                    i++;
+                }
+
+                worksheet.Range("A" + i, "C" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "Jami";
+                worksheet.Cell(i, 3).Value = _data.Sum(x => x.Ball);
+
+                IXLRange range = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(i, 3).Address);
+                range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                using var stream = new MemoryStream();
+                workbook.SaveAs(stream);
+                var content = stream.ToArray();
+
+                return File(content, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("error");
+            }
         }
     }
 }

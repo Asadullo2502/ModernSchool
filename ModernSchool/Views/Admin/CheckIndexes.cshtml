@@ -8,7 +8,7 @@
 
 
 <ul class="nav nav-pills nav-justified">
-    @foreach (var item in Model.Indexes.Where(x => x.Level == 1))
+    @foreach (var item in Model.Indexes.Where(x => x.Level == 1).OrderBy(x => x.OrderNumber))
     {
         <li class="nav-item">
             <a class="nav-link border mr-1 ml-1 level1btn" id="index_@item.Id" onclick="level1click(@item.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "background:#5cd85c59" : "")"> @(lang == "ru" ? item.NameRu : item.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)</span></a>
@@ -16,7 +16,7 @@
     }
 </ul>
 <ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2))
+    @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2).OrderBy(x => x.OrderNumber))
     {
         <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
             <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item2.NameRu : item2.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count)</span></a>
@@ -24,7 +24,7 @@
     }
 </ul>
 <ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3))
+    @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3).OrderBy(x => x.OrderNumber))
     {
         <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
             <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item3.NameRu : item3.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count)</span></a>
@@ -32,7 +32,7 @@
     }
 </ul>
 <ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4))
+    @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4).OrderBy(x => x.OrderNumber))
     {
         <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
             <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item4.NameRu : item4.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count)</span></a>
@@ -40,7 +40,7 @@
     }
 </ul>
 <ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5))
+    @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5).OrderBy(x => x.OrderNumber))
     {
         <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
             <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item5.NameRu : item5.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count)</span></a>

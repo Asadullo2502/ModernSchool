@@ -34,7 +34,7 @@
 <form>
     <div class="card card-body mb-4">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label>@Localization.GetTranslate("region", lang)</label>
                     <select class="custom-select" name="RegionId" id="Regions">
@@ -42,7 +42,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label>@Localization.GetTranslate("district", lang)</label>
                     <select class="custom-select" name="DistrictId" id="Districts">
@@ -65,10 +65,16 @@
                 <div class="form-group">
                     <label>&ensp;</label>
                     <button class="btn btn-primary form-control" type="button" onclick="window.location.href='/Rater/Solve'">
-                        <span class="btn-icon-wrapper pr-2 opacity-9">
-                            <i class="fa fa-address-card fa-w-20"></i>
-                        </span>
-                        @Localization.GetTranslate("xisoblash", lang)
+                        @Localization.GetTranslate("xisoblash (Maktab)", lang)
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>&ensp;</label>
+                    <button class="btn btn-primary form-control" type="button" onclick="window.location.href='/Rater/Solve2'">
+
+                        @Localization.GetTranslate("xisoblash (Tekshiruvchi)", lang)
                     </button>
                 </div>
             </div>
@@ -84,7 +90,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table" id="myTable">
+                    <table class="table table-bordered" id="myTable">
                         <thead class="text-primary">
                             <tr>
                                 <th style="text-align:center">
@@ -99,20 +105,23 @@
                                 <th style="text-align:center">
                                     Nomi
                                 </th>
-                                <th style="text-align:center">
+                                <th style="text-align:center" colspan="2">
                                     I
                                 </th>
-                                <th style="text-align:center">
+                                <th style="text-align:center" colspan="2">
                                     II
                                 </th>
-                                <th style="text-align:center">
+                                <th style="text-align:center" colspan="2">
                                     III
                                 </th>
-                                <th style="text-align:center">
+                                <th style="text-align:center" colspan="2">
                                     IV
                                 </th>
                                 <th style="text-align:center">
-                                    Jami Ball
+                                    Maktab Ball
+                                </th>
+                                <th style="text-align:center">
+                                    Inspektor Ball
                                 </th>
                                 <th style="text-align:center">
                                     Baholangan sanasi
@@ -137,20 +146,35 @@
                                     <td>
                                         @item.NameUz
                                     </td>
-                                    <td>
-                                        @item.ball1School | <p class="text-success">@item.ball1Inspektor</p>
+                                    <td class="@(item.ball1School == null ? "" : item.ball1School < 120 ? "bg-danger" : item.ball1School < 180 ? "bg-warning" : item.ball1School < 240 ? "bg-success" : "bg-primary")">
+                                        @item.ball1School
                                     </td>
-                                    <td>
-                                        @item.ball2School | <p class="text-success">@item.ball2Inspektor</p>
+                                    <td class="text-white @(item.ball1Inspektor == null ? "" : item.ball1Inspektor < 120 ? "bg-danger" : item.ball1Inspektor < 180 ? "bg-warning" : item.ball1Inspektor < 240 ? "bg-success" : "bg-primary")">
+                                        @item.ball1Inspektor
                                     </td>
-                                    <td>
-                                        @item.ball3School | <p class="text-success">@item.ball3Inspektor</p>
+                                    <td class="@(item.ball2School == null ? "" : item.ball2School < 80 ? "bg-danger" : item.ball2School < 120 ? "bg-warning" : item.ball2School < 160 ? "bg-success" : "bg-primary")">
+                                        @item.ball2School
                                     </td>
-                                    <td>
-                                        @item.ball4School | <p class="text-success">@item.ball4Inspektor</p>
+                                    <td class="text-white @(item.ball2Inspektor == null ? "" : item.ball2Inspektor < 80 ? "bg-danger" : item.ball2Inspektor < 120 ? "bg-warning" : item.ball2Inspektor < 160 ? "bg-success" : "bg-primary")">
+                                        @item.ball2Inspektor
                                     </td>
-                                    <td>
-                                        @item.ballSchool | <p class="text-success">@item.ballInspektor</p>
+                                    <td class="@(item.ball3School == null ? "" : item.ball3School < 80 ? "bg-danger" : item.ball3School < 120 ? "bg-warning" : item.ball3School < 160 ? "bg-success" : "bg-primary")">
+                                        @item.ball3School
+                                    </td>
+                                    <td class="text-white @(item.ball3Inspektor == null ? "" : item.ball3Inspektor < 80 ? "bg-danger" : item.ball3Inspektor < 120 ? "bg-warning" : item.ball3Inspektor < 160 ? "bg-success" : "bg-primary")">
+                                        @item.ball3Inspektor
+                                    </td>
+                                    <td class="@(item.ball4School == null ? "" : item.ball4School < 120 ? "bg-danger" : item.ball4School < 180 ? "bg-warning" : item.ball4School < 240 ? "bg-success" : "bg-primary")">
+                                        @item.ball4School
+                                    </td>
+                                    <td class="text-white @(item.ball4Inspektor == null ? "" : item.ball4Inspektor < 120 ? "bg-danger" : item.ball4Inspektor < 180 ? "bg-warning" : item.ball4Inspektor < 240 ? "bg-success" : "bg-primary")">
+                                        @item.ball4Inspektor
+                                    </td>
+                                    <td class="@(item.ballSchool == null ? "" : (item.ball1School < 120 || item.ballSchool < 400) ? "bg-danger" : item.ballSchool < 600 ? "bg-warning" : item.ballSchool < 800 ? "bg-success" : "bg-primary")">
+                                        @item.ballSchool
+                                    </td>
+                                    <td class="text-white @(item.ballInspektor == null ? "" : (item.ball1Inspektor < 120 || item.ballInspektor < 400) ? "bg-danger" : item.ballInspektor < 600 ? "bg-warning" : item.ballInspektor < 800 ? "bg-success" : "bg-primary")">
+                                        @item.ballInspektor
                                     </td>
                                     <td>@item.UpdateDate.ToString("dd.MM.yyyy | hh:mm")</td>
                                     <td style="text-align:right">
@@ -184,10 +208,7 @@
     </li>
 </ul>
 <script>
-    $('#myTable').DataTable({
-        dom: 'ltpr',
-        "paging": false,
-    });
+
 
     $.getJSON("/GetApi/GetRegions/", function (result) {
         var $dropdown = $("#Regions");

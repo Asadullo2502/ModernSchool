@@ -159,8 +159,8 @@ namespace ModernSchool.Controllers
         {
 
             string filter = "1=1";
-            filter += (RegionId > 0) ? "and v.id = " + RegionId : "";
-            filter += (DistrictId > 0) ? "and d.id = " + DistrictId : "";
+            filter += (RegionId > 0) ? "and v.Id = " + RegionId : "";
+            filter += (DistrictId > 0) ? "and d.Id = " + DistrictId : "";
 
             var schools = await db.RatedViewModel.FromSqlRaw(@"
                 with db as (
@@ -177,7 +177,7 @@ namespace ModernSchool.Controllers
 		                       isnull((select sum(i.SchoolBall)
 				               from IndexBalls i
 				               left join Indexes ind on ind.Id = i.IndexId
-				               where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 1),0),2) ball1,
+				               where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 1),0),2) ball1School,
                         ROUND((select sum(c.MaxBall)
 			                   from Rates r
 			                   left join Criterias c on c.Id = r.CriteriaId
@@ -186,7 +186,7 @@ namespace ModernSchool.Controllers
 		                      ) + isnull((select sum(i.SchoolBall)
 				                  from IndexBalls i
 				                  left join Indexes ind on ind.Id = i.IndexId
-				                  where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 2),0),2) ball2,
+				                  where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 2),0),2) ball2School,
                         ROUND((select sum(c.MaxBall)
 			                   from Rates r
 			                   left join Criterias c on c.Id = r.CriteriaId
@@ -196,7 +196,7 @@ namespace ModernSchool.Controllers
 				                    select sum(i.SchoolBall)
 				                    from IndexBalls i
 				                    left join Indexes ind on ind.Id = i.IndexId
-				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 3),0),2) ball3,
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 3),0),2) ball3School,
 	                    ROUND((select sum(c.MaxBall)
 			                   from Rates r
 			                   left join Criterias c on c.Id = r.CriteriaId
@@ -206,7 +206,7 @@ namespace ModernSchool.Controllers
 				                    select sum(i.SchoolBall)
 				                    from IndexBalls i
 				                    left join Indexes ind on ind.Id = i.IndexId
-				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 4),0),2) ball4,
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null and ind.RootIndex = 4),0),2) ball4School,
                         ROUND((select sum(c.MaxBall)
 			                    from Rates r
 			                    left join Criterias c on c.Id = r.CriteriaId
@@ -214,7 +214,55 @@ namespace ModernSchool.Controllers
 		                        ) + isnull((
 				                    select sum(i.SchoolBall)
 				                    from IndexBalls i
-				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null),0),2) ball,
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.SchoolBall is not null),0),2) ballSchool,
+
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and i.RootIndex = 1 and i.Id != 96) + 
+		                       isnull((select sum(i.InspektorBall)
+				               from IndexBalls i
+				               left join Indexes ind on ind.Id = i.IndexId
+				               where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null and ind.RootIndex = 1),0),2) ball1Inspektor,
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and i.RootIndex = 2
+		                      ) + isnull((select sum(i.InspektorBall)
+				                  from IndexBalls i
+				                  left join Indexes ind on ind.Id = i.IndexId
+				                  where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null and ind.RootIndex = 2),0),2) ball2Inspektor,
+                        ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and i.RootIndex = 3
+		                       ) + isnull((
+				                    select sum(i.InspektorBall)
+				                    from IndexBalls i
+				                    left join Indexes ind on ind.Id = i.IndexId
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null and ind.RootIndex = 3),0),2) ball3Inspektor,
+	                    ROUND((select sum(c.MaxBall)
+			                   from Rates r
+			                   left join Criterias c on c.Id = r.CriteriaId
+			                   left join Indexes i on i.Id = c.IndexId
+			                   where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and i.RootIndex = 4
+		                       ) + isnull((
+				                    select sum(i.InspektorBall)
+				                    from IndexBalls i
+				                    left join Indexes ind on ind.Id = i.IndexId
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null and ind.RootIndex = 4),0),2) ball4Inspektor,
+                        ROUND((select sum(c.MaxBall)
+			                    from Rates r
+			                    left join Criterias c on c.Id = r.CriteriaId
+			                    where c.Type != 'number' and r.SchoolId = s.Id and r.Year = " + _year + @" and r.ValueInspektor is not null and r.IndexId != 96
+		                        ) + isnull((
+				                    select sum(i.InspektorBall)
+				                    from IndexBalls i
+				                    where i.SchoolId = s.Id and i.Year = " + _year + @" and i.InspektorBall is not null),0),2) ballInspektor,
+
 	                    max(r.UpdateDateSchool) UpdateDate,
                         ROW_NUMBER() OVER(ORDER BY max(r.UpdateDateSchool) desc) AS PageNumber
                     from Rates r
