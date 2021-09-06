@@ -7,7 +7,8 @@ namespace ModernSchool.Models
 {
     public class IndexBallsExcelViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+        //public int Id { get; set; }
         //public int RegionId { get; set; }
         //public string RegionName { get; set; }
         //public int DistrictId { get; set; }
@@ -16,7 +17,8 @@ namespace ModernSchool.Models
         //public string SchoolName { get; set; }
         public int IndexId { get; set; }
         public string IndexName { get; set; }
-        public double? Ball { get; set; }
+        public double? SchoolBall { get; set; }
+        public double? InspektorBall { get; set; }
         public int RootIndex { get; set; }
     }
 }

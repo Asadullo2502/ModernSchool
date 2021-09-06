@@ -126,8 +126,8 @@
                                 <th style="text-align:center">
                                     Baholangan sanasi
                                 </th>
-                                <th>
-                                </th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,7 +143,7 @@
                                 <td>
                                     @item.DistrictName
                                 </td>
-                                <td>
+                                <td onclick="window.location.href='/Admin/DetailsByIndex/?school_id=@item.Id'" style="cursor:pointer">
                                     @item.NameUz
                                 </td>
                                 <td class="@(item.ball1School == null ? "" : item.ball1School < 120 ? "bg-danger" : item.ball1School < 180 ? "bg-warning" : item.ball1School < 240 ? "bg-success" : "bg-primary")">
@@ -180,6 +180,11 @@
                                 <td style="text-align:right">
                                     <button type="button" class="btn btn-info" onclick="window.location.href = '/Admin/CheckIndexes/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Batafsil">
                                         <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                                <td style="text-align:right">
+                                    <button type="button" class="btn btn-light" onclick="window.location.href = '/Admin/SchoolIndexBallsToExcel/@item.Id'" data-toggle="tooltip" data-placement="bottom" title="Excelga yuklash">
+                                        <i class="fa fa-file-excel" aria-hidden="true"></i>
                                     </button>
                                 </td>
                             </tr>

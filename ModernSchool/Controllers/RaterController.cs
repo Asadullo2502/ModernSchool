@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -762,6 +763,136 @@ namespace ModernSchool.Controllers
             }
             catch { return new ObjectResult(new { status = "fail" }); }
 
+        }
+
+        public IActionResult DetailsByIndex(int school_id = 0)
+        {
+            ViewBag.school = db.Schools.FirstOrDefault(x => x.Id == school_id);
+            var _data = data.IndexBallsExcels(school_id, _year);
+            return View(_data);
+        }
+
+        public IActionResult SchoolIndexBallsToExcel(int id = 0)
+        {
+            var _data = data.IndexBallsExcels(id, _year);
+
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = db.Schools.FirstOrDefault(x => x.Id == id).NameUz.ToUpper() + "(" + DateTime.Now.ToString("yyyy-MM-dd") + ").xlsx";
+
+            int i = 3;
+
+            try
+            {
+                using var workbook = new XLWorkbook();
+                IXLWorksheet worksheet = workbook.Worksheets.Add("Maktab baholagani");
+
+                worksheet.Range("A1:D1").Row(1).Merge();
+                worksheet.Cell(1, 1).Style.Font.Bold = true;
+                worksheet.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(1, 1).Value = db.Schools.FirstOrDefault(x => x.Id == id).NameUz.ToUpper() + " BO`YICHA TAHLIL(" + DateTime.Now.ToString("yyyy - MM - dd") + ")";
+
+                worksheet.Column("A").Width = 5;
+                worksheet.Column("B").Width = 160;
+                worksheet.Column("C").Width = 10;
+                worksheet.Column("D").Width = 10;
+
+                worksheet.Row(2).Style.Font.Bold = true;
+                worksheet.Row(2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Range("A" + 2, "D" + 2).Style.Fill.BackgroundColor = XLColor.LightGreen;
+                worksheet.Cell(2, 1).Value = "#";
+                worksheet.Cell(2, 2).Value = "Index";
+                worksheet.Cell(2, 3).Value = "Maktab ball";
+                worksheet.Cell(2, 4).Value = "Inspektor ball";
+
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "I-SOHA";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 1).Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 1).Sum(x => x.InspektorBall)), 2);
+                i++;
+
+                foreach (var item in _data.Where(x => x.RootIndex == 1))
+                {
+                    worksheet.Cell(i, 1).Value = i - 2;
+                    worksheet.Cell(i, 2).Value = item.IndexName;
+                    worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(item.SchoolBall), 2);
+                    worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(item.InspektorBall), 2);
+
+                    i++;
+                }
+
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "II-SOHA";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 2).Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 2).Sum(x => x.InspektorBall)), 2);
+                i++;
+
+                foreach (var item in _data.Where(x => x.RootIndex == 2))
+                {
+                    worksheet.Cell(i, 1).Value = i - 2;
+                    worksheet.Cell(i, 2).Value = item.IndexName;
+                    worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(item.SchoolBall), 2);
+                    worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(item.InspektorBall), 2);
+
+                    i++;
+                }
+
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "III-SOHA";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 3).Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 3).Sum(x => x.InspektorBall)), 2);
+                i++;
+
+                foreach (var item in _data.Where(x => x.RootIndex == 3))
+                {
+                    worksheet.Cell(i, 1).Value = i - 2;
+                    worksheet.Cell(i, 2).Value = item.IndexName;
+                    worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(item.SchoolBall), 2);
+                    worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(item.InspektorBall), 2);
+
+                    i++;
+                }
+
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "IV-SOHA";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 4).Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 4).Sum(x => x.InspektorBall)), 2);
+                i++;
+
+                foreach (var item in _data.Where(x => x.RootIndex == 4))
+                {
+                    worksheet.Cell(i, 1).Value = i - 2;
+                    worksheet.Cell(i, 2).Value = item.IndexName;
+                    worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(item.SchoolBall), 2);
+                    worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(item.InspektorBall), 2);
+
+                    i++;
+                }
+
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.Yellow;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "Jami";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Sum(x => x.InspektorBall)), 2);
+
+                IXLRange range = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(i, 4).Address);
+                range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                using var stream = new MemoryStream();
+                workbook.SaveAs(stream);
+                var content = stream.ToArray();
+
+                return File(content, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("error");
+            }
         }
     }
 }

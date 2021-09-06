@@ -2580,6 +2580,13 @@ namespace ModernSchool.Controllers
             return 1;
         }
 
+        public IActionResult DetailsByIndex(int school_id = 0)
+        {
+            ViewBag.school = db.Schools.FirstOrDefault(x => x.Id == school_id);
+            var _data = data.IndexBallsExcels(school_id, _year);
+            return View(_data);
+        }
+
         ////////////////////////////////////////////////////////////////////////////
         public void TrySaveMaxBall(int indexId, int schoolId, double itogBall)
         {
@@ -2641,7 +2648,7 @@ namespace ModernSchool.Controllers
 
         public IActionResult SchoolIndexBallsToExcel(int id = 0)
         {
-            var _data = data.SchoolIndexBallsExcels(id, _year);
+            var _data = data.IndexBallsExcels(id, _year);
 
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = db.Schools.FirstOrDefault(x => x.Id == id).NameUz.ToUpper() + "(" + DateTime.Now.ToString("yyyy-MM-dd") + ").xlsx";
@@ -2651,9 +2658,9 @@ namespace ModernSchool.Controllers
             try
             {
                 using var workbook = new XLWorkbook();
-                IXLWorksheet worksheet = workbook.Worksheets.Add("List1");
+                IXLWorksheet worksheet = workbook.Worksheets.Add("Maktab baholagani");
 
-                worksheet.Range("A1:C1").Row(1).Merge();
+                worksheet.Range("A1:D1").Row(1).Merge();
                 worksheet.Cell(1, 1).Style.Font.Bold = true;
                 worksheet.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(1, 1).Value = db.Schools.FirstOrDefault(x=>x.Id == id).NameUz.ToUpper() + " BO`YICHA TAHLIL(" + DateTime.Now.ToString("yyyy - MM - dd") + ")";
@@ -2661,29 +2668,91 @@ namespace ModernSchool.Controllers
                 worksheet.Column("A").Width = 5;
                 worksheet.Column("B").Width = 160;
                 worksheet.Column("C").Width = 10;
+                worksheet.Column("D").Width = 10;
 
                 worksheet.Row(2).Style.Font.Bold = true;
                 worksheet.Row(2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                worksheet.Range("A" + 2, "C" + 2).Style.Fill.BackgroundColor = XLColor.LightGreen;
+                worksheet.Range("A" + 2, "D" + 2).Style.Fill.BackgroundColor = XLColor.LightGreen;
                 worksheet.Cell(2, 1).Value = "#";
                 worksheet.Cell(2, 2).Value = "Index";
-                worksheet.Cell(2, 3).Value = "Ball";
+                worksheet.Cell(2, 3).Value = "Maktab ball";
+                worksheet.Cell(2, 4).Value = "Inspektor ball";
 
-                foreach (var item in _data)
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "I-SOHA";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Where(x=>x.RootIndex == 1).Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Where(x=>x.RootIndex == 1).Sum(x => x.InspektorBall)), 2);
+                i++;
+
+                foreach (var item in _data.Where(x => x.RootIndex == 1))
                 {
                     worksheet.Cell(i, 1).Value = i - 2;
                     worksheet.Cell(i, 2).Value = item.IndexName;
-                    worksheet.Cell(i, 3).Value = item.Ball;
+                    worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(item.SchoolBall),2);
+                    worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(item.InspektorBall),2);
 
                     i++;
                 }
 
-                worksheet.Range("A" + i, "C" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "II-SOHA";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 2).Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 2).Sum(x => x.InspektorBall)), 2);
+                i++;
+
+                foreach (var item in _data.Where(x => x.RootIndex == 2))
+                {
+                    worksheet.Cell(i, 1).Value = i - 2;
+                    worksheet.Cell(i, 2).Value = item.IndexName;
+                    worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(item.SchoolBall), 2);
+                    worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(item.InspektorBall), 2);
+
+                    i++;
+                }
+
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "III-SOHA";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 3).Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 3).Sum(x => x.InspektorBall)), 2);
+                i++;
+
+                foreach (var item in _data.Where(x => x.RootIndex == 3))
+                {
+                    worksheet.Cell(i, 1).Value = i - 2;
+                    worksheet.Cell(i, 2).Value = item.IndexName;
+                    worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(item.SchoolBall), 2);
+                    worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(item.InspektorBall), 2);
+
+                    i++;
+                }
+
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.LightGray;
+                worksheet.Row(i).Style.Font.Bold = true;
+                worksheet.Cell(i, 2).Value = "IV-SOHA";
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 4).Sum(x => x.SchoolBall)), 2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Where(x => x.RootIndex == 4).Sum(x => x.InspektorBall)), 2);
+                i++;
+
+                foreach (var item in _data.Where(x => x.RootIndex == 4))
+                {
+                    worksheet.Cell(i, 1).Value = i - 2;
+                    worksheet.Cell(i, 2).Value = item.IndexName;
+                    worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(item.SchoolBall), 2);
+                    worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(item.InspektorBall), 2);
+
+                    i++;
+                }
+
+                worksheet.Range("A" + i, "D" + i).Style.Fill.BackgroundColor = XLColor.Yellow;
                 worksheet.Row(i).Style.Font.Bold = true;
                 worksheet.Cell(i, 2).Value = "Jami";
-                worksheet.Cell(i, 3).Value = _data.Sum(x => x.Ball);
+                worksheet.Cell(i, 3).Value = Math.Round(Convert.ToDecimal(_data.Sum(x => x.SchoolBall)),2);
+                worksheet.Cell(i, 4).Value = Math.Round(Convert.ToDecimal(_data.Sum(x => x.InspektorBall)),2);
 
-                IXLRange range = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(i, 3).Address);
+                IXLRange range = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(i, 4).Address);
                 range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                 range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 

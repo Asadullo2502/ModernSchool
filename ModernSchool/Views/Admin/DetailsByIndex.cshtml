@@ -1,0 +1,95 @@
+﻿@model List<IndexBallsExcelViewModel>
+@{
+    ViewData["Title"] = "DetailsByIndex";
+    Layout = "~/Views/Shared/_LayoutAdminNew.cshtml";
+    int i = 1;
+    School school = ViewBag.school;
+}
+
+<button class="btn btn-primary mb-2" onclick="window.location.href='/Admin/RatedSchools'">Ortga</button>
+<div class="card">
+    <div class="card-header">
+        @school.NameUz
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Index</th>
+                    <th>Maktab ball</th>
+                    <th>Inspektor ball</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-warning">
+                    <td colspan="2">I-SOHA</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Where(x => x.RootIndex == 1).Sum(x=>x.SchoolBall)), 2))</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Where(x => x.RootIndex == 1).Sum(x=>x.InspektorBall)), 2))</td>
+                </tr>
+                @foreach (var item in Model.Where(x => x.RootIndex == 1))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.IndexName</td>
+                        <td>@(Math.Round(Convert.ToDecimal(item.SchoolBall), 2))</td>
+                        <td>@(Math.Round(Convert.ToDecimal(item.InspektorBall), 2))</td>
+                    </tr>
+                    i++;
+                }
+                <tr class="bg-warning">
+                    <td colspan="2">II-SOHA</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Where(x => x.RootIndex == 2).Sum(x=>x.SchoolBall)), 2))</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Where(x => x.RootIndex == 2).Sum(x=>x.InspektorBall)), 2))</td>
+                </tr>
+                @foreach (var item in Model.Where(x => x.RootIndex == 2))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.IndexName</td>
+                        <td>@(Math.Round(Convert.ToDecimal(item.SchoolBall), 2))</td>
+                        <td>@(Math.Round(Convert.ToDecimal(item.InspektorBall), 2))</td>
+                    </tr>
+                    i++;
+                }
+                <tr class="bg-warning">
+                    <td colspan="2">III-SOHA</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Where(x => x.RootIndex == 3).Sum(x=>x.SchoolBall)), 2))</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Where(x => x.RootIndex == 3).Sum(x=>x.InspektorBall)), 2))</td>
+                </tr>
+                @foreach (var item in Model.Where(x => x.RootIndex == 3))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.IndexName</td>
+                        <td>@(Math.Round(Convert.ToDecimal(item.SchoolBall), 2))</td>
+                        <td>@(Math.Round(Convert.ToDecimal(item.InspektorBall), 2))</td>
+                    </tr>
+                    i++;
+                }
+                <tr class="bg-warning">
+                    <td colspan="2">IV-SOHA</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Where(x => x.RootIndex == 4).Sum(x=>x.SchoolBall)), 2))</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Where(x => x.RootIndex == 4).Sum(x=>x.InspektorBall)), 2))</td>
+                </tr>
+                @foreach (var item in Model.Where(x => x.RootIndex == 4))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.IndexName</td>
+                        <td>@(Math.Round(Convert.ToDecimal(item.SchoolBall), 2))</td>
+                        <td>@(Math.Round(Convert.ToDecimal(item.InspektorBall), 2))</td>
+                    </tr>
+                    i++;
+                }
+                <tr class="bg-primary text-white">
+                    <td colspan="2">JAMI</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Sum(x=>x.SchoolBall)), 2))</td>
+                    <td>@(Math.Round(Convert.ToDecimal(Model.Sum(x=>x.InspektorBall)), 2))</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
