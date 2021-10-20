@@ -47,6 +47,31 @@
         background-position: right 5% top 35px;
     }
 
+    .card_68 {
+        background-image: url('/img/book1.svg');
+        background-repeat: no-repeat;
+        background-size: 70px;
+        background-position: right 5% top 50px;
+    }
+    .card_69 {
+        background-image: url('/img/school1.svg');
+        background-repeat: no-repeat;
+        background-size: 60px;
+        background-position: right 5% top 50px;
+    }
+    .card_70 {
+        background-image: url('/img/man1.svg');
+        background-repeat: no-repeat;
+        background-size: 60px;
+        background-position: right 5% top 50px;
+    }
+    .card_71 {
+        background-image: url('/img/pc1.svg');
+        background-repeat: no-repeat;
+        background-size: 70px;
+        background-position: right 5% top 50px;
+    }
+
     b {
         border: #3f6ad8 solid 2px;
         border-radius: 50px;
@@ -61,7 +86,7 @@
     @foreach (var item in Model.Indexes.Where(x => x.Level == 1).OrderBy(x => x.OrderNumber))
     {
     <div class="col">
-        <div class="card card-body mb-1 level1btn" id="index_@item.Id" style="border-width:2px; cursor:pointer @(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "background:#5cd85c59" : "")" onclick="level1click(@item.Id)">
+        <div class="card card-body mb-1 level1btn card_@item.Id" id="index_@item.Id" style="border-width:2px; cursor:pointer @(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "background:#5cd85c59" : "")" onclick="level1click(@item.Id)">
             <div class="row">
                 <div class="col-9">
                     <div class="row">
