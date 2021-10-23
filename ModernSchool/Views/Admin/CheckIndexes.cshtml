@@ -7,159 +7,432 @@
 }
 
 <style>
-    .bo {
-        width: 100%;
-        height: 60px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        content: "";
-        position: relative;
-        line-height: 1.3;
-        font-size: 16px;
-    }
+    
+    .school-block-wrapper {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
 
-        .bo:before {
-            content: '';
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: linear-gradient(transparent 30px, white);
-        }
 
-    .card:hover {
-        border-color: #3f6ad8;
-    }
 
-    .card.active {
-        border-color: #3f6ad8;
-    }
+.school-block {
+   cursor: pointer;
+   display: flex;
+   flex-direction: column;
+   background: transparent;
+   border-radius: 10px;
+   padding: 1rem;
+   min-height: 70px;
+   width: calc(100% / 4 - 10px);
+   margin-right: 10px;
+   transition: all ease 0.5s;
+}
 
-    .card-body {
-        padding: 1.0rem;
-    }
 
-    .card {
-        background-image: url('/img/book.svg');
-        background-repeat: no-repeat;
-        background-size: 90px;
-        background-position: right 5% top 35px;
-    }
 
-    .card_68 {
-        background-image: url('/img/book1.svg');
-        background-repeat: no-repeat;
-        background-size: 70px;
-        background-position: right 5% top 50px;
-    }
-    .card_69 {
-        background-image: url('/img/school1.svg');
-        background-repeat: no-repeat;
-        background-size: 60px;
-        background-position: right 5% top 50px;
-    }
-    .card_70 {
-        background-image: url('/img/man1.svg');
-        background-repeat: no-repeat;
-        background-size: 60px;
-        background-position: right 5% top 50px;
-    }
-    .card_71 {
-        background-image: url('/img/pc1.svg');
-        background-repeat: no-repeat;
-        background-size: 70px;
-        background-position: right 5% top 50px;
-    }
+.school-block.active {
+   box-shadow: 0 0.46875rem 2.1875rem rgb(4 9 20 / 3%),
+   0 0.9375rem 1.40625rem rgb(4 9 20 / 3%),
+   0 0.25rem 0.53125rem rgb(4 9 20 / 5%),
+   0 0.125rem 0.1875rem rgb(4 9 20 / 3%);
+   background: #ffffff;
+   transition: all ease 0.5s;
+}
+.school-block.active .school-block-top-center {
+   transition: all ease 0.5s;
+   color: #028CCE;
+}
+.school-block:hover {
+   box-shadow: 0 0.46875rem 2.1875rem rgb(4 9 20 / 3%),
+   0 0.9375rem 1.40625rem rgb(4 9 20 / 3%),
+   0 0.25rem 0.53125rem rgb(4 9 20 / 5%),
+   0 0.125rem 0.1875rem rgb(4 9 20 / 3%);
+   background: #ffffff;
+   transition: all ease 0.5s;
+}
+.school-block:hover .school-block-top-center {
+   transition: all ease 0.5s;
+   color: #028CCE;
+}
 
-    b {
-        border: #3f6ad8 solid 2px;
-        border-radius: 50px;
-        padding-left: 7px;
-        padding-right: 7px;
-        padding-bottom: 5px;
-        padding-top: 5px;
-    }
+.school-block-top {
+   display: flex;
+   align-items: flex-start;
+   justify-content: space-between;
+   width: 100%;
+}
+
+.school-block-top-left {
+   width: 30px;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border: 3px solid #68AF91;
+   box-sizing: border-box;
+   border-radius: 50%;
+}
+.school-block-top-left span{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: #68AF91;
+}
+
+.school-block-top-center {
+   width: 60%;
+   color: #B1B5B8;
+   margin-left: 10px;
+   font-size: 13px;
+   font-weight: bold;
+   transition: all ease 0.5s;
+   min-height: 40px;
+   max-height: 40px;
+   overflow: hidden;
+}
+
+
+.school-block-top-right {
+   color: #fff;
+   font-size: 12px;
+   font-weight: bold;
+   width: 40px;
+   height: 15px;
+   padding: 5px 10px;
+   display: flex;
+   text-align: center;
+   align-items: center;
+   justify-self: center;  
+   border-radius: 40px;
+   box-sizing: content-box;
+}
+.school-block-top-right span{
+   width: 100%;
+}
+
+.progressBar {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: flex-start;
+   margin-top: 20px;
+   background: #CCCCCC;
+   border-radius: 40px;
+   position: relative;
+   height: 10px;
+}
+
+.progressBar .ver {
+   position: absolute;
+   left: 0;
+   color: white;
+   background: #028CCE;
+   width: 20px;
+   height: 20px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 12px;
+   border-radius: 50%;
+   padding: 2px;
+   z-index: 2;
+}
+
+.progressBar .prog {
+   position: absolute;
+   left: 0;
+   height: 100%;
+   width: 50%;
+   background: #028CCE;
+   border-radius: 40px;
+}
+
+.school-block-child-wrapper {
+   margin-top: 20px;
+   display: flex;
+   justify-content: space-between;
+   width: 100%;
+   position: relative;
+}
+
+.school-block-child-top {
+   display: flex;
+   align-items: flex-start;
+   justify-content: space-between;
+   width: 100%;
+}
+
+.school-block-child {
+    max-height: 120px;
+    overflow-y: hidden;
+   width: calc(100%  - 10px);
+   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+   rgba(0, 0, 0, 0.23) 0px 3px 6px;
+   cursor: pointer;
+   display: flex;
+   flex-direction: column;
+   background: transparent;
+   border-radius: 10px;
+   padding: 1rem;
+   min-height: 120px;
+   margin-right: 10px;
+   transition: all ease 0.5s;
+   background: #ffffff url('/img/book.svg');
+   background-repeat: no-repeat;
+   background-size: 90px;
+   background-position: right -2% bottom -10px;
+}
+
+
+
+ .school-block-child .school-block-child-top .school-block-child-left {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #68AF91;
+    box-sizing: border-box;
+    border-radius: 50%;
+ }
+
+ .school-block-child .school-block-child-top .school-block-child-left span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #68AF91;
+ }
+
+ .school-block-child .school-block-child-top .school-block-child-right {
+    background: #DCF9FD;
+    color: #7EB8DA;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 40px;
+    height: 15px;
+    padding: 5px 10px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-self: center;
+    border-radius: 40px;
+    box-shadow: none;
+    box-sizing: content-box;
+ }
+
+ .school-block-child-right span {
+    width: 100%;
+ }
+
+ .school-block-child-center {
+    width: 75%;
+    color: #757188;
+    font-weight: normal;
+    margin-top: 12px;
+    font-size: 15px;
+    display: flex;
+    overflow-y: scroll;
+ }
+
+ .school-block-child-center span {
+    font-size: 24px;
+    color: white;
+    margin-right: 20px;
+    display: none;
+ }
+
+
+.school-block-child .school-block-child-bottom {
+   display: none;
+}
+
+.school-block-child.active {
+   width: 250%;
+   height: 118px;
+   background:url('/img/book.svg') #028CCE;
+   background-repeat: no-repeat;
+   background-size: 120px;
+   background-position: right 30px bottom 50%;
+   min-height: 140px;
+   max-height: 140px;
+   box-shadow: none;
+}
+.school-block-child.active > .school-block-child-center {
+   font-size: 24px;
+   color: white;
+   margin-top: 0;
+   
+}
+
+
+.school-block-child-center::-webkit-scrollbar {
+   width: 0;
+}
+
+.school-block-child-center::-webkit-scrollbar-track {
+   background: transparent;
+}
+
+.school-block-child-center::-webkit-scrollbar-thumb {
+   background-color: transparent;
+   border-radius: 6px;
+   border: 3px solid transparent;
+}
+.school-block-child.active>.school-block-child-top .school-block-child-left {
+   display: none;
+}
+.school-block-child.active>.school-block-child-top  {
+   justify-content: flex-end;
+}
+.school-block-child.active>.school-block-child-top .school-block-child-right {
+   font-size: 18px;
+   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+   rgba(0, 0, 0, 0.23) 0px 3px 6px; 
+}
+.school-block-child.active > .school-block-child-bottom {
+   display: flex;
+   width: 100%;
+}
+.school-block-child.active>.school-block-child-bottom > .school-block-child-wrapper {
+   margin-top: 0;
+   width: 100%;
+   position: absolute;
+   bottom: -160px;
+   left: 0;
+   right: 0;
+   background: #028CCE;
+   border-radius:10px;
+   padding: 10px 10px 20px 10px;
+   min-height: 170px;
+    max-height: 170px;
+
+}
+
+
+.school-block-child.active > .school-block-child-center span {
+  display: inline-flex;
+}
+
+
+.school-block-child.disabled {
+   width: calc(30% - 10px);
+   height: 100px;
+   background: #ffff;
+   box-sizing: border-box;
+}
+.school-block-child.disabled .school-block-child-top {
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   height: 100%;
+}
+.school-block-child.disabled .school-block-child-left {
+   margin-bottom: 10px;
+}
+.school-block-child.disabled .school-block-child-center {
+   display: none;
+}
+
+.school-block-child-wrapper {
+   display: none;
+}
+.school-block-child-wrapper.active {
+   display: flex;
+}
+
+.indexTitles {
+    position: absolute;
+    top: 120%;
+    width: 100%;
+    margin: 0 auto;
+    left: 0;
+}
+
 </style>
 
-<div class="row">
+<div class="school-block-wrapper">
     @foreach (var item in Model.Indexes.Where(x => x.Level == 1).OrderBy(x => x.OrderNumber))
     {
-    <div class="col">
-        <div class="card card-body mb-1 level1btn card_@item.Id" id="index_@item.Id" style="border-width:2px; cursor:pointer @(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "background:#5cd85c59" : "")" onclick="level1click(@item.Id)">
-            <div class="row">
-                <div class="col-9">
-                    <div class="row">
-                        <div class="col-3">
-                            <b class="text-primary">@(lang == "ru" ? item.ShortName : item.ShortName)</b>
-                        </div>
-                        <div class="col-9">
-                            <div class="bo">@(lang == "ru" ? item.NameRu : item.NameUz)</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3" style="text-align:right">
-                    <span class="badge text-white" style="background-color:@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "#4caf50" : "#f44336b0")">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)</span>
-                </div>
+      <div class="school-block" onclick="level1click(@item.Id)">
+         <div class="school-block-top">
+            <div class="school-block-top-left">
+               <b>@(lang == "ru" ? item.ShortName : item.ShortName)</b>
             </div>
-            <br />
-            <br />
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="background-color:@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "#4caf50" : "#f44336b0") ; width: @(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected *100 / Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected * 100 / Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)%</div>
+
+            <div class="school-block-top-center">
+                    @(lang == "ru" ? item.NameRu : item.NameUz)
             </div>
-        </div>
-        
-    </div>
+
+            <div class="school-block-top-right"
+            style="background-color:@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count ? "#4caf50" : "#f44336b0")"
+            >
+               <span>@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)</span>
+            </div>
+         </div>
+
+         <div class="progressBar">
+            <span class="ver"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="12" height="12" viewBox="0 0 256 256" xml:space="preserve">
+            <desc>Created with Fabric.js 1.7.22</desc>
+                <defs>
+            </defs>
+        <g transform="translate(128 128) scale(0.72 0.72)" style="">
+	        <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(-175.05 -175.05000000000004) scale(3.89 3.89)" >
+	        <path d="M 29.452 78.819 L 1.601 50.968 c -2.134 -2.134 -2.134 -5.595 0 -7.729 l 8.691 -8.691 c 2.134 -2.134 5.595 -2.134 7.729 0 l 13.058 13.058 c 1.236 1.236 3.239 1.236 4.475 0 l 36.425 -36.425 c 2.134 -2.134 5.595 -2.134 7.729 0 l 8.691 8.691 c 2.134 2.134 2.134 5.595 0 7.729 L 37.181 78.819 C 35.046 80.953 31.586 80.953 29.452 78.819 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: #fff; fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+        </g>
+        </g>
+        </svg></span>
+            <span class="prog" style="width: @(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Selected *100 / Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item.Id).Count)%;"></span>
+         </div>
+      </div>
     }
 </div>
-<ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item2 in Model.Indexes.Where(x => x.Level == 2).OrderBy(x => x.OrderNumber))
-    {
-        <li class="nav-item navlvl2 navlvl1child_@item2.ParentId">
-            <a class="nav-link border mr-1 ml-1 level2btn level1Child_@item2.ParentId" id="index_@item2.Id" onclick="level2click(@item2.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item2.NameRu : item2.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count)</span></a>
-        </li>
-    }
-</ul>
-<ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item3 in Model.Indexes.Where(x => x.Level == 3).OrderBy(x => x.OrderNumber))
-    {
-        <li class="nav-item navlvl3 navlvl2child_@item3.ParentId">
-            <a class="nav-link border mr-1 ml-1 level3btn level2Child_@item3.ParentId" id="index_@item3.Id" onclick="level3click(@item3.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item3.NameRu : item3.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item3.Id).Count)</span></a>
-        </li>
-    }
-</ul>
-<ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item4 in Model.Indexes.Where(x => x.Level == 4).OrderBy(x => x.OrderNumber))
-    {
-        <li class="nav-item navlvl4 navlvl3child_@item4.ParentId">
-            <a class="nav-link border mr-1 ml-1 level4btn level3Child_@item4.ParentId" id="index_@item4.Id" onclick="level4click(@item4.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item4.NameRu : item4.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item4.Id).Count)</span></a>
-        </li>
-    }
-</ul>
-<ul class="nav nav-pills nav-justified mt-2">
-    @foreach (var item5 in Model.Indexes.Where(x => x.Level == 5).OrderBy(x => x.OrderNumber))
-    {
-        <li class="nav-item navlvl5 navlvl4child_@item5.ParentId">
-            <a class="nav-link border mr-1 ml-1 level5btn level4Child_@item5.ParentId" id="index_@item5.Id" onclick="level5click(@item5.Id)" href="#" style="@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected == Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count ? "background:#5cd85c59" : "")">@(lang == "ru" ? item5.NameRu : item5.NameUz) <span class="badge badge-light">@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item5.Id).Count)</span></a>
-        </li>
-    }
-</ul>
 
-@foreach (var item in Model.Indexes.Where(x => x.Level > 2))
-{
-    if (item.Criterias.Count > 0)
-    {
+ @foreach (var item in Model.Indexes.Where(x => x.Level == 1).OrderBy(x => x.OrderNumber)) {
+    <div class="school-block-child-wrapper" id="index_@item.Id">
+    @{
+        GetSomeString(2, item.Id, 0, lang, j);
+    }
+    </div>
+}
 
-        <div class="row indexTitle_@item.Id indexTitles mt-3">
+@functions {
+    private async Task GetSomeString(int username, int item, int joe, string lang, int j)
+    {
+       @foreach (var item2 in Model.Indexes.Where(x => x.Level == username).OrderBy(x => x.OrderNumber)){
+            @if(item == item2.ParentId){
+                
+                <div class="school-block-child">
+                    @{
+                        joe++;
+                    }
+                <div class="school-block-child-top">
+                    <div class="school-block-child-left">
+                        <b>@joe</b>
+                    </div>
+                    <div class="school-block-child-right">
+                        <span>@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id ==
+                                item2.Id).Selected)/@(Model.IndexesDataStatuses.FirstOrDefault(x=>x.Id == item2.Id).Count)
+                        </span>
+                    </div>
+                    </div>
+
+                    <div class="school-block-child-center">
+                        <span>@(item2.ShortName)</span> @(lang == "ru" ? item2.NameRu : item2.NameUz)
+                    </div>
+
+                    <div class="school-block-child-bottom">
+                        @if(item2.Criterias.Count > 0){
+                             <div class="row indexTitle_@item2.Id indexTitles mt-3">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header" style="font-weight:700">@(lang == "ru" ? item.NameRu : item.NameUz)</div>
+                    <div class="card-header" style="font-weight:700">@(lang == "ru" ? item2.NameRu : item2.NameUz)</div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-6">
                                 <h4 class="text-center">Maktab</h4>
                                 <hr />
-                                @foreach (var cr in item.Criterias)
+                                @foreach (var cr in item2.Criterias)
                                 {
                                     if (cr.Type != "number")
                                     {
@@ -237,7 +510,7 @@
                             <div class="col-6">
                                 <h4 class="text-center">Nazoratchi</h4>
                                 <hr />
-                                @foreach (var cr in item.Criterias)
+                                @foreach (var cr in item2.Criterias)
                                 {
                                     if (cr.Type != "number")
                                     {
@@ -315,8 +588,8 @@
                         </div>
                         
                         <div class="footer mt-5" style="text-align:right">
-                            <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("save", lang).ToUpper()" onclick="SaveData(@item.Id)" />
-                            <input type="button" class="btn btn-light" value="@Localization.GetTranslate("reset", lang).ToUpper()" onclick="Reset(@item.Id)" />
+                            <input type="button" class="btn btn-primary" value="@Localization.GetTranslate("save", lang).ToUpper()" onclick="SaveData(@item2.Id)" />
+                            <input type="button" class="btn btn-light" value="@Localization.GetTranslate("reset", lang).ToUpper()" onclick="Reset(@item2.Id)" />
                         </div>
                     </div>
                 </div>
@@ -327,14 +600,14 @@
                         Yuklangan fayllar
                     </div>
                     <div class="card-body">
-                        <div id="refDiv_@item.Id">
+                        <div id="refDiv_@item2.Id">
                             <div class="row">
                                 @{ j = 1; }
-                                @foreach (var files in Model.UploadFiles.Where(x => x.IndexId == item.Id))
+                                @foreach (var files in Model.UploadFiles.Where(x => x.IndexId == item2.Id))
                                 {
                                     <div class="col-12 mb-1">
                                         <a target="_blank" href="~/uploads/@files.FileGuid">@j.  @files.FileName</a>
-                                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="deleteUploadFile(@files.Id,@item.Id)"><span class="fa fa-trash-alt"></span></button>
+                                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="deleteUploadFile(@files.Id,@item2.Id)"><span class="fa fa-trash-alt"></span></button>
                                     </div>
                                     j++;
                                 }
@@ -343,13 +616,13 @@
                         <hr />
                         <div class="row">
                             <div class="col-4">
-                                <label class="btn btn-light" for="fileUpload_@item.Id" style="margin-bottom:0px">
-                                    <input id="fileUpload_@item.Id" type="file" style="display:none"
-                                           onchange="$('#upload-file-info_@item.Id').text(this.files[0].name)">
+                                <label class="btn btn-light" for="fileUpload_@item2.Id" style="margin-bottom:0px">
+                                    <input id="fileUpload_@item2.Id" type="file" style="display:none"
+                                           onchange="$('#upload-file-info_@item2.Id').text(this.files[0].name)">
                                     Faylni tanlang
                                 </label>
-                                <span class='label label-info' id="upload-file-info_@item.Id"></span>
-                                <button class="btn btn-primary" id="btnUpload" type="button" onclick="uploadFile(@item.Id)">
+                                <span class='label label-info' id="upload-file-info_@item2.Id"></span>
+                                <button class="btn btn-primary" id="btnUpload" type="button" onclick="uploadFile(@item2.Id)">
                                     Faylni saqlash
                                 </button>
                                 <button class="btn btn-primary" id="btnUpload2" type="button" disabled style="display:none">
@@ -362,9 +635,24 @@
                 </div>
             </div>
         </div>
-
+                        }else {
+                            <div class="school-block-child-wrapper" id="index_@item2.Id" style="display: flex;">
+                                @{
+                                    GetSomeString(username + 1, item2.Id, 0, lang, j);
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            } 
+        } 
     }
 }
+
+
+   
+
+
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -468,107 +756,59 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $(".level2btn").css('display', 'none');
-        $(".level3btn").css('display', 'none');
-        $(".level4btn").css('display', 'none');
-        $(".level5btn").css('display', 'none');
-        $(".criterias").css('display', 'none');
-        $(".indexTitles").css('display', 'none');
-    });
+    
+
+    let GlobalBlock = document.querySelectorAll('.school-block')
+
+    GlobalBlock.forEach(el => {
+        el.addEventListener('click', () => {
+            GlobalBlock.forEach(el1=> {
+                el1.classList.remove('active')
+            })
+          el.classList.toggle('active')
+        })
+    })
     function level1click(id) {
-        $(".level1btn").removeClass('active');
-        $(".level2btn").removeClass('active');
-        $(".level3btn").removeClass('active');
-        $(".level4btn").removeClass('active');
-        $(".level5btn").removeClass('active');
+        let schoolBlocks = document.querySelectorAll('.school-block-child-wrapper')
+        schoolBlocks.forEach(el => {
+            el.classList.remove('active')
+        })
+
 
         $("#index_" + id).addClass('active');
 
-        $(".navlvl2").css('display', 'none');
-        $(".navlvl3").css('display', 'none');
-        $(".navlvl4").css('display', 'none');
-        $(".navlvl5").css('display', 'none');
-        $(".criterias").css('display', 'none');
-        $(".indexTitles").css('display', 'none');
-
-        $(".level1Child_" + id).css('display', 'block');
-        $(".navlvl1child_" + id).css('display', 'block');
-        $('#btnUpload2').hide();
+       
     }
-    function level2click(id) {
-        $(".level2btn").removeClass('active');
-        $(".level3btn").removeClass('active');
-        $(".level4btn").removeClass('active');
-        $(".level5btn").removeClass('active');
-
-        $("#index_" + id).addClass('active');
-
-        $(".navlvl3").css('display', 'none');
-        $(".navlvl4").css('display', 'none')
-        $(".navlvl5").css('display', 'none')
-        $(".criterias").css('display', 'none');;
-        $(".indexTitles").css('display', 'none');
-
-        $(".level2Child_" + id).css('display', 'block');
-        $(".navlvl2child_" + id).css('display', 'block');
-        $('#btnUpload2').hide();
-    }
-    function level3click(id) {
-        $(".level3btn").removeClass('active');
-        $(".level4btn").removeClass('active');
-        $(".level5btn").removeClass('active');
-
-        $("#index_" + id).addClass('active');
-
-        $(".navlvl4").css('display', 'none');
-        $(".navlvl5").css('display', 'none');
-        $(".criterias").css('display', 'none');
-
-        $(".level3Child_" + id).css('display', 'block');
-        $(".navlvl3child_" + id).css('display', 'block');
-
-        $(".criterias").css('display', 'none');
-        $(".indexTitles").css('display', 'none');
-        $(".indexCriterias_" + id).css('display', 'block');
-        $(".indexCriteriasInsp_" + id).css('display', 'block');
-        $(".indexTitle_" + id).css('display', 'block');
-        $('#btnUpload2').hide();
-    }
-    function level4click(id) {
-        $(".level4btn").removeClass('active');
-        $(".level5btn").removeClass('active');
-
-        $("#index_" + id).addClass('active');
-
-        $(".navlvl5").css('display', 'none');
-        $(".criterias").css('display', 'none');
-
-        $(".level4Child_" + id).css('display', 'block');
-        $(".navlvl4child_" + id).css('display', 'block');
-
-        $(".criterias").css('display', 'none');
-        $(".indexTitles").css('display', 'none');
-        $(".indexCriterias_" + id).css('display', 'block');
-        $(".indexCriteriasInsp_" + id).css('display', 'block');
-        $(".indexTitle_" + id).css('display', 'block');
-        $('#btnUpload2').hide();
-    }
-    function level5click(id) {
-        $(".level5btn").removeClass('active');
-
-        $("#index_" + id).addClass('active');
-
-        $(".level5Child_" + id).css('display', 'block');
-        $(".navlvl5child_" + id).css('display', 'block');
-
-        $(".criterias").css('display', 'none');
-        $(".indexTitles").css('display', 'none');
-        $(".indexCriterias_" + id).css('display', 'block');
-        $(".indexCriteriasInsp_" + id).css('display', 'block');
-        $(".indexTitle_" + id).css('display', 'block');
-        $('#btnUpload2').hide();
-    }
+    let block2 = document.querySelectorAll('.school-block-child')
+    block2.forEach(el => {
+   
+   el.addEventListener('click', (event) => {
+       event.stopPropagation();
+      if (el.className === 'school-block-child') {
+          for (let i = 0; i < el.parentElement.childElementCount; i++) {
+             el.parentElement.children[i].classList.add('disabled')
+          }
+          el.classList.remove('disabled')
+          el.classList.add('active')
+      } else if (el.className === 'school-block-child disabled') {
+         for (let i = 0; i < el.parentElement.childElementCount; i++) {
+            el.parentElement.children[i].classList.add('disabled')
+            el.parentElement.children[i].classList.remove('active')
+         }
+         el.classList.remove('disabled')
+         el.classList.add('active')
+      }else {
+         for (let i = 0; i < el.parentElement.childElementCount; i++) {
+            el.parentElement.children[i].classList.remove('disabled')
+         }
+         el.classList.remove('disabled')
+         el.classList.remove('active')
+      }
+   })
+   
+})
+    
+    
 
     function clickRadio(criteriaId, indexId, ball) {
         if (ball == 0) {
@@ -668,5 +908,7 @@
         if (e.keyCode != 9) // ignore tab
             e.preventDefault();
     });
+
+   
 </script>
 
