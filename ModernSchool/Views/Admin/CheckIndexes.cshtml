@@ -475,7 +475,7 @@
                     <div class="school-block-child-bottom">
                         @if(item2.Criterias.Count > 0){
                              <div class="row indexTitle_@item2.Id indexTitles color_@color mt-3"
-                                data-name="forma" id="forma"
+                                data-name="forma" 
                              >
             <div class="col-12">
                 <div class="card">
@@ -833,10 +833,14 @@
        
     }
     let block2 = document.querySelectorAll('.school-block-child')
-    let forma = document.querySelector('#forma')
-    forma.addEventListener('click', () => {
-        forma.dataset.name = 'adding'
+    let forma = document.querySelectorAll('.indexTitles')
+
+    forma.forEach(el => {
+        el.addEventListener('click', () => {
+            el.dataset.name = 'adding'
+        })
     })
+    
     block2.forEach(el => {
    
    el.addEventListener('click', (event) => {
@@ -854,7 +858,7 @@
          }
          el.classList.remove('disabled')
          el.classList.add('active')
-      } else if(forma.dataset.name === 'adding') {
+      } else if(el.children[el.children.length - 1].children[0].dataset.name === 'adding') {
 
         }else {
          for (let i = 0; i < el.parentElement.childElementCount; i++) {
@@ -863,7 +867,9 @@
          el.classList.remove('disabled')
          el.classList.remove('active')
       }
-      forma.dataset.name = 'forma'
+      forma.forEach(el => {
+        el.dataset.name = 'forma'
+      })
    })
    
 })
