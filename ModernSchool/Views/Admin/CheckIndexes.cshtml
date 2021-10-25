@@ -182,6 +182,22 @@
    background-repeat: no-repeat;
    background-size: 90px;
    background-position: right -2% bottom -10px;
+   margin-top: 20px;
+}
+
+.school-block-child-wrapper .school-block-child:first-child {
+   margin-left: 10px;
+}
+
+.school-block-child-wrapper .school-block-child:first-child.active {
+   margin-left: 0;
+}
+.school-block-child-wrapper .school-block-child:last-child.active {
+   margin-right: 0;
+}
+
+.school-block-child.active .indexTitles  {
+    padding: 30px 0;
 }
 
 
@@ -249,14 +265,16 @@
 
 .school-block-child.active {
    width: 250%;
-   height: 118px;
+   height: 140px;
    background:url('/img/book.svg') #028CCE;
    background-repeat: no-repeat;
    background-size: 120px;
    background-position: right 30px bottom 50%;
-   min-height: 140px;
-   max-height: 140px;
+   min-height: 160px;
+   max-height: 160px;
    box-shadow: none;
+   margin-top: 0;
+   border-radius: 10px 10px 0 0;
 }
 .school-block-child.active > .school-block-child-center {
    font-size: 24px;
@@ -301,9 +319,8 @@
    bottom: -160px;
    left: 0;
    right: 0;
-   background: #028CCE;
    border-radius:10px;
-   padding: 10px 10px 20px 10px;
+   padding-bottom: 20px;
    min-height: 170px;
     max-height: 170px;
 
@@ -320,6 +337,7 @@
    height: 100px;
    background: #ffff;
    box-sizing: border-box;
+   margin: 20px 10px 20px 0;
 }
 .school-block-child.disabled .school-block-child-top {
    flex-direction: column;
@@ -343,11 +361,43 @@
 
 .indexTitles {
     position: absolute;
-    top: 120%;
+    top: 82%;
     width: 100%;
     margin: 0 auto;
     left: 0;
 }
+
+.school-block-child.active>.school-block-child-bottom > .color_1 {
+    background: #6BB8E9;
+}
+.school-block-child.active>.school-block-child-bottom > .color_2 {
+    background: #4F9DCF;
+}
+.school-block-child.active>.school-block-child-bottom > .color_3 {
+    background: #388CC1;
+}
+ .school-block-child.active>.school-block-child-bottom > .color_4 {
+    background: #2F82B8;
+}
+ .school-block-child.active>.school-block-child-bottom > .color_5 {
+    background: #2073AA;
+}
+.school-block-child.active#color_1 {
+    background: #6BB8E9;
+}
+.school-block-child.active#color_2 {
+    background: #4F9DCF;
+}
+.school-block-child.active#color_3 {
+    background: #388CC1;
+}
+ .school-block-child.active#color_4 {
+    background: #2F82B8;
+}
+ .school-block-child.active#color_5 {
+    background: #2073AA;
+}
+
 
 </style>
 
@@ -391,21 +441,22 @@
  @foreach (var item in Model.Indexes.Where(x => x.Level == 1).OrderBy(x => x.OrderNumber)) {
     <div class="school-block-child-wrapper" id="index_@item.Id">
     @{
-        GetSomeString(2, item.Id, 0, lang, j);
+        GetSomeString(2, item.Id, 0, lang, j, 1);
     }
     </div>
 }
 
+
 @functions {
-    private async Task GetSomeString(int username, int item, int joe, string lang, int j)
+    private async Task GetSomeString(int username, int item, int joe, string lang, int j, int color)
     {
        @foreach (var item2 in Model.Indexes.Where(x => x.Level == username).OrderBy(x => x.OrderNumber)){
             @if(item == item2.ParentId){
                 
-                <div class="school-block-child">
+                <div class="school-block-child" id="color_@color">
                     @{
                         joe++;
-                    }
+                     }
                 <div class="school-block-child-top">
                     <div class="school-block-child-left">
                         <b>@joe</b>
@@ -423,7 +474,9 @@
 
                     <div class="school-block-child-bottom">
                         @if(item2.Criterias.Count > 0){
-                             <div class="row indexTitle_@item2.Id indexTitles mt-3">
+                             <div class="row indexTitle_@item2.Id indexTitles color_@color mt-3"
+                                data-name="forma" id="forma"
+                             >
             <div class="col-12">
                 <div class="card">
                     <div class="card-header" style="font-weight:700">@(lang == "ru" ? item2.NameRu : item2.NameUz)</div>
@@ -636,9 +689,9 @@
             </div>
         </div>
                         }else {
-                            <div class="school-block-child-wrapper" id="index_@item2.Id" style="display: flex;">
+                            <div class="school-block-child-wrapper color_@color" id="index_@item2.Id" style="display: flex;">
                                 @{
-                                    GetSomeString(username + 1, item2.Id, 0, lang, j);
+                                    GetSomeString(username + 1, item2.Id, 0, lang, j, color+1);
                                 }
                             </div>
                         }
@@ -780,6 +833,10 @@
        
     }
     let block2 = document.querySelectorAll('.school-block-child')
+    let forma = document.querySelector('#forma')
+    forma.addEventListener('click', () => {
+        forma.dataset.name = 'adding'
+    })
     block2.forEach(el => {
    
    el.addEventListener('click', (event) => {
@@ -797,13 +854,16 @@
          }
          el.classList.remove('disabled')
          el.classList.add('active')
-      }else {
+      } else if(forma.dataset.name === 'adding') {
+
+        }else {
          for (let i = 0; i < el.parentElement.childElementCount; i++) {
             el.parentElement.children[i].classList.remove('disabled')
          }
          el.classList.remove('disabled')
          el.classList.remove('active')
       }
+      forma.dataset.name = 'forma'
    })
    
 })
